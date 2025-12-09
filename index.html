@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirley's AI Music Studio | 月光奏鳴曲</title>
+    <style>
+        /* ---------------------------------- */
+        /* 核心 CSS 樣式 (元素可見性保證版) */
+        /* ---------------------------------- */
+
+        html { height: 100%; }
+        :root {
+            --clock-size: 500px;
+            --rose-size: 120px; 
+            --status-point-size: 45px; 
+            --pointer-width: 14px;
+            --pointer-height: 50%;
+            --diamond-blue: #a7ffeb; 
+            --star-color: #e0f7fa;
+        }
+
+        /* 🌟 動畫關鍵幀 (保持不變) */
+        @keyframes sparkle-blink { 0%, 70%, 100% { opacity: 1; } 5% { opacity: 0.2; transform: scale(1.01); } 10% { opacity: 1; } 15% { opacity: 0.3; } }
+        @keyframes diamond-pulse { 0% { box-shadow: 0 0 60px var(--diamond-blue); } 50% { box-shadow: 0 0 90px var(--diamond-blue); } 100% { box-shadow: 0 0 60px var(--diamond-blue); } }
+        @keyframes pulse-subtle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.02); opacity: 0.95; } }
+        @keyframes twinkle-pulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 0.9; } }
+
+        body {
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center; 
+            background: radial-gradient(circle at center, #1b0a2e 0%, #0a0413 100%);
+            color: var(--star-color); font-family: 'Georgia', serif; overflow: hidden; position: relative;
+        }
+
+        /* 🌟 音符粒子/背景光點 */
+        body::before {
+            content: ''; position: absolute; width: 100%; height: 100%; background: transparent;
+            box-shadow: -150px -150px 3px var(--star-color), 100px 50px 2px var(--star-color),
+                -80px 200px 1px var(--star-color), 180px -100px 2px var(--star-color),
+                -220px 120px 1px var(--star-color), 300px 300px 4px var(--diamond-blue),
+                -400px -50px 2px var(--diamond-blue);
+            animation: twinkle-pulse 10s infinite alternate; z-index: -1; 
+        }
+
+        /* 🖼️ 主容器，用於容納標題和時鐘 */
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative; 
+            z-index: 10;
+        }
+
+        /* 🎶 網頁標題樣式 (確保可見) */
+        #main-title {
+            color: var(--star-color);
+            font-size: 2.2em;
+            margin-bottom: 40px; 
+            text-align: center;
+            font-weight: normal; 
+            
+            text-shadow: 
+                0 0 10px var(--diamond-blue), 
+                0 0 20px rgba(255, 255, 255, 0.8);
+            animation: diamond-pulse 3s infinite alternate; 
+            z-index: 30; 
+        }
+
+        /* 💎 主介面容器：鑽石表盤邊框 */
+        #clock-interface {
+            position: relative; width: var(--clock-size); height: var(--clock-size); border-radius: 50%;
+            background: radial-gradient(circle, #222 0%, #000 80%); 
+            border: 15px solid rgba(224, 247, 250, 0.9); 
+            box-shadow: 0 0 60px var(--diamond-blue), 0 0 30px rgba(255, 255, 255, 0.8), 
+                inset 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.7); 
+            animation: diamond-pulse 4s infinite alternate; 
+            z-index: 10; 
+        }
+
+        .clock-face {
+            width: 100%; height: 100%; position: relative; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; overflow: hidden; 
+        }
+
+        /* 🌹 玫瑰 (芬德拉) 容器 (確保可見) */
+        #rose-container {
+            position: absolute; width: var(--rose-size); height: var(--rose-size);
+            top: calc(50% - var(--rose-size) / 2); left: calc(50% - var(--rose-size) / 2); 
+            z-index: 15; 
+            animation: pulse-subtle 4s infinite ease-in-out; 
+        }
+        #fendala-rose { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s, transform 0.5s ease-in-out, filter 0.5s ease-in-out; }
+        
+        /* 時針/指示棒 */
+        #pointer-hand {
+            position: absolute; width: var(--pointer-width); height: var(--pointer-height);
+            top: 0; left: calc(50% - var(--pointer-width) / 2); transform-origin: bottom center; 
+            background: linear-gradient(to top, var(--diamond-blue), rgba(255, 255, 255, 0.8), rgba(0,0,0,0));
+            border-radius: 5px; box-shadow: 0 0 20px var(--diamond-blue), 0 0 10px #fff; 
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 5; 
+            pointer-events: none; 
+        }
+
+        /* 🌟 狀態點基礎樣式 */
+        .status-point {
+            position: absolute; width: var(--status-point-size); height: var(--status-point-size); border-radius: 50%;
+            background-color: rgba(167, 255, 235, 0.1); border: 2px solid var(--diamond-blue); 
+            box-shadow: 0 0 20px var(--diamond-blue), 0 0 10px #fff; 
+            transition: transform 0.4s ease-in-out, background-color 0.4s;
+            cursor: pointer; text-decoration: none; display: flex; justify-content: center; align-items: center;
+            z-index: 20; 
+            backdrop-filter: blur(2px); 
+            animation: sparkle-blink 3s infinite alternate; 
+        }
+        #point-12 { animation-delay: 0s; } #point-3 { animation-delay: 0.5s; }
+        #point-6 { animation-delay: 1s; } #point-9 { animation-delay: 1.5s; }
+
+        .status-point:hover {
+            transform: scale(1.15); background-color: rgba(167, 255, 235, 0.3);
+            box-shadow: 0 0 40px var(--diamond-blue), 0 0 15px #fff; 
+        }
+
+        /* 🌟 狀態點標籤 (文字最終修正：確保可見) */
+        .status-point .label {
+            position: absolute; 
+            
+            color: #FFFFFF; /* 純白色 */
+            
+            font-size: 1.0em; 
+            font-weight: bold; 
+            white-space: nowrap;
+            
+            z-index: 25; /* 確保在所有時鐘元素之上 */
+            
+            /* 黑色陰影，強制對比度 */
+            text-shadow: 
+                0 0 2px #000, 
+                0 0 5px #000; 
+        }
+
+        /* 狀態點精確定位 (使用稍微推離圓點的位置) */
+        #point-12 { top: 0px; left: calc(50% - var(--status-point-size) / 2); }
+        #point-12 .label { top: -30px; } 
+
+        #point-3 { right: 0px; top: calc(50% - var(--status-point-size) / 2); }
+        #point-3 .label { right: -60px; } 
+
+        #point-6 { bottom: 0px; left: calc(50% - var(--status-point-size) / 2); }
+        #point-6 .label { bottom: -30px; } 
+
+        #point-9 { left: 0px; top: calc(50% - var(--status-point-size) / 2); }
+        #point-9 .label { left: -60px; } 
+        
+        /* 🌹 玫瑰狀態 CSS */
+        .rose-unopened { filter: grayscale(0%); animation: pulse-subtle 4s infinite ease-in-out; } 
+        .rose-dead { opacity: 0.5; transform: scale(0.9); filter: saturate(0.2) brightness(0.7); animation: none; }
+        .rose-emo { opacity: 0.8; filter: saturate(0.5) brightness(0.9); animation: pulse-slow 3s infinite ease-in-out; }
+        @keyframes pulse-slow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+        .rose-charging { transform: scale(1.1); filter: saturate(1.2) hue-rotate(20deg); animation: pulse-medium 2s infinite ease-in-out; }
+        @keyframes pulse-medium { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.15); } }
+        .rose-learning { transform: scale(1.2); filter: saturate(2) brightness(1.2); box-shadow: 0 0 15px var(--diamond-blue); animation: pulse-strong 1.5s infinite ease-in-out; }
+        @keyframes pulse-strong { 0%, 100% { transform: scale(1.2); } 50% { transform: scale(1.25); } }
+
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <h1 id="main-title">Shirley’s AI Music Studio | 月光奏鳴曲</h1>
+        
+        <div id="clock-interface">
+            <div class="clock-face">
+                
+                <div id="rose-container">
+                    <img id="fendala-rose" 
+                         src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/rose%20unopened.png" 
+                         alt="未開的白色玫瑰">
+                </div>
+
+                <div id="pointer-hand"></div>
+
+                <a href="#" class="status-point" id="point-12" data-status="dead">
+                    <span class="label">擺爛中</span>
+                </a>
+
+                <a href="#" class="status-point" id="point-3" data-status="emo">
+                    <span class="label">EMO中</span>
+                </a>
+
+                <a href="#" class="status-point" id="point-6" data-status="charging">
+                    <span class="label">充電中</span>
+                </a>
+
+                <a href="learning.html" class="status-point active-point" id="point-9" data-status="learning">
+                    <span class="label">學習中</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ----------------------------------
+        // 核心 JavaScript 邏輯 (保持不變)
+        // ----------------------------------
+
+        const roseElement = document.getElementById('fendala-rose');
+        const pointerHand = document.getElementById('pointer-hand');
+        const statusPoints = document.querySelectorAll('.status-point');
+
+        const statusAngles = {
+            'dead': 0,        // 12點
+            'emo': 90,        // 3點
+            'charging': 180,  // 6點
+            'learning': 270   // 9點
+        };
+
+        roseElement.classList.add('rose-unopened'); 
+
+        statusPoints.forEach(point => {
+            const status = point.getAttribute('data-status');
+            const targetAngle = statusAngles[status];
+            
+            // 滑鼠進入：旋轉時針並切換玫瑰狀態
+            point.addEventListener('mouseover', () => {
+                pointerHand.style.transform = `rotate(${targetAngle}deg)`;
+                roseElement.className = ''; 
+                roseElement.classList.add(`rose-${status}`);
+            });
+
+            // 滑鼠離開：玫瑰回到預設狀態
+            point.addEventListener('mouseout', () => {
+                roseElement.className = '';
+                roseElement.classList.add('rose-unopened');
+            });
+
+            // 點擊事件
+            point.addEventListener('click', (e) => {
+                if (status === 'learning') {
+                    // 9點學習中導航到 learning.html
+                } else {
+                    e.preventDefault(); 
+                    alert(`您點擊了 [${point.querySelector('.label').textContent}]，將打開對應的音樂選單！`);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
