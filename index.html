@@ -20,6 +20,7 @@
             --star-color: #e0f7fa;
             --color-deep-space: #0a0413;
             --font-family-base: 'Orbitron', sans-serif;
+            --label-offset: 75px; /* 文字標籤的外擴距離 */
         }
 
         /* 🌟 動畫關鍵幀 */
@@ -27,7 +28,7 @@
         @keyframes diamond-pulse { 0% { box-shadow: 0 0 60px var(--diamond-blue); } 50% { box-shadow: 0 0 90px var(--diamond-blue); } 100% { box-shadow: 0 0 60px var(--diamond-blue); } }
         @keyframes pulse-subtle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.02); opacity: 0.95; } }
         @keyframes twinkle-pulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 0.9; } }
-        /* 🎵 播放時的指針/玫瑰循環動畫 */
+        /* 🎵 播放時表盤循環旋轉動畫 */
         @keyframes spinning-loop {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -54,7 +55,6 @@
         }
 
         #main-container {
-            /* 主容器，用於控制所有元素的播放狀態 */
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; z-index: 10;
         }
@@ -81,7 +81,7 @@
             z-index: 10;
             transition: transform 0.5s ease-out;
         }
-        /* ** 優化點：點擊播放時，表盤開始慢速旋轉 ** */
+        /* 播放時，表盤開始慢速旋轉 */
         .is-playing #clock-interface {
             animation: spinning-loop 120s linear infinite, diamond-pulse 4s infinite alternate;
         }
@@ -129,12 +129,8 @@
             backdrop-filter: blur(2px);
             animation: sparkle-blink 3s infinite alternate;
         }
-        #point-12 { top: 0px; left: calc(50% - var(--status-point-size) / 2); }
-        #point-3 { right: 0px; top: calc(50% - var(--status-point-size) / 2); }
-        #point-6 { bottom: 0px; left: calc(50% - var(--status-point-size) / 2); }
-        #point-9 { left: 0px; top: calc(50% - var(--status-point-size) / 2); }
 
-        /* ** 優化點：狀態點標籤 - 確保文字清晰可見 ** */
+        /* ** 優化點 1: 狀態點標籤 - 增加陰影和定位 ** */
         .status-point .label {
             position: absolute;
             color: var(--star-color);
@@ -142,15 +138,27 @@
             font-weight: 700;
             white-space: nowrap;
             z-index: 25;
-            /* 關鍵：使用多層黑色外陰影提高對比度 */
-            text-shadow: 0 0 5px #000, 0 0 10px #000, 0 0 1px var(--diamond-blue);
+            /* 關鍵: 增加強烈的黑邊和光暈，確保在黑色背景上清晰可見 */
+            text-shadow: 
+                0 0 2px var(--color-deep-space), 
+                0 0 5px var(--color-deep-space), 
+                0 0 10px var(--diamond-blue);
+            padding: 2px 4px; /* 增加一點點空間 */
+            background-color: rgba(0, 0, 0, 0.3); /* 輕微黑色背景以確保對比 */
+            border-radius: 5px;
         }
 
-        /* 狀態點標籤精確定位 (放在圓點外側) */
-        #point-12 .label { top: -35px; transform: translateX(-50%); left: 50%; }
-        #point-3 .label { right: -75px; top: 50%; transform: translateY(-50%); }
-        #point-6 .label { bottom: -35px; transform: translateX(-50%); left: 50%; }
-        #point-9 .label { left: -75px; top: 50%; transform: translateY(-50%); }
+        /* 狀態點位置 */
+        #point-12 { top: 0px; left: calc(50% - var(--status-point-size) / 2); }
+        #point-3 { right: 0px; top: calc(50% - var(--status-point-size) / 2); }
+        #point-6 { bottom: 0px; left: calc(50% - var(--status-point-size) / 2); }
+        #point-9 { left: 0px; top: calc(50% - var(--status-point-size) / 2); }
+
+        /* 狀態點標籤精確定位 (確保文字在外側) */
+        #point-12 .label { top: calc(0px - var(--label-offset) + 20px); transform: translateX(-50%); left: 50%; }
+        #point-3 .label { right: calc(0px - var(--label-offset) + 30px); top: 50%; transform: translateY(-50%); }
+        #point-6 .label { bottom: calc(0px - var(--label-offset) + 20px); transform: translateX(-50%); left: 50%; }
+        #point-9 .label { left: calc(0px - var(--label-offset) + 30px); top: 50%; transform: translateY(-50%); }
 
         /* 🌹 玫瑰狀態 CSS (保持不變) */
         .rose-unopened { filter: grayscale(0%); animation: pulse-subtle 4s infinite ease-in-out; }
@@ -164,63 +172,80 @@
 
 
         /* ---------------------------------- */
-        /* 5. 音樂控制器 - 精緻玻璃匣子 */
+        /* 5. Video 播放器 - 精緻玻璃匣子 (優化點 2) */
         /* ---------------------------------- */
-        #controls-bar {
-            width: var(--clock-size);
-            max-width: 550px;
+
+        /* 播放器容器 (玻璃匣子) */
+        #video-player-container {
+            width: 400px;
+            height: 250px; /* 為影片預留空間 */
             margin-top: 50px;
+            position: relative;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-
-            /* ** 優化點：玻璃匣子樣式 ** */
-            background: rgba(10, 4, 19, 0.6); /* 半透明深色背景 */
-            backdrop-filter: blur(10px); /* 關鍵：毛玻璃效果 */
-            border: 2px solid rgba(167, 255, 235, 0.4); /* 半透明霓虹邊框 */
-            box-shadow: 0 0 30px rgba(167, 255, 235, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.2); /* 內外光暈 */
-
-            padding: 15px 25px;
+            
+            /* ** 玻璃匣子樣式 ** */
+            background: rgba(10, 4, 19, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(167, 255, 235, 0.4);
+            box-shadow: 0 0 30px rgba(167, 255, 235, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.2);
             border-radius: 20px;
+            overflow: hidden; /* 確保內容不溢出 */
             z-index: 50;
-            transition: box-shadow 0.5s ease-in-out;
         }
-        /* 播放時的輕微脈衝動畫 */
-        .is-playing #controls-bar {
+
+        /* 播放器光暈動畫 */
+        .is-playing #video-player-container {
              box-shadow: 0 0 45px var(--diamond-blue), inset 0 0 15px rgba(255, 255, 255, 0.3);
              animation: pulse-subtle 3s infinite ease-in-out;
         }
 
-        #music-title-display {
-            color: var(--star-color);
-            text-shadow: 0 0 8px var(--diamond-blue);
-            font-size: 1.2em;
-            margin: 0 15px;
-            flex-grow: 1;
-            text-align: left;
-            font-weight: 500;
+        /* 影片元素樣式 */
+        #moonlight-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保填滿容器 */
+            display: block;
+            cursor: pointer;
+            transition: opacity 0.3s;
         }
-
-        #current-time {
-            color: var(--diamond-blue);
-            text-shadow: 0 0 5px var(--diamond-blue);
-            font-size: 1.2em;
+        
+        /* 播放/暫停按鈕 (置中並放大) */
+        #play-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 60;
+            background: rgba(0, 0, 0, 0.3); /* 輕微覆蓋以顯示按鈕 */
+            transition: opacity 0.3s;
         }
-
-        #play-pause-btn {
+        
+        .play-button {
             background: var(--diamond-blue);
             color: var(--color-deep-space);
             border: none;
-            padding: 12px 18px;
-            font-size: 1.5em;
+            padding: 20px 30px;
+            font-size: 2.5em;
             cursor: pointer;
             border-radius: 50%;
             transition: all 0.3s;
-            box-shadow: 0 0 15px var(--diamond-blue);
+            box-shadow: 0 0 20px var(--diamond-blue), 0 0 10px #fff;
+            pointer-events: all; /* 確保可以點擊 */
         }
-        #play-pause-btn:hover {
+        .play-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px var(--diamond-blue), 0 0 10px #fff;
+            box-shadow: 0 0 30px var(--diamond-blue), 0 0 15px #fff;
+        }
+        
+        /* 播放時隱藏覆蓋層 */
+        #video-player-container.playing #play-overlay {
+            opacity: 0;
+            pointer-events: none;
         }
 
     </style>
@@ -258,31 +283,35 @@
             </div>
         </div>
 
-        <div id="controls-bar">
-            <button id="play-pause-btn">▶</button>
-            <p id="music-title-display">Studio Theme Music</p>
-            <span id="current-time">0:00</span>
+        <div id="video-player-container">
+            
+            <video id="moonlight-video" loop>
+                <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <div id="play-overlay">
+                <button class="play-button" id="toggle-play">▶</button>
+            </div>
         </div>
-
-        <audio id="music-player">
-            <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/music/studio%20theme.mp3" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
     </div>
 
     <script>
         // ----------------------------------
-        // 核心 JavaScript 邏輯
+        // 核心 JavaScript 邏輯 (連動 Video 播放)
         // ----------------------------------
 
         const mainContainer = document.getElementById('main-container');
         const roseElement = document.getElementById('fendala-rose');
         const pointerHand = document.getElementById('pointer-hand');
         const statusPoints = document.querySelectorAll('.status-point');
-        const musicPlayer = document.getElementById('music-player');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const currentTimeDisplay = document.getElementById('current-time');
-        const controlsBar = document.getElementById('controls-bar');
+
+        // Video 相關元素
+        const videoPlayerContainer = document.getElementById('video-player-container');
+        const videoElement = document.getElementById('moonlight-video');
+        const togglePlayButton = document.getElementById('toggle-play');
+        const playOverlay = document.getElementById('play-overlay');
+
 
         const statusAngles = {
             'dead': 0,
@@ -294,13 +323,13 @@
 
         roseElement.classList.add('rose-unopened');
 
-        // 1. 狀態點互動邏輯 (只在音樂暫停時響應 mouseover)
+        // 1. 狀態點互動邏輯 (只在 Video 暫停時響應 mouseover)
         statusPoints.forEach(point => {
             const status = point.getAttribute('data-status');
             const targetAngle = statusAngles[status];
 
             point.addEventListener('mouseover', () => {
-                if (musicPlayer.paused) {
+                if (videoElement.paused) {
                     pointerHand.style.transform = `rotate(${targetAngle}deg)`;
                     roseElement.className = '';
                     roseElement.classList.add(`rose-${status}`);
@@ -308,7 +337,7 @@
             });
 
             point.addEventListener('mouseout', () => {
-                if (musicPlayer.paused) {
+                if (videoElement.paused) {
                     pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
                     roseElement.className = '';
                     roseElement.classList.add('rose-unopened');
@@ -318,8 +347,8 @@
             point.addEventListener('click', (e) => {
                 if (status !== 'learning') {
                     e.preventDefault();
-                    if (!musicPlayer.paused) {
-                         musicPlayer.pause();
+                    if (!videoElement.paused) {
+                         videoElement.pause();
                     }
                     alert(`您點擊了 [${point.querySelector('.label').textContent}]，將打開對應的音樂選單！`);
                 }
@@ -327,44 +356,43 @@
         });
 
 
-        // 2. 音樂控制邏輯 (播放/暫停與表盤連動)
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        playPauseBtn.addEventListener('click', () => {
-            if (musicPlayer.paused) {
+        // 2. Video 控制邏輯 (播放/暫停與表盤連動)
+        togglePlayButton.addEventListener('click', () => {
+            if (videoElement.paused) {
                 // 嘗試播放，如果成功，會觸發 'play' 事件
-                musicPlayer.play().catch(error => {
-                    console.error("播放失敗，可能是瀏覽器阻止自動播放:", error);
-                    alert("音樂播放失敗，請確保瀏覽器允許自動播放或手動操作一次！");
+                videoElement.play().catch(error => {
+                    console.error("Video 播放失敗，可能是瀏覽器阻止自動播放:", error);
+                    alert("Video 播放失敗，請確保瀏覽器允許自動播放或手動操作一次！");
                 });
             } else {
-                musicPlayer.pause(); // 會觸發 'pause' 事件
+                videoElement.pause(); // 會觸發 'pause' 事件
             }
         });
+        
+        // ** Video 元素本身也可以點擊暫停 **
+        videoElement.addEventListener('click', () => {
+             if (!videoElement.paused) {
+                 videoElement.pause();
+             }
+        });
 
-        // ** 播放事件：啟動表盤旋轉動畫 **
-        musicPlayer.addEventListener('play', () => {
-            playPauseBtn.textContent = '⏸';
-            // 添加 class 啟動表盤和播放器光暈動畫
+        // 播放事件：啟動表盤旋轉動畫
+        videoElement.addEventListener('play', () => {
+            togglePlayButton.textContent = '⏸';
+            videoPlayerContainer.classList.add('playing');
             mainContainer.classList.add('is-playing');
-            controlsBar.classList.add('is-playing');
             
-            // 指針固定在 EMO (90度)
+            // 指針和玫瑰進入 EMO 狀態
             pointerHand.style.transform = `rotate(${statusAngles['emo']}deg)`;
             roseElement.className = '';
             roseElement.classList.add('rose-emo');
         });
 
-        // ** 暫停事件：停止表盤旋轉動畫 **
-        musicPlayer.addEventListener('pause', () => {
-            playPauseBtn.textContent = '▶';
-            // 移除 class 停止所有連動動畫
+        // 暫停事件：停止表盤旋轉動畫
+        videoElement.addEventListener('pause', () => {
+            togglePlayButton.textContent = '▶';
+            videoPlayerContainer.classList.remove('playing');
             mainContainer.classList.remove('is-playing');
-            controlsBar.classList.remove('is-playing');
             
             // 指針和玫瑰回到預設狀態
             pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
@@ -372,19 +400,12 @@
             roseElement.classList.add('rose-unopened');
         });
 
-        // 歌曲播放完畢
-        musicPlayer.addEventListener('ended', () => {
-             musicPlayer.pause();
-             musicPlayer.currentTime = 0;
+        // 播放結束時 (如果 loop 屬性被移除)
+        videoElement.addEventListener('ended', () => {
+             videoElement.pause();
+             videoElement.currentTime = 0;
         });
 
-        musicPlayer.addEventListener('timeupdate', () => {
-            currentTimeDisplay.textContent = formatTime(musicPlayer.currentTime);
-        });
-
-        musicPlayer.addEventListener('loadedmetadata', () => {
-            currentTimeDisplay.textContent = formatTime(musicPlayer.currentTime);
-        });
     </script>
 </body>
 </html>
