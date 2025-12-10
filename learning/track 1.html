@@ -912,13 +912,12 @@
       const navLink = document.querySelector(`#page-nav a[data-target='${sectionId}']`);
       if (navLink) navLink.classList.add('active');
 
-      const contentContainerTop = document.getElementById('content-container').offsetTop;
-      window.scrollTo({
-        top: contentContainerTop - 20,
-        behavior: 'smooth'
-      });
-    }
+     const contentContainerTop = document.getElementById('content-container').offsetTop;
 
+window.scrollTo({
+    top: contentContainerTop - 20, 
+    behavior: 'smooth'
+});
     window.onload = function() {
       showSection('lyrics-section');
     };
