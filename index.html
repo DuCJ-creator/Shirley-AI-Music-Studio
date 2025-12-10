@@ -13,29 +13,28 @@
         :root {
             --clock-size: 500px;
             --rose-size: 120px;
-            --status-point-size: 45px;
+            --status-point-size: 85px; /* **大幅放大圓點** 以容納文字 */
             --pointer-width: 14px;
             --pointer-height: 50%;
-            --diamond-blue: #a7ffeb; /* 霓虹青綠色 */
+            --diamond-blue: #a7ffeb;
             --star-color: #e0f7fa;
             --color-deep-space: #0a0413;
             --font-family-base: 'Orbitron', sans-serif;
-            --label-offset: 75px; /* 文字標籤的外擴距離 */
+            --label-offset: 75px;
         }
 
-        /* 🌟 動畫關鍵幀 */
+        /* 🌟 動畫關鍵幀 (保持不變) */
         @keyframes sparkle-blink { 0%, 70%, 100% { opacity: 1; } 5% { opacity: 0.2; transform: scale(1.01); } 10% { opacity: 1; } 15% { opacity: 0.3; } }
         @keyframes diamond-pulse { 0% { box-shadow: 0 0 60px var(--diamond-blue); } 50% { box-shadow: 0 0 90px var(--diamond-blue); } 100% { box-shadow: 0 0 60px var(--diamond-blue); } }
         @keyframes pulse-subtle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.02); opacity: 0.95; } }
         @keyframes twinkle-pulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 0.9; } }
-        /* 🎵 播放時表盤循環旋轉動畫 */
         @keyframes spinning-loop {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         /* ---------------------------------- */
-        /* 2. 佈局與背景 */
+        /* 2. 佈局與背景 (保持不變) */
         /* ---------------------------------- */
         body {
             margin: 0; padding: 0; height: 100vh; width: 100vw;
@@ -45,7 +44,6 @@
         }
 
         body::before {
-            /* 背景光點/粒子效果 */
             content: ''; position: absolute; width: 100%; height: 100%; background: transparent;
             box-shadow: -150px -150px 3px var(--star-color), 100px 50px 2px var(--star-color),
                 -80px 200px 1px var(--star-color), 180px -100px 2px var(--star-color),
@@ -69,7 +67,7 @@
         }
 
         /* ---------------------------------- */
-        /* 3. 表盤 (Clock Interface) - 播放動畫連動 */
+        /* 3. 表盤 (Clock Interface) */
         /* ---------------------------------- */
         #clock-interface {
             position: relative; width: var(--clock-size); height: var(--clock-size); border-radius: 50%;
@@ -81,7 +79,6 @@
             z-index: 10;
             transition: transform 0.5s ease-out;
         }
-        /* 播放時，表盤開始慢速旋轉 */
         .is-playing #clock-interface {
             animation: spinning-loop 120s linear infinite, diamond-pulse 4s infinite alternate;
         }
@@ -91,7 +88,7 @@
             display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
 
-        /* 🌹 玫瑰 */
+        /* 🌹 玫瑰 & 指針 (保持不變) */
         #rose-container {
             position: absolute; width: var(--rose-size); height: var(--rose-size);
             top: calc(50% - var(--rose-size) / 2); left: calc(50% - var(--rose-size) / 2);
@@ -99,8 +96,6 @@
             animation: pulse-subtle 4s infinite ease-in-out;
         }
         #fendala-rose { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s, transform 0.5s ease-in-out, filter 0.5s ease-in-out; }
-
-        /* 時針/指示棒 */
         #pointer-hand {
             position: absolute; width: var(--pointer-width); height: var(--pointer-height);
             top: 0; left: calc(50% - var(--pointer-width) / 2); transform-origin: bottom center;
@@ -110,139 +105,114 @@
             z-index: 5; pointer-events: none;
             transform: rotate(0deg);
         }
-        /* 播放時指針固定在 EMO 狀態 */
         .is-playing #pointer-hand {
-            transition: none;
-            animation: none;
+            transition: none; animation: none;
             transform: rotate(90deg) scale(1.05);
         }
 
-
-        /* 🌟 狀態點 - 優化文字可見性 */
+        /* ---------------------------------- */
+        /* 4. 狀態點 - 終極優化 (文字內嵌) */
+        /* ---------------------------------- */
         .status-point {
-            position: absolute; width: var(--status-point-size); height: var(--status-point-size); border-radius: 50%;
-            background-color: rgba(167, 255, 235, 0.1); border: 2px solid var(--diamond-blue);
-            box-shadow: 0 0 20px var(--diamond-blue), 0 0 10px #fff;
+            position: absolute;
+            width: var(--status-point-size);
+            height: var(--status-point-size);
+            border-radius: 50%;
+            /* 讓背景顏色更深，提高內嵌文字的對比度 */
+            background-color: rgba(10, 4, 19, 0.8); 
+            border: 4px solid var(--diamond-blue); /* 邊框加粗 */
+            box-shadow: 0 0 25px var(--diamond-blue), 0 0 15px #fff;
             transition: transform 0.4s ease-in-out, background-color 0.4s;
-            cursor: pointer; display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
             z-index: 20;
             backdrop-filter: blur(2px);
             animation: sparkle-blink 3s infinite alternate;
+            text-align: center; /* 確保文字居中 */
         }
 
-        /* ** 優化點 1: 狀態點標籤 - 增加陰影和定位 ** */
+        /* 狀態點定位 (由於圓點變大，需要調整其中心位置) */
+        #point-12 { top: calc(0% + 15px); left: calc(50% - var(--status-point-size) / 2); }
+        #point-3 { right: calc(0% + 15px); top: calc(50% - var(--status-point-size) / 2); }
+        #point-6 { bottom: calc(0% + 15px); left: calc(50% - var(--status-point-size) / 2); }
+        #point-9 { left: calc(0% + 15px); top: calc(50% - var(--status-point-size) / 2); }
+
+        .status-point:hover {
+            transform: scale(1.15); background-color: rgba(167, 255, 235, 0.2);
+            box-shadow: 0 0 40px var(--diamond-blue), 0 0 15px #fff;
+        }
+
+        /* ** 優化點 1: 文字內嵌在圓點中央 ** */
         .status-point .label {
-            position: absolute;
+            position: static; /* 讓文字在 flex 容器中居中 */
             color: var(--star-color);
-            font-size: 1.1em;
+            font-size: 1.0em; /* 調整大小以適應圓點 */
             font-weight: 700;
-            white-space: nowrap;
-            z-index: 25;
-            /* 關鍵: 增加強烈的黑邊和光暈，確保在黑色背景上清晰可見 */
+            white-space: normal; /* 允許文字換行，以容納長度 */
+            line-height: 1.3;
+            /* 關鍵: 強烈的霓虹文字外發光，確保在深色背景中清晰突出 */
             text-shadow: 
-                0 0 2px var(--color-deep-space), 
-                0 0 5px var(--color-deep-space), 
-                0 0 10px var(--diamond-blue);
-            padding: 2px 4px; /* 增加一點點空間 */
-            background-color: rgba(0, 0, 0, 0.3); /* 輕微黑色背景以確保對比 */
-            border-radius: 5px;
+                0 0 5px var(--diamond-blue), 
+                0 0 10px var(--diamond-blue), 
+                0 0 1px #fff;
+            padding: 5px; 
+            z-index: 25;
+            max-width: 80%; /* 限制文字寬度 */
+        }
+        
+        /* 由於文字已經在圓點內部，不需要外部定位 */
+        #point-12 .label, #point-3 .label, #point-6 .label, #point-9 .label {
+            position: static;
+            transform: none; 
+            left: auto;
+            right: auto;
+            top: auto;
+            bottom: auto;
         }
 
-        /* 狀態點位置 */
-        #point-12 { top: 0px; left: calc(50% - var(--status-point-size) / 2); }
-        #point-3 { right: 0px; top: calc(50% - var(--status-point-size) / 2); }
-        #point-6 { bottom: 0px; left: calc(50% - var(--status-point-size) / 2); }
-        #point-9 { left: 0px; top: calc(50% - var(--status-point-size) / 2); }
-
-        /* 狀態點標籤精確定位 (確保文字在外側) */
-        #point-12 .label { top: calc(0px - var(--label-offset) + 20px); transform: translateX(-50%); left: 50%; }
-        #point-3 .label { right: calc(0px - var(--label-offset) + 30px); top: 50%; transform: translateY(-50%); }
-        #point-6 .label { bottom: calc(0px - var(--label-offset) + 20px); transform: translateX(-50%); left: 50%; }
-        #point-9 .label { left: calc(0px - var(--label-offset) + 30px); top: 50%; transform: translateY(-50%); }
-
-        /* 🌹 玫瑰狀態 CSS (保持不變) */
-        .rose-unopened { filter: grayscale(0%); animation: pulse-subtle 4s infinite ease-in-out; }
-        .rose-dead { opacity: 0.5; transform: scale(0.9); filter: saturate(0.2) brightness(0.7); animation: none; }
-        .rose-emo { opacity: 0.8; filter: saturate(0.5) brightness(0.9); animation: pulse-slow 3s infinite ease-in-out; }
-        @keyframes pulse-slow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-        .rose-charging { transform: scale(1.1); filter: saturate(1.2) hue-rotate(20deg); animation: pulse-medium 2s infinite ease-in-out; }
-        @keyframes pulse-medium { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.15); } }
-        .rose-learning { transform: scale(1.2); filter: saturate(2) brightness(1.2); box-shadow: 0 0 15px var(--diamond-blue); animation: pulse-strong 1.5s infinite ease-in-out; }
-        @keyframes pulse-strong { 0%, 100% { transform: scale(1.2); } 50% { transform: scale(1.25); } }
-
-
         /* ---------------------------------- */
-        /* 5. Video 播放器 - 精緻玻璃匣子 (優化點 2) */
+        /* 5. Video 播放器 - 精緻玻璃匣子 (保持不變) */
         /* ---------------------------------- */
-
-        /* 播放器容器 (玻璃匣子) */
         #video-player-container {
-            width: 400px;
-            height: 250px; /* 為影片預留空間 */
-            margin-top: 50px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            /* ** 玻璃匣子樣式 ** */
+            width: 400px; height: 250px; 
+            margin-top: 50px; position: relative;
+            display: flex; justify-content: center; align-items: center;
             background: rgba(10, 4, 19, 0.6);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(167, 255, 235, 0.4);
             box-shadow: 0 0 30px rgba(167, 255, 235, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            overflow: hidden; /* 確保內容不溢出 */
+            overflow: hidden;
             z-index: 50;
         }
-
-        /* 播放器光暈動畫 */
         .is-playing #video-player-container {
              box-shadow: 0 0 45px var(--diamond-blue), inset 0 0 15px rgba(255, 255, 255, 0.3);
              animation: pulse-subtle 3s infinite ease-in-out;
         }
-
-        /* 影片元素樣式 */
         #moonlight-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 確保填滿容器 */
-            display: block;
-            cursor: pointer;
-            transition: opacity 0.3s;
+            width: 100%; height: 100%; object-fit: cover; 
+            display: block; cursor: pointer; transition: opacity 0.3s;
         }
-        
-        /* 播放/暫停按鈕 (置中並放大) */
         #play-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 60;
-            background: rgba(0, 0, 0, 0.3); /* 輕微覆蓋以顯示按鈕 */
+            position: absolute; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 60;
+            background: rgba(0, 0, 0, 0.3);
             transition: opacity 0.3s;
         }
-        
         .play-button {
-            background: var(--diamond-blue);
-            color: var(--color-deep-space);
-            border: none;
-            padding: 20px 30px;
-            font-size: 2.5em;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: all 0.3s;
+            background: var(--diamond-blue); color: var(--color-deep-space);
+            border: none; padding: 20px 30px; font-size: 2.5em;
+            cursor: pointer; border-radius: 50%; transition: all 0.3s;
             box-shadow: 0 0 20px var(--diamond-blue), 0 0 10px #fff;
-            pointer-events: all; /* 確保可以點擊 */
+            pointer-events: all;
         }
         .play-button:hover {
             transform: scale(1.1);
             box-shadow: 0 0 30px var(--diamond-blue), 0 0 15px #fff;
         }
-        
-        /* 播放時隱藏覆蓋層 */
         #video-player-container.playing #play-overlay {
             opacity: 0;
             pointer-events: none;
@@ -298,15 +268,13 @@
 
     <script>
         // ----------------------------------
-        // 核心 JavaScript 邏輯 (連動 Video 播放)
+        // 核心 JavaScript 邏輯 (保持不變)
         // ----------------------------------
 
         const mainContainer = document.getElementById('main-container');
         const roseElement = document.getElementById('fendala-rose');
         const pointerHand = document.getElementById('pointer-hand');
         const statusPoints = document.querySelectorAll('.status-point');
-
-        // Video 相關元素
         const videoPlayerContainer = document.getElementById('video-player-container');
         const videoElement = document.getElementById('moonlight-video');
         const togglePlayButton = document.getElementById('toggle-play');
@@ -323,7 +291,7 @@
 
         roseElement.classList.add('rose-unopened');
 
-        // 1. 狀態點互動邏輯 (只在 Video 暫停時響應 mouseover)
+        // 1. 狀態點互動邏輯
         statusPoints.forEach(point => {
             const status = point.getAttribute('data-status');
             const targetAngle = statusAngles[status];
@@ -356,51 +324,44 @@
         });
 
 
-        // 2. Video 控制邏輯 (播放/暫停與表盤連動)
+        // 2. Video 控制邏輯
         togglePlayButton.addEventListener('click', () => {
             if (videoElement.paused) {
-                // 嘗試播放，如果成功，會觸發 'play' 事件
                 videoElement.play().catch(error => {
                     console.error("Video 播放失敗，可能是瀏覽器阻止自動播放:", error);
                     alert("Video 播放失敗，請確保瀏覽器允許自動播放或手動操作一次！");
                 });
             } else {
-                videoElement.pause(); // 會觸發 'pause' 事件
+                videoElement.pause();
             }
         });
         
-        // ** Video 元素本身也可以點擊暫停 **
         videoElement.addEventListener('click', () => {
              if (!videoElement.paused) {
                  videoElement.pause();
              }
         });
 
-        // 播放事件：啟動表盤旋轉動畫
         videoElement.addEventListener('play', () => {
             togglePlayButton.textContent = '⏸';
             videoPlayerContainer.classList.add('playing');
             mainContainer.classList.add('is-playing');
             
-            // 指針和玫瑰進入 EMO 狀態
             pointerHand.style.transform = `rotate(${statusAngles['emo']}deg)`;
             roseElement.className = '';
             roseElement.classList.add('rose-emo');
         });
 
-        // 暫停事件：停止表盤旋轉動畫
         videoElement.addEventListener('pause', () => {
             togglePlayButton.textContent = '▶';
             videoPlayerContainer.classList.remove('playing');
             mainContainer.classList.remove('is-playing');
             
-            // 指針和玫瑰回到預設狀態
             pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
             roseElement.className = '';
             roseElement.classList.add('rose-unopened');
         });
 
-        // 播放結束時 (如果 loop 屬性被移除)
         videoElement.addEventListener('ended', () => {
              videoElement.pause();
              videoElement.currentTime = 0;
