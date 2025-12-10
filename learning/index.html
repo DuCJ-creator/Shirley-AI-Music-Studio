@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI 學習花園 | Learn Grammar with AI Songs</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------------------------------- */
+    /* 1) Tokens — Burgundy Magnolia */
+    /* ---------------------------------- */
+    :root{
+      /* 勃根地酒紅（更深、更紫、更高級） */
+      --burg-0:#fff0f3;     /* 極少量高光 */
+      --burg-1:#f0b7c2;     /* 玫瑰粉霧（只點綴） */
+      --burg-2:#c45a72;     /* 深玫瑰紅 */
+      --burg-3:#8f203e;     /* 勃根地 */
+      --burg-4:#5c0f26;     /* 酒紅暗部 */
+      --burg-5:#2f0712;     /* 絲絨影 */
+
+      /* 金色流光 */
+      --gold-0:#fff3c8;
+      --gold-1:#ffd36b;
+      --gold-2:#ffb400;
+
+      /* 文字 */
+      --ivory:#fff7fb;
+      --ink:#120915;
+
+      /* 暮色星空（非黑底喪禮） */
+      --bg-0:#0a1030;  
+      --bg-1:#171245;  
+      --bg-2:#2b0f4b;  
+      --bg-3:#3b0b3f;  
+      --bg-4:#4a1134;  
+
+      --font-ui:"Orbitron", system-ui, sans-serif;
+      --font-serif:"Cormorant Garamond", serif;
+
+      --container-size:min(92vw, 820px);
+      --petal-w:clamp(190px, 26vw, 270px);
+      --petal-h:clamp(260px, 40vw, 360px);
+      --center-size:clamp(120px, 18vw, 170px);
+
+      /* 11 瓣花 */
+      --lift:clamp(62px, 10vw, 94px);
+
+      /* Layout rhythm */
+      --title-bottom-gap: clamp(8px, 1.6vh, 14px);
+      --nav-bottom-gap: clamp(10px, 2vh, 18px);
+    }
+
+    html, body { height: 100%; }
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family:var(--font-ui);
+      color:var(--ivory);
+      background:
+        radial-gradient(1200px 820px at 50% 35%, var(--bg-4) 0%, var(--bg-3) 28%, var(--bg-2) 55%, var(--bg-1) 75%, var(--bg-0) 100%);
+      overflow:hidden;
+      position:relative;
+      letter-spacing:.02em;
+    }
+
+    /* ---------------------------------- */
+    /* 2) Starfield + Nebula + Floating Sparks */
+    /* ---------------------------------- */
+    body::before{
+      content:"";
+      position:absolute; inset:-10%;
+      background:
+        radial-gradient(1px 1px at 6% 12%, rgba(255,255,255,.9) 0 70%, transparent 72%),
+        radial-gradient(1px 1px at 22% 38%, rgba(255,255,255,.7) 0 70%, transparent 72%),
+        radial-gradient(1px 1px at 44% 18%, rgba(255,255,255,.8) 0 70%, transparent 72%),
+        radial-gradient(1.2px 1.2px at 72% 22%, rgba(255,255,255,.9) 0 70%, transparent 72%),
+        radial-gradient(1px 1px at 82% 66%, rgba(255,255,255,.75) 0 70%, transparent 72%),
+        radial-gradient(1.3px 1.3px at 16% 78%, rgba(255,255,255,.85) 0 70%, transparent 72%),
+        radial-gradient(1px 1px at 58% 84%, rgba(255,255,255,.7) 0 70%, transparent 72%),
+        radial-gradient(1.2px 1.2px at 90% 38%, rgba(255,255,255,.8) 0 70%, transparent 72%);
+      opacity:.65;
+      filter: blur(.2px);
+      animation: starDrift 28s linear infinite;
+      z-index:-3;
+    }
+    @keyframes starDrift{ to{ transform: translateY(3%) translateX(-2%); } }
+
+    body::after{
+      content:"";
+      position:absolute; inset:-20%;
+      background:
+        radial-gradient(900px 650px at 30% 30%, rgba(196,90,114,.12), transparent 60%),
+        radial-gradient(900px 700px at 70% 20%, rgba(143,32,62,.10), transparent 65%),
+        radial-gradient(1000px 760px at 50% 70%, rgba(255,211,107,.08), transparent 60%);
+      animation: nebulaBreathe 9s ease-in-out infinite;
+      z-index:-2;
+    }
+    @keyframes nebulaBreathe{
+      0%,100%{opacity:.55; transform:scale(1);}
+      50%{opacity:.92; transform:scale(1.03);}
+    }
+
+    .spark-field{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:-1;
+      overflow:hidden;
+    }
+    .spark{
+      position:absolute;
+      width:140px; height:2px;
+      background: linear-gradient(90deg, transparent, rgba(255,211,107,.95), transparent);
+      filter: blur(0.4px);
+      opacity:.55;
+      transform: rotate(12deg);
+      animation: sparkMove linear infinite;
+    }
+    @keyframes sparkMove{
+      0%{ transform: translateX(-25vw) translateY(0) rotate(12deg); opacity:0; }
+      10%{ opacity:.8; }
+      100%{ transform: translateX(125vw) translateY(-34vh) rotate(12deg); opacity:0; }
+    }
+
+    /* ---------------------------------- */
+    /* 3) Title */
+    /* ---------------------------------- */
+    #page-title{
+      font-family:var(--font-serif);
+      font-weight:600;
+      font-size:clamp(1.75rem, 3.2vw, 2.5rem);
+      letter-spacing:.09em;
+      text-align:center;
+      margin:0 0 var(--title-bottom-gap) 0; /* gap reduced */
+      color:var(--ivory);
+      text-shadow:
+        0 0 18px rgba(196,90,114,.55),
+        0 0 55px rgba(255,211,107,.22);
+      z-index:5;
+    }
+    #page-title small{
+      display:block;
+      font-family:var(--font-ui);
+      font-size:.74em;
+      letter-spacing:.22em;
+      color:rgba(255,247,251,.9);
+      margin-top:6px;
+    }
+
+    /* ---------------------------------- */
+    /* 4) Navigation Panel (2 columns, first full width) */
+    /* ---------------------------------- */
+    #nav-panel{
+      width:min(92vw, 860px);
+      margin:0 0 var(--nav-bottom-gap) 0;
+      padding:clamp(12px, 2.2vw, 18px);
+      border-radius:18px;
+      position:relative;
+      z-index:4;
+      background:
+        linear-gradient(180deg, rgba(20,6,26,.65), rgba(10,4,20,.78));
+      border:1px solid rgba(255,243,200,.55);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.5),
+        0 0 24px rgba(255,211,107,.35),
+        inset 0 0 20px rgba(196,90,114,.22);
+      backdrop-filter: blur(10px) saturate(1.1);
+    }
+    #nav-panel::before{
+      content:"";
+      position:absolute; inset:-1px;
+      border-radius:18px;
+      background:
+        radial-gradient(120% 140% at 10% 0%, rgba(255,211,107,.18), transparent 55%),
+        radial-gradient(120% 140% at 90% 100%, rgba(196,90,114,.18), transparent 60%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+
+    .nav-title{
+      font-family:var(--font-ui);
+      font-weight:700;
+      letter-spacing:.16em;
+      font-size:clamp(.95rem, 1.6vw, 1.1rem);
+      color:var(--gold-0);
+      opacity:.95;
+      text-shadow:0 0 10px rgba(255,211,107,.55);
+      margin:0 0 10px 0;
+      text-align:center;
+    }
+
+    .nav-grid{
+      display:grid;
+      gap:10px 14px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .nav-item{
+      padding:10px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--ivory);
+      font-size:clamp(.9rem, 1.55vw, 1rem);
+      line-height:1.4;
+      text-shadow:
+        0 1px 3px rgba(0,0,0,.8),
+        0 0 8px rgba(196,90,114,.35);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+    .nav-item strong{
+      color:#fff;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+
+    /* First item full width */
+    .nav-item.full{
+      grid-column: 1 / -1;
+      text-align:center;
+      background:
+        linear-gradient(180deg, rgba(255,211,107,.10), rgba(196,90,114,.08)),
+        rgba(255,255,255,.05);
+      border-color: rgba(255,211,107,.35);
+      box-shadow:
+        0 0 14px rgba(255,211,107,.35),
+        inset 0 0 18px rgba(196,90,114,.18);
+    }
+
+    /* subtle hover hint (not a link, just feedback) */
+    .nav-item:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,211,107,.35);
+      box-shadow: 0 6px 16px rgba(0,0,0,.45), 0 0 12px rgba(255,211,107,.25);
+    }
+
+    /* ---------------------------------- */
+    /* 5) Flower container */
+    /* ---------------------------------- */
+    #petal-container{
+      width:var(--container-size);
+      height:var(--container-size);
+      position:relative;
+      display:grid;
+      place-items:center;
+      animation: slowPulse 12s ease-in-out infinite;
+      z-index:3;
+      filter: drop-shadow(0 18px 60px rgba(0,0,0,.6));
+    }
+    @keyframes slowPulse{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.02);}
+    }
+
+    /* ---------------------------------- */
+    /* 6) Center core */
+    /* ---------------------------------- */
+    #learning-center{
+      position:absolute;
+      width:var(--center-size);
+      height:var(--center-size);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:0;
+      line-height:1.15;
+
+      background:
+        radial-gradient(circle at 38% 32%,
+          var(--burg-0) 0%,
+          var(--burg-1) 36%,
+          var(--burg-2) 62%,
+          var(--burg-3) 100%);
+      border:1.5px solid rgba(255,240,243,.95);
+      box-shadow:
+        0 0 26px rgba(196,90,114,.9),
+        0 0 18px rgba(255,211,107,.7),
+        inset 0 0 12px rgba(255,240,243,1);
+
+      font-size:clamp(1rem, 2.4vw, 1.2rem);
+      font-weight:800;
+      letter-spacing:.08em;
+      color:var(--ink);
+      text-shadow:
+        0 1px 0 rgba(255,240,243,1),
+        0 0 8px rgba(255,211,107,.9);
+
+      z-index:30;
+      animation: centerBreathe 6s ease-in-out infinite;
+    }
+    @keyframes centerBreathe{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.06);}
+    }
+
+    /* ---------------------------------- */
+    /* 7) Petals — Burgundy vellum */
+    /* ---------------------------------- */
+    .petal{
+      --angle:0deg;
+      --tilt:0deg;
+      position:absolute;
+      width:var(--petal-w);
+      height:var(--petal-h);
+      transform-origin:center bottom;
+
+      clip-path: polygon(
+        50% 0%,
+        67% 4%,
+        82% 14%,
+        92% 28%,
+        96% 44%,
+        90% 62%,
+        78% 78%,
+        62% 90%,
+        54% 96%,
+        50% 100%,
+        46% 96%,
+        38% 90%,
+        22% 78%,
+        10% 62%,
+        4% 44%,
+        8% 28%,
+        18% 14%,
+        33% 4%
+      );
+
+      transform:
+        rotate(var(--angle))
+        translateY(calc(var(--lift) * -1))
+        rotate(var(--tilt));
+
+      background:
+        radial-gradient(120% 140% at 50% 0%,
+          var(--burg-0) 0%,
+          var(--burg-1) 18%,
+          var(--burg-2) 40%,
+          var(--burg-3) 68%,
+          var(--burg-4) 100%),
+        linear-gradient(165deg,
+          rgba(255,240,243,1),
+          rgba(196,90,114,.92) 45%,
+          rgba(92,15,38,1) 100%);
+
+      border:1px solid rgba(255,240,243,.9);
+      backdrop-filter: blur(7px) saturate(1.12);
+
+      box-shadow:
+        inset 0 16px 38px rgba(255,240,243,1),
+        inset 0 -34px 62px rgba(47,7,18,.90),
+        0 12px 34px rgba(0,0,0,.55),
+        0 0 18px rgba(255,211,107,.32);
+      filter: drop-shadow(0 0 8px rgba(196,90,114,1));
+
+      display:grid;
+      place-items:center;
+      text-decoration:none;
+      text-align:center;
+      padding:14px;
+      line-height:1.5;
+
+      color:var(--ivory);
+      font-size:clamp(.9rem, 1.8vw, 1.05rem);
+      font-weight:700;
+      letter-spacing:.03em;
+
+      text-shadow:
+        0 2px 6px rgba(0,0,0,.85),
+        0 0 10px rgba(255,211,107,.25);
+
+      transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease,
+        filter .45s ease,
+        background .45s ease;
+
+      animation: petalBreathe 7.2s ease-in-out infinite;
+      z-index:2;
+      cursor:pointer;
+      isolation:isolate;
+    }
+
+    .petal::after{
+      content:"";
+      position:absolute;
+      inset:15% 11%;
+      border-radius:18px;
+      background: rgba(14,4,10,.34);
+      filter: blur(12px);
+      z-index:-1;
+    }
+
+    .petal::before{
+      content:"";
+      position:absolute; inset:0;
+      clip-path: inherit;
+      background:
+        radial-gradient(120% 140% at 50% 0%,
+          rgba(255,240,243,.55),
+          transparent 55%),
+        repeating-radial-gradient(circle at 50% 8%,
+          rgba(255,240,243,.20) 0 8px,
+          rgba(255,240,243,0) 8px 18px);
+      opacity:.26;
+      mix-blend-mode: soft-light;
+      pointer-events:none;
+    }
+
+    @keyframes petalBreathe{
+      0%,100%{
+        filter: drop-shadow(0 0 7px rgba(196,90,114,1));
+        box-shadow:
+          inset 0 16px 38px rgba(255,240,243,1),
+          inset 0 -34px 62px rgba(47,7,18,.82),
+          0 10px 30px rgba(0,0,0,.55),
+          0 0 14px rgba(255,211,107,.28);
+      }
+      50%{
+        filter: drop-shadow(0 0 10px rgba(196,90,114,1));
+        box-shadow:
+          inset 0 18px 42px rgba(255,240,243,1),
+          inset 0 -38px 68px rgba(47,7,18,.95),
+          0 14px 36px rgba(0,0,0,.6),
+          0 0 20px rgba(255,211,107,.45);
+      }
+    }
+
+    .petal:hover,
+    .petal:focus-visible{
+      transform:
+        rotate(var(--angle))
+        translateY(calc(var(--lift) * -1 - 12px))
+        rotate(var(--tilt))
+        scale(1.05);
+
+      box-shadow:
+        inset 0 20px 46px rgba(255,240,243,1),
+        inset 0 -42px 74px rgba(30,4,12,.98),
+        0 16px 44px rgba(0,0,0,.65),
+        0 0 26px rgba(255,211,107,.8);
+
+      filter: drop-shadow(0 0 13px rgba(255,211,107,1));
+      animation:none;
+      outline:none;
+      z-index:8;
+    }
+
+    .petal .petal-content{
+      transform: rotate(calc(var(--angle) * -1)) rotate(calc(var(--tilt) * -1));
+      max-width:82%;
+    }
+
+    .petal.layer-a{ z-index:3; }
+    .petal.layer-b{ z-index:2; }
+
+    /* ---------------------------------- */
+    /* 8) Back Button */
+    /* ---------------------------------- */
+    #back-button{
+      margin-top: clamp(14px, 2.6vh, 28px);
+      background: linear-gradient(180deg, var(--gold-0), var(--gold-1));
+      color:#2a0f1e;
+      border:1px solid rgba(255,241,200,.95);
+      padding: 12px 22px;
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      font-weight:800;
+      font-family:var(--font-ui);
+      letter-spacing:.08em;
+      border-radius: 14px;
+      cursor:pointer;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.55),
+        0 0 18px rgba(255,211,107,1);
+      transition:.25s ease;
+      z-index:5;
+    }
+    #back-button:hover{
+      transform: translateY(-1px) scale(1.04);
+      box-shadow:
+        0 14px 40px rgba(0,0,0,.65),
+        0 0 26px rgba(255,211,107,1);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+    }
+
+    /* ---------------------------------- */
+    /* 9) Golden trail canvas */
+    /* ---------------------------------- */
+    #trail-canvas{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:999;
+      mix-blend-mode: screen;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating light streaks -->
+  <div class="spark-field" aria-hidden="true">
+    <div class="spark" style="top:12%; left:-10%; animation-duration:14s; animation-delay:-2s;"></div>
+    <div class="spark" style="top:30%; left:-20%; animation-duration:18s; animation-delay:-6s; opacity:.45;"></div>
+    <div class="spark" style="top:56%; left:-15%; animation-duration:16s; animation-delay:-9s;"></div>
+    <div class="spark" style="top:74%; left:-30%; animation-duration:20s; animation-delay:-12s; opacity:.35;"></div>
+  </div>
+
+  <canvas id="trail-canvas"></canvas>
+
+  <h1 id="page-title">
+    AI 學習花園
+    <small>Learn Grammar with AI Songs</small>
+  </h1>
+
+  <!-- Navigation panel -->
+  <section id="nav-panel" aria-label="花園導覽（知識地圖）">
+    <h2 class="nav-title">Knowledge Map · 文法花園導覽</h2>
+
+    <div class="nav-grid">
+      <div class="nav-item full">
+        <strong>1) Learn 5 Sentence Structures</strong><br>
+        統領英文句型與文法全局的主枝幹
+      </div>
+
+      <div class="nav-item"><strong>2) Learn Simple Tenses</strong></div>
+      <div class="nav-item"><strong>3) Learn Progressive Tenses</strong></div>
+
+      <div class="nav-item"><strong>4) Learn Perfect Tenses</strong></div>
+      <div class="nav-item"><strong>5) Learn To do V.S. doing</strong></div>
+
+      <div class="nav-item"><strong>6) Learn V-ing V.S. V-ed</strong></div>
+      <div class="nav-item"><strong>7) Learn Noun Clauses</strong></div>
+
+      <div class="nav-item"><strong>8) Learn Adjective Clauses</strong></div>
+      <div class="nav-item"><strong>9) Learn Adverb Clauses</strong></div>
+
+      <div class="nav-item"><strong>10) Learn Inverted Sentences</strong></div>
+      <div class="nav-item"><strong>11) Learn Subjunctive Mood</strong></div>
+    </div>
+  </section>
+
+  <!-- Flower -->
+  <div id="petal-container" role="navigation" aria-label="AI 學習花園 11 個文法學習入口">
+
+    <!-- 11 petals, 360/11 ≈ 32.727deg -->
+    <a class="petal layer-a" style="--angle:-65.45deg; --tilt:-4deg"
+       href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%201.html"
+       target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn 5 Sentence Structures</strong></div>
+    </a>
+
+    <a class="petal layer-b" style="--angle:-32.73deg; --tilt:2deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Simple Tenses</strong></div>
+    </a>
+
+    <a class="petal layer-a" style="--angle:0deg; --tilt:-3deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Progressive Tenses</strong></div>
+    </a>
+
+    <a class="petal layer-b" style="--angle:32.73deg; --tilt:3deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Perfect Tenses</strong></div>
+    </a>
+
+    <a class="petal layer-a" style="--angle:65.45deg; --tilt:-2deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn To do V.S. doing</strong></div>
+    </a>
+
+    <a class="petal layer-b" style="--angle:98.18deg; --tilt:4deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn V-ing V.S. V-ed</strong></div>
+    </a>
+
+    <a class="petal layer-a" style="--angle:130.91deg; --tilt:-4deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Noun Clauses</strong></div>
+    </a>
+
+    <a class="petal layer-b" style="--angle:163.64deg; --tilt:2deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Adjective Clauses</strong></div>
+    </a>
+
+    <a class="petal layer-a" style="--angle:196.36deg; --tilt:-3deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Adverb Clauses</strong></div>
+    </a>
+
+    <a class="petal layer-b" style="--angle:229.09deg; --tilt:3deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Inverted Sentences</strong></div>
+    </a>
+
+    <a class="petal layer-a" style="--angle:261.82deg; --tilt:-2deg" href="#" target="_blank" rel="noopener">
+      <div class="petal-content"><strong>Learn Subjunctive Mood</strong></div>
+    </a>
+
+    <div id="learning-center" aria-hidden="true">
+      AI 唱歌，<br>學文法！
+    </div>
+  </div>
+
+  <button id="back-button" onclick="window.location.href='index.html'">
+    返回主頁
+  </button>
+
+  <script>
+    /* ---------------------------------- */
+    /* Golden Trail — “點花成金” */
+    /* ---------------------------------- */
+    const canvas = document.getElementById('trail-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let w, h, dpr;
+    function resize(){
+      dpr = window.devicePixelRatio || 1;
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
+    }
+    resize();
+    window.addEventListener('resize', () => {
+      ctx.setTransform(1,0,0,1,0,0);
+      resize();
+    });
+
+    const points = [];
+    const MAX_POINTS = 44;
+
+    window.addEventListener('mousemove', (e) => {
+      points.push({ x: e.clientX, y: e.clientY, life: 1 });
+      if(points.length > MAX_POINTS) points.shift();
+    });
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+
+      for(let i=0;i<points.length;i++){
+        points[i].life -= 0.02;
+      }
+
+      for(let i=1;i<points.length;i++){
+        const p0 = points[i-1];
+        const p1 = points[i];
+        if(p1.life <= 0) continue;
+
+        const alpha = Math.max(0, p1.life);
+        const lw = 10 * alpha + 1;
+
+        const grad = ctx.createLinearGradient(p0.x,p0.y,p1.x,p1.y);
+        grad.addColorStop(0, `rgba(255,180,0,0)`);
+        grad.addColorStop(0.5, `rgba(255,211,107,${0.95*alpha})`);
+        grad.addColorStop(1, `rgba(255,243,200,${0.7*alpha})`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = lw;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(p0.x,p0.y);
+        ctx.lineTo(p1.x,p1.y);
+        ctx.stroke();
+
+        if(i === points.length-1){
+          ctx.fillStyle = `rgba(255,211,107,${alpha})`;
+          ctx.beginPath();
+          ctx.arc(p1.x,p1.y, 6*alpha, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+
+      while(points.length && points[0].life <= 0) points.shift();
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
