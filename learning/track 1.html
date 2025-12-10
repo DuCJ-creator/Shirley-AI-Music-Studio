@@ -486,6 +486,15 @@
     .content-section {
     scroll-margin-top: 320px; /* 給 frozen header 的安全距離 */
 }
+    /* 讓每個 section 自動避開 frozen header（高度由 JS 寫入） */
+:root{
+  --header-offset: 320px; /* 預設值，JS 會動態覆蓋 */
+}
+
+.content-section{
+  scroll-margin-top: calc(var(--header-offset) + 12px);
+}
+
   </style>
 </head>
 
@@ -906,9 +915,8 @@ function showSection(sectionId) {
 
     // 2. 顯示目標區塊
     const target = document.getElementById(sectionId);
-    if (target) {
-        target.style.display = 'block';
-    }
+    if (!target) return;
+    target.style.display = 'block';
 
     // 3. 更新導航欄 active 狀態
     document.querySelectorAll('#page-nav a').forEach(link => {
@@ -917,18 +925,20 @@ function showSection(sectionId) {
     const activeLink = document.querySelector(`#page-nav a[data-target='${sectionId}']`);
     if (activeLink) activeLink.classList.add('active');
 
-    // ✅ 4. 精準捲到「目標 section 頂端」
+    // ✅ 4. 取得 frozen header 真實高度（info-card + nav）
     const header = document.getElementById('info-card-wrapper');
-    const headerHeight = header ? header.offsetHeight : 0;
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
 
-    // 目標區塊在 viewport 的位置 + 目前滾動量 = 真實頁面座標
-    const targetTop = target.getBoundingClientRect().top + window.pageYOffset;
+    // ✅ 5. 把高度寫進 CSS 變數，讓 scroll-margin-top 生效
+    document.documentElement.style.setProperty('--header-offset', `${headerHeight}px`);
 
-    // ✅ 捲到：目標頂端 - frozen header 高度 - 微調
-    window.scrollTo({
-        top: targetTop - headerHeight - 12,
-        behavior: 'smooth'
-    });
+    // ✅ 6. 先讓 target 滾到頂（靠 scroll-margin-top 避開 header）
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // ✅ 7. 再保險上拉一點點（解掉某些瀏覽器誤差）
+    setTimeout(() => {
+        window.scrollBy({ top: -(headerHeight + 12), behavior: 'smooth' });
+    }, 250);
 }
     window.onload = function() {
       showSection('lyrics-section');
