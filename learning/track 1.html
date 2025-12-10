@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning: My Country Creek | 學習中：故鄉溪畔</title>
+    <style>
+        /* ---------------------------------- */
+        /* 1. 配色與氛圍：高級田園風、螢火蟲 */
+        /* ---------------------------------- */
+        :root {
+            /* 主題色：柔和的田園綠、米色和夏夜深藍 */
+            --color-deep-green: #4f7942;     /* 深沉的田園綠 */
+            --color-soft-cream: #f4f2e5;     /* 柔和米色/溪沙 */
+            --color-night-sky: #1b2f4a;      /* 深夜藍 (用於細節點綴) */
+            --color-firefly: #dfff6c;        /* 螢火蟲的亮黃綠 */
+            
+            --color-text-primary: #3c3c3c;   /* 主要文字深灰 */
+            --color-accent: var(--color-deep-green); /* 強調色 */
+            --color-card-bg: rgba(255, 255, 255, 0.98); /* 清晰卡片背景 (略微強化不透明度) */
+        }
+
+        /* 螢火蟲動畫 (保持不變) */
+        @keyframes firefly-glow {
+            0%, 100% { box-shadow: 0 0 5px var(--color-firefly); opacity: 0.8; }
+            50% { box-shadow: 0 0 10px var(--color-firefly), 0 0 20px var(--color-firefly); opacity: 1; }
+        }
+        @keyframes firefly-move {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(20vw, 15vh); }
+            50% { transform: translate(-10vw, 25vh); }
+            75% { transform: translate(5vw, -10vh); }
+        }
+        
+        /* 波光流動動畫 */
+        @keyframes wave-flow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        body {
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            color: var(--color-text-primary);
+            margin: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+            position: relative; 
+            /* 修正：增加頂部空間以避免固定導航欄遮擋內容 */
+            padding-top: 280px; 
+            
+            /* 應用波光流動效果 */
+            background: linear-gradient(135deg, var(--color-soft-cream) 0%, #c1d7ae 50%, #b2c9a6 100%);
+            background-size: 200% 200%;
+            animation: wave-flow 45s ease infinite alternate; 
+        }
+        
+        body::before { /* 螢火蟲效果 */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            box-shadow: 
+                30vw 50vh 2px 2px var(--color-firefly),
+                -10vw 80vh 1px 1px var(--color-firefly),
+                70vw 20vh 3px 3px var(--color-firefly),
+                -5vw -5vh 1px 1px var(--color-firefly),
+                10vw 60vh 2px 2px var(--color-firefly);
+            animation: firefly-move 25s infinite linear, firefly-glow 2s infinite alternate;
+            z-index: -1; 
+            filter: blur(0.5px);
+        }
+
+        /* ---------------------------------- */
+        /* 資訊卡與導航 (保持不變) */
+        /* ---------------------------------- */
+        #info-card-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; 
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #info-card {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #fefefe 0%, #e1edd4 100%); 
+            padding: 15px 30px 10px 30px;
+            border-radius: 0 0 10px 10px;
+            text-align: left; 
+            border: 1px solid #c8d9c2;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); 
+        }
+        #info-card h1, #info-card h2 { text-align: center; font-size: 1.8em; margin: 0 0 5px 0; color: var(--color-night-sky); }
+        #info-card ul { list-style: none; padding-left: 0; margin: 10px 0; text-align: left; }
+        #info-card li { display: block; font-size: 0.95em; margin: 5px 0; padding-left: 20px; position: relative;}
+        #info-card li::before { content: '★'; color: var(--color-firefly); position: absolute; left: 0; font-weight: bold; }
+        
+        #page-nav { width: 100%; background-color: var(--color-deep-green); padding: 15px 0; text-align: center; border-bottom: 3px solid var(--color-firefly); }
+        #page-nav a { text-decoration: none; color: white; padding: 10px 18px; margin: 0 5px; border-radius: 25px; transition: background-color 0.3s, color 0.3s; font-weight: bold; font-size: 1.1em; display: inline-block;}
+        #page-nav a:hover, #page-nav a.active { background-color: var(--color-firefly); color: var(--color-night-sky); }
+
+        /* ---------------------------------- */
+        /* 內容容器與切換機制 (保持不變) */
+        /* ---------------------------------- */
+        #content-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto 50px auto;
+            background: var(--color-card-bg); 
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        .content-section { display: none; }
+        .section-header { margin-top: 0; padding-bottom: 10px; border-bottom: 3px solid var(--color-accent); color: var(--color-text-primary); font-size: 1.8em; font-weight: 500; margin-bottom: 25px; }
+        
+        /* ---------------------------------- */
+        /* 歌詞卡片結構與排版 (已強化) */
+        /* ---------------------------------- */
+        .lyric-section {
+            padding: 15px;
+            margin-bottom: 30px; 
+            border: 2px solid #c8d9c2; /* 強化邊框 */
+            border-radius: 12px; 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 強化陰影 */
+            background-color: #ffffff; /* 確保背景為純白或淺色 */
+            transition: transform 0.3s;
+        }
+        .lyric-section:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+        }
+        .lyric-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .en-lyrics, .zh-lyrics {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            white-space: pre-wrap; 
+            line-height: 1.5; 
+        }
+        .lyric-title { font-weight: bold; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #ddd; }
+        
+        /* ---------------------------------- */
+        /* 單字翻轉卡片樣式 (已完全修復) */
+        /* ---------------------------------- */
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            perspective: 1000px; /* 3D 景深設在容器上 */
+        }
+        .flip-card { height: 150px; position: relative; }
+        
+        /* 關鍵：內層用於旋轉 */
+        .flip-card-inner { 
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; 
+            transform-style: preserve-3d; /* 確保子元素在 3D 空間中呈現 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            border-radius: 10px;
+        }
+        
+        /* 關鍵：懸停時旋轉內層 */
+        .flip-card:hover .flip-card-inner { 
+            transform: rotateY(180deg); 
+        }
+        
+        /* 卡片正面和背面共用樣式 */
+        .flip-card-front, .flip-card-back { 
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; /* 確保背面隱藏 */
+            border-radius: 10px; 
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; padding: 10px; box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+        .flip-card-front { background-color: white; }
+        
+        /* 關鍵：背面初始化旋轉 180 度 */
+        .flip-card-back { 
+            background-color: var(--color-accent); 
+            color: white; 
+            transform: rotateY(180deg); 
+            font-size: 0.9em; 
+            text-align: center;
+        }
+        .eng-word-front { font-size: 2.0em; font-weight: bold; color: var(--color-night-sky); margin-top: 5px; }
+
+        /* ---------------------------------- */
+        /* 修辭手法卡片結構 (已強化) */
+        /* ---------------------------------- */
+        .rhetoric-device {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            border-left: 8px solid var(--color-firefly); /* 強化標記條 */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* 強化陰影 */
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .rhetoric-device:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
+            transform: translateY(-3px);
+        }
+        
+        /* ---------------------------------- */
+        /* 五大句型卡片優化 (已強化) */
+        /* ---------------------------------- */
+        .grammar-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            border-left: 8px solid; 
+            transition: transform 0.3s;
+        }
+        .grammar-card:hover { transform: translateY(-3px); }
+        .grammar-card h3 { margin-top: 0; padding-bottom: 5px; border-bottom: 1px dashed #ccc; font-size: 1.5em; }
+        /* 句型專屬配色 */
+        .grammar-card.sv-type { border-left-color: #42a5f5; }
+        .grammar-card.svo-type { border-left-color: #66bb6a; }
+        .grammar-card.svsc-type { border-left-color: #ffca28; }
+        .grammar-card.sviodo-type { border-left-color: #ab47bc; }
+        .grammar-card.svooc-type { border-left-color: #ef5350; }
+        
+        #challenge-section-content textarea { width: 98%; min-height: 50px; padding: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    
+    <div id="info-card-wrapper">
+        <div id="info-card">
+            <h1>Song: My Country Creek | 故鄉溪畔</h1>
+            <h2>Author：Shirley & AI Shirley老師&她的AI工具人</h2>
+            
+            <div id="music-box-container">
+                <p>🎵 Click to play the creek's quiet melody | 點擊播放溪畔的靜謐旋律</p>
+                <audio controls id="music-player">
+                    <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/music/my%20country%20creek.mp3" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <ul>
+                <li>Learning Foci 1：5 Simple Sentences Structures (簡單句5大句型)</li>
+                <li>Learning Foci 2：Childhood memory description (童年記憶描寫)</li>
+                <li>Learning Foci 3：Rhetorical Devices (修辭手法)</li>
+            </ul>
+        </div>
+        
+        <nav id="page-nav">
+            <a href="../index.html" class="back-link">🏡 Home | 主頁</a>
+            <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section'); return false;">📜 Lyrics | 雙語歌詞</a>
+            <a href="#" data-target="words-section" onclick="showSection('words-section'); return false;">🔠 Vocabulary | 重點單字</a>
+            <a href="#" data-target="grammar-section" onclick="showSection('grammar-section'); return false;">📐 Grammar | 五大句型</a>
+            <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section'); return false;">💡 Rhetoric | 修辭手法</a>
+            <a href="#" data-target="challenge-section" onclick="showSection('challenge-section'); return false;">🎯 Challenge | 練習挑戰</a>
+        </nav>
+    </div>
+
+    <div id="content-container">
+        
+        <div id="lyrics-section" class="content-section" style="display: block;">
+            <h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
+            
+            <div class="lyric-section">
+                <div class="lyric-box">
+                    <div class="en-lyrics">
+                        <div class="lyric-title">Verse 1 & Pre-Chorus 1</div>
+                        Dust danced on that road.<br>
+                        The sun warmed our backs.<br>
+                        We were young and wild.<br>
+                        With no heavy loads.<br>
+                        Just a creek so mild.<br>
+                        <br>
+                        That water gave me dreams.<br>
+                        Those pebbles felt like gold.<br>
+                        The old tree shared its secrets,<br>
+                        And never seemed to grow old.
+                    </div>
+                    <div class="zh-lyrics">
+                        <div class="lyric-title">第一段與預副歌 1</div>
+                        塵土在鄉間小路上飛揚，<br>
+                        陽光將我們的背影拉長。<br>
+                        那時我們年少又輕狂，<br>
+                        心頭沒有煩憂的重量，<br>
+                        只有一條溫順的溪水流淌。<br>
+                        <br>
+                        那流水曾贈予我夢想，<br>
+                        鵝卵石摸起來像黃金一樣。<br>
+                        老樹分享了它的秘藏，<br>
+                        而它自己，彷彿從未歷經滄桑。
+                    </div>
+                </div>
+            </div>
+
+            <div class="lyric-section">
+                 <div class="lyric-box">
+                    <div class="en-lyrics">
+                        <div class="lyric-title">Chorus | 副歌</div>
+                        Take me back, back to that creek side,<br>
+                        Where the dragonflies shone like jewels.<br>
+                        We built our world from mud and sunlight,<br>
+                        And time forgot all the rules.<br>
+                        The trees sang sweetly, slowly.<br>
+                        Oh, country creek, you flow…<br>
+                        Straight to my soul.
+                    </div>
+                    <div class="zh-lyrics">
+                        <div class="lyric-title">副歌</div>
+                        帶我回去吧，回到那小溪旁，<br>
+                        那裡蜻蜓閃爍如寶石的光芒。<br>
+                        我們用泥巴和陽光建造了殿堂，<br>
+                        而時間遺忘了所有的規章。<br>
+                        樹木吟唱，甜美而悠揚。<br>
+                        噢，故鄉的溪流，你流淌著…<br>
+                        徑直流入我的胸膛。
+                    </div>
+                </div>
+            </div>
+
+            <div class="lyric-section">
+                <div class="lyric-box">
+                    <div class="en-lyrics">
+                        <div class="lyric-title">Verse 2 & Pre-Chorus 2</div>
+                        We skipped the flat stones.<br>
+                        They hopped across the stream.<br>
+                        You drew maps in the wet sand,<br>
+                        I made a wish, a dream.<br>
+                        The world felt a giant,<br>
+                        But we, a marching band!<br>
+                        <br>
+                        That summer made us brothers.<br>
+                        The air smelled like rain.<br>
+                        You handed me a twig, a token arcane,<br>
+                        A sword against the mundane.
+                    </div>
+                    <div class="zh-lyrics">
+                        <div class="lyric-title">第二段與預副歌 2</div>
+                        我們打著水漂，<br>
+                        石片躍過溪床。<br>
+                        你在濕沙上畫圖，<br>
+                        我許下願望。<br>
+                        世界像個沉默的巨人，<br>
+                        但我們，是一支行進的樂隊聲勢昂揚！<br>
+                        <br>
+                        那個夏天結下兄弟般的情誼，<br>
+                        風中滿是青草與雨的氣息。<br>
+                        你遞來樹枝為號，一個神秘的信物，<br>
+                        一把對抗平庸的劍。
+                    </div>
+                </div>
+            </div>
+
+            <div class="lyric-section">
+                <div class="lyric-box">
+                    <div class="en-lyrics">
+                        <div class="lyric-title">Bridge & Outro | 橋段與尾聲</div>
+                        Now the roads are paved and straight.<br>
+                        The city lights are bright.<br>
+                        But sometimes in the quiet,<br>
+                        I miss that different light.<br>
+                        Then I hear the water…<br>
+                        It calls my childhood name.<br>
+                        That country creek still whispers,<br>
+                        “You can find your way.”<br>
+                        <br>
+                        Dust dances…<br>
+                        Sun beams…<br>
+                        The creek flows…<br>
+                        Take me home…
+                    </div>
+                    <div class="zh-lyrics">
+                        <div class="lyric-title">橋段與尾聲</div>
+                        如今道路鋪得筆直坦蕩，<br>
+                        都市的燈火徹夜輝煌，<br>
+                        但在某些寧靜的片刻，<br>
+                        我懷念那塵土與青草香。<br>
+                        然後我聽見流水在歌唱…<br>
+                        聲聲呼喚我舊日的模樣。<br>
+                        那故鄉的溪流，依然低語，<br>
+                        「歸來吧，別再流浪。」<br>
+                        <br>
+                        小路綿長…<br>
+                        光陰徜徉…<br>
+                        溪水流淌…<br>
+                        帶我歸鄉…
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="words-section" class="content-section">
+            <h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡 (Hover to Flip!)</h2>
+            <div class="word-grid">
+                
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">自然環境 | Environment</div>
+                            <div class="eng-word-front">creek</div>
+                            <div class="chinese-word-front">小溪 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Stream</div>
+                            <div class="chinese-word-back">Just a creek so mild. (只是一條溫順的溪水流淌。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">自然環境 | Environment</div>
+                            <div class="eng-word-front">pebbles</div>
+                            <div class="chinese-word-front">鵝卵石 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Small stone</div>
+                            <div class="chinese-word-back">Those pebbles felt like gold. (鵝卵石摸起來像黃金一樣。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">自然環境 | Environment</div>
+                            <div class="eng-word-front">dragonflies</div>
+                            <div class="chinese-word-front">蜻蜓 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Insect</div>
+                            <div class="chinese-word-back">Where the dragonflies shone like jewels. (那裡蜻蜓閃爍如寶石的光芒。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">動作 | Action</div>
+                            <div class="eng-word-front">skipped</div>
+                            <div class="chinese-word-front">打水漂 (v.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">v. Throw stones</div>
+                            <div class="chinese-word-back">We skipped the flat stones. (我們打著水漂，石片躍過溪床。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">情感抽象 | Abstract</div>
+                            <div class="eng-word-front">arcane</div>
+                            <div class="chinese-word-front">神秘的 (adj.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">adj. Mysterious</div>
+                            <div class="chinese-word-back">a token arcane (一個神秘的信物)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">情感抽象 | Abstract</div>
+                            <div class="eng-word-front">soul</div>
+                            <div class="chinese-word-front">靈魂 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Spirit</div>
+                            <div class="chinese-word-back">Straight to my soul. (徑直流入我的胸膛。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">日常事物 | Nouns</div>
+                            <div class="eng-word-front">load</div>
+                            <div class="chinese-word-front">負擔/重量 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Burden/Weight</div>
+                            <div class="chinese-word-back">With no heavy loads. (心頭沒有煩憂的重量。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">形容詞 | Adjective</div>
+                            <div class="eng-word-front">mild</div>
+                            <div class="chinese-word-front">溫和的 (adj.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">adj. Gentle</div>
+                            <div class="chinese-word-back">Just a creek so mild. (只是一條溫順的溪水流淌。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">日常事物 | Nouns</div>
+                            <div class="eng-word-front">token</div>
+                            <div class="chinese-word-front">信物/標誌 (n.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">n. Symbol/Sign</div>
+                            <div class="chinese-word-back">You handed me a twig, a token arcane. (你遞來樹枝為號，一個神秘的信物。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-card flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="word-category">形容詞 | Adjective</div>
+                            <div class="eng-word-front">mundane</div>
+                            <div class="chinese-word-front">平凡的/單調的 (adj.)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="pos-back">adj. Ordinary</div>
+                            <div class="chinese-word-back">A sword against the mundane. (一把對抗平庸的劍。)</div>
+                            <div class="example-back">Hover to flip back</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="grammar-section" class="content-section">
+            <h2 class="section-header">📐 5 Simple Sentence Structures | 五大句型結構分析</h2>
+            
+            <div class="grammar-card sv-type">
+                <h3><span style="color:#42a5f5;">🟦</span> 1. S + V (Subject + Verb)</h3>
+                <p><strong>結構：</strong> 主詞 + 不及物動詞</p>
+                <ul>
+                    <li>Dust **danced**. (塵土飛揚。)</li>
+                    <li>The creek **flows**. (溪水流淌。)</li>
+                </ul>
+            </div>
+            
+            <div class="grammar-card svo-type">
+                <h3><span style="color:#66bb6a;">🟢</span> 2. S + V + O (Subject + Verb + Object)</h3>
+                <p><strong>結構：</strong> 主詞 + 及物動詞 + 受詞</p>
+                <ul>
+                    <li>The sun **warmed** our backs. (陽光溫暖我們的背。)</li>
+                    <li>We **built** our world. (我們建造我們的世界。)</li>
+                </ul>
+            </div>
+            
+            <div class="grammar-card svsc-type">
+                <h3><span style="color:#ffca28;">🟡</span> 3. S + V + SC (Subject + Verb + Subject Complement)</h3>
+                <p><strong>結構：</strong> 主詞 + 連綴動詞 + 主詞補語</p>
+                <ul>
+                    <li>We **were** young and wild. (我們年少又輕狂。)</li>
+                    <li>Those pebbles **felt** like gold. (那些鵝卵石摸起來像黃金。)</li>
+                </ul>
+            </div>
+
+            <div class="grammar-card sviodo-type">
+                <h3><span style="color:#ab47bc;">🟣</span> 4. S + V + IO + DO (Subject + Verb + Indirect Object + Direct Object)</h3>
+                <p><strong>結構：</strong> 主詞 + 授予動詞 + 間接受詞 + 直接受詞</p>
+                <ul>
+                    <li>That water **gave** **me** dreams. (那流水贈予我夢想。)</li>
+                    <li>You **handed** **me** a twig. (你遞給我一截樹枝。)</li>
+                </ul>
+            </div>
+
+            <div class="grammar-card svooc-type">
+                <h3><span style="color:#ef5350;">🔴</span> 5. S + V + O + OC (Subject + Verb + Object + Object Complement)</h3>
+                <p><strong>結構：</strong> 主詞 + 動詞 + 受詞 + 受詞補語</p>
+                <ul>
+                    <li>That summer **made** **us** brothers. (那個夏天使我們成為兄弟。)</li>
+                    <li>(一般情境例句：I **found** the key **broken**.)</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div id="rhetoric-section" class="content-section">
+            <h2 class="section-header">💡 Rhetorical Devices | 修辭手法分析</h2>
+            
+            <div class="rhetoric-device">
+                <h3>1. Simile | 明喻</h3>
+                <p>定義: 使用 **like** 或 **as** 直接比較兩個不同的事物。</p>
+                <ul>
+                    <li><div class="rhetoric-example">Where the dragonflies shone **like** jewels. (蜻蜓閃爍如寶石。)</div></li>
+                    <li><div class="rhetoric-example">Those pebbles felt **like** gold. (鵝卵石摸起來像黃金。)</div></li>
+                    <li><div class="rhetoric-example">The air smelled **like** rain. (空氣聞起來像雨。)</div></li>
+                </ul>
+            </div>
+            
+            <div class="rhetoric-device">
+                <h3>2. Metaphor | 隱喻</h3>
+                <p>定義: 不直接使用 like 或 as，而是隱含地將一事物說成是另一事物，以進行間接比較。</p>
+                <ul>
+                    <li><div class="rhetoric-example">A sword against the mundane. (一把對抗平庸的劍。) — 將「回憶/勇氣」隱喻為一把劍。</div></li>
+                    <li><div class="rhetoric-example">But we, a marching band! (但我們，一支行進樂隊！) — 將「我們這群夥伴」隱喻為一支樂隊。</div></li>
+                </ul>
+            </div>
+            
+            <div class="rhetoric-device">
+                <h3>3. Personification | 擬人化</h3>
+                <p>定義: 賦予非人類的事物（如自然現象、抽象概念）以人類的特質或行為。</p>
+                <ul>
+                    <li><div class="rhetoric-example">Dust **danced** on that road. (塵土在路上起舞。)</div></li>
+                    <li><div class="rhetoric-example">The old tree **shared** its secrets. (老樹分享了它的秘密。)</div></li>
+                    <li><div class="rhetoric-example">Time **forgot** all the rules. (時間忘記了所有規則。)</div></li>
+                    <li><div class="rhetoric-example">That country creek still **whispers**... (那故鄉的溪流仍在低語...)</div></li>
+                </ul>
+            </div>
+            
+            <div class="rhetoric-device">
+                <h3>4. Apposition | 同位語</h3>
+                <p>定義: 將一個名詞或名詞性短語置於另一個名詞旁邊，以對其進行解釋、說明或重新命名。</p>
+                <ul>
+                    <li><div class="rhetoric-example">You handed me a twig, **a token arcane**. (你遞給我一截樹枝，一個神秘的符號。) — 後者是前者的同位語。</div></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="challenge-section" class="content-section">
+            <h2 class="section-header">🎯 Writing Challenge | 練習挑戰</h2>
+            
+            <div class="grammar-card" id="challenge-section-content">
+                
+                <h3>✍️ Composition Time | 創作時間：用今天學的句型寫一段關於你童年記憶的歌詞</h3>
+                <p>S+V (Subject + Verb)：</p><textarea placeholder="Example: The wind sang."></textarea>
+                <p>S+V+O (Subject + Verb + Object)：</p><textarea placeholder="Example: I hugged my teddy bear."></textarea>
+                <p>S+V+SC (Subject + Verb + Subject Complement)：</p><textarea placeholder="Example: The whole world felt bright."></textarea>
+                <p>S+V+IO+DO (Subject + Verb + Indirect Object + Direct Object)：</p><textarea placeholder="Example: My mom gave me sweet candy."></textarea>
+                <p>S+V+O+OC (Subject + Verb + Object + Object Complement)：</p><textarea placeholder="Example: That memory made me laugh."></textarea>
+
+                <h3>🎵 Melody Gap Fill | 旋律填空：聽歌填空</h3>
+                <div class="fill-in-the-blank">
+                    "Dust <input type="text" placeholder="danced"> on that road.<br>
+                    The sun <input type="text" placeholder="warmed"> our backs.<br>
+                    We <input type="text" placeholder="were"> young and <input type="text" placeholder="wild">.<br>
+                    With no heavy <input type="text" placeholder="loads">.<br>
+                    Just a creek so <input type="text" placeholder="mild">."
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script>
+        /**
+         * 內容切換機制：只顯示一個內容區塊，確保頁面乾淨。
+         */
+        function showSection(sectionId) {
+            // 1. 隱藏所有內容區塊
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // 2. 顯示目標區塊
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.style.display = 'block';
+            }
+            
+            // 3. 更新導航欄的 active 狀態
+            document.querySelectorAll('#page-nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            // 找到對應的導航連結並添加 active 類
+            document.querySelector(`#page-nav a[data-target='${sectionId}']`).classList.add('active');
+            
+            // 確保每次切換後頁面滾動到內容頂部 (避開 fixed header)
+            const contentContainerTop = document.getElementById('content-container').offsetTop;
+            
+            // 修正滾動：滾動到內容頂部，再向上微調 20px 確保內容不被遮擋
+            window.scrollTo({
+                top: contentContainerTop - 20, 
+                behavior: 'smooth'
+            });
+        }
+        
+        // 頁面載入時，預設顯示雙語歌詞區
+        window.onload = function() {
+            showSection('lyrics-section');
+        };
+    </script>
+</body>
+</html>
