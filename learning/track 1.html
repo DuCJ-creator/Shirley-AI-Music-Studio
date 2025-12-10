@@ -912,10 +912,15 @@
       const navLink = document.querySelector(`#page-nav a[data-target='${sectionId}']`);
       if (navLink) navLink.classList.add('active');
 
-     const contentContainerTop = document.getElementById('content-container').offsetTop;
+    // 確保每次切換後頁面滾動到內容頂部 (避開 fixed header)
+const contentContainerTop = document.getElementById('content-container').offsetTop;
 
+// ✅ 動態抓 fixed header 真實高度
+const headerHeight = document.getElementById('info-card-wrapper').offsetHeight;
+
+// ✅ 滾動到「內容頂端 - header高度 - 微調」
 window.scrollTo({
-    top: contentContainerTop - 20, 
+    top: contentContainerTop - headerHeight - 10,
     behavior: 'smooth'
 });
     window.onload = function() {
