@@ -489,126 +489,156 @@
         0 0 50px rgba(114,245,255,1);
       filter: brightness(1.05);
     }
+/* ---------------------------------- */
+/* Lyrics Bookmarks：星河書籤卡片（軌道版） */
+/* ---------------------------------- */
 
-    /* ---------------------------------- */
-    /* Lyrics Stream                      */
-    /* ---------------------------------- */
-    #lyrics-stream{
-      position: fixed;
-      inset: 0;
-      display: none;
-      pointer-events: none;
-      z-index: 8;
-    }
+#lyrics-bookmarks{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;   /* 容器本身不吃滑鼠 */
+  z-index: 7;
+}
 
-    .lyrics-glass{
-      position: absolute;
-      left: 50%;
-      bottom: 8vh;
-      transform: translateX(-50%);
-      width: min(92vw, 860px);
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      backdrop-filter: none;
-      padding: 0;
-    }
+.bookmark-cloud{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
 
-    .lyrics-header{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      padding: 0 6px 10px;
-      border: none;
-      margin-bottom: 6px;
-      opacity: .75;
-      filter: drop-shadow(0 0 10px rgba(114,245,255,.35));
-    }
-    .lyrics-title{
-      font-family:"Cormorant Garamond", serif;
-      font-size:1.25rem;
-      letter-spacing:.08em;
-      text-shadow: 0 0 12px rgba(114,245,255,.35);
-    }
-    .lyrics-sub{
-      font-size:.8rem;
-      letter-spacing:.22em;
-      color:var(--ink-dim);
-    }
+/* 卡片：固定在畫面中心，由 JS 用 transform 推到軌道位置 */
+.bookmark-card{
+  position: absolute;
+  top: 50%;
+  left: 50%;
 
-    .lyrics-lines{
-      height: clamp(240px, 45vh, 520px);
-      overflow: hidden;
-      position: relative;
-      padding: 10px 8px 0;
-      mask-image: linear-gradient(to bottom,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%);
-    }
+  width: min(320px, 60vw);
+  height: min(260px, 50vh);
 
-    .lyric-line{
-      font-size: clamp(1rem, 2.6vw, 1.2rem);
-      line-height: 1.9;
-      letter-spacing: .06em;
-      color: var(--ink);
-      text-shadow:
-        0 0 14px rgba(114,245,255,.3),
-        0 0 2px rgba(255,255,255,.9);
-      opacity: 0;
-      transform: translateY(18px);
-      margin: 4px 0;
-      white-space: pre-wrap;
-      filter: blur(.2px);
-    }
+  perspective: 1100px;
+  pointer-events: auto;
+  cursor: pointer;
+}
 
-    .lyric-line.flow-in{
-      animation: flowIn 1.6s ease forwards;
-    }
+/* flip 的內層，只負責 3D 翻轉 */
+.bookmark-inner{
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform .7s cubic-bezier(.2,.8,.2,1);
+}
 
-    @keyframes flowIn{
-      0%{
-        opacity:0;
-        transform: translateY(18px);
-        letter-spacing:.09em;
-        filter: blur(2px);
-      }
-      60%{
-        opacity:.95;
-        transform: translateY(0px);
-        letter-spacing:.04em;
-        filter: blur(.2px);
-      }
-      100%{
-        opacity:1;
-        transform: translateY(-2px);
-      }
-    }
+/* 正反兩面通用基底 */
+.bookmark-face{
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 14px 16px;
+  backface-visibility: hidden;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.78),
+    0 0 26px rgba(114,245,255,.32);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-    .lyrics-lines.is-flowing{
-      animation: slowDriftUp 18s linear infinite;
-    }
+/* 正面：標題卡 */
+.bookmark-front{
+  background:
+    radial-gradient(circle at 20% 0%,
+      rgba(255,255,255,.18),
+      transparent 55%),
+    linear-gradient(145deg,
+      rgba(10,16,26,.96),
+      rgba(4,8,16,.98));
+  border:1px solid rgba(159,255,230,.45);
+}
 
-    @keyframes slowDriftUp{
-      0%{ transform: translateY(0); }
-      100%{ transform: translateY(-18%); }
-    }
+.bookmark-tag{
+  font-family:"Orbitron", sans-serif;
+  font-size:.7rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color: rgba(231,247,247,.8);
+  text-shadow: 0 0 10px rgba(114,245,255,.4);
+}
 
-    .lyric-line.section{
-      margin-top:10px;
-      font-weight:700;
-      color:var(--accent-strong);
-      text-shadow: 0 0 12px rgba(159,255,230,.6);
-      letter-spacing:.12em;
-    }
+.bookmark-title{
+  margin-top:10px;
+  font-family:"Cormorant Garamond", serif;
+  font-size:1.6rem;
+  letter-spacing:.16em;
+  color:rgba(231,247,247,.96);
+  text-shadow:
+    0 0 16px rgba(114,245,255,.4),
+    0 0 30px rgba(159,255,230,.5);
+}
 
-    @media (prefers-reduced-motion: reduce){
-      .lyrics-lines.is-flowing{ animation:none !important; }
-      .lyric-line.flow-in{ animation:none !important; opacity:1; transform:none; }
-    }
+.bookmark-hint{
+  margin-top:auto;
+  font-size:.8rem;
+  letter-spacing:.16em;
+  color:rgba(231,247,247,.75);
+  text-align:right;
+  opacity:.9;
+}
 
-    /* ---------------------------------- */
+/* 反面：歌詞內容卡 */
+.bookmark-back{
+  background:
+    radial-gradient(circle at 0% 0%,
+      rgba(159,255,230,.16),
+      transparent 55%),
+    linear-gradient(145deg,
+      rgba(5,10,20,.98),
+      rgba(3,6,12,.98));
+  border:1px solid rgba(207,216,255,.45);
+  transform: rotateY(180deg);
+}
+
+.bookmark-section-label{
+  font-family:"Orbitron", sans-serif;
+  font-size:.7rem;
+  letter-spacing:.26em;
+  text-transform:uppercase;
+  color:rgba(231,247,247,.7);
+  margin-bottom:6px;
+}
+
+.bookmark-lyrics{
+  flex:1;
+  font-family:"Cormorant Garamond", serif;
+  font-size:.95rem;
+  letter-spacing:.03em;
+  line-height:1.6;
+  white-space:pre-line;
+  color:rgba(231,247,247,.94);
+
+  /* 優先讓它整張卡顯示完；真的超出就微捲動 */
+  overflow:auto;
+  scrollbar-width:none;        /* Firefox: 隱藏捲軸 */
+}
+.bookmark-lyrics::-webkit-scrollbar{
+  display:none;                /* Chrome: 隱藏捲軸 */
+}
+
+/* 卡片翻轉狀態 */
+.bookmark-card.is-flipped .bookmark-inner{
+  transform: rotateY(180deg);
+}
+
+/* 小螢幕：略縮小但仍偏大，歌詞還是看得到 */
+@media (max-width: 600px){
+  .bookmark-card{
+    width: 80vw;
+    height: min(280px, 55vh);
+  }
+  .bookmark-title{
+    font-size:1.3rem;
+  }
+}
+
     /* Modal                              */
     /* ---------------------------------- */
     .modal-backdrop{
@@ -731,16 +761,11 @@
       </div>
     </section>
 
-    <!-- Lyrics Stream -->
-    <section id="lyrics-stream" aria-label="Moonlight Sonata 歌詞" aria-hidden="true">
-      <div class="lyrics-glass">
-        <div class="lyrics-header">
-          <div class="lyrics-title">Moonlight Sonata</div>
-          <div class="lyrics-sub">Lyrics Flow</div>
-        </div>
-        <div id="lyrics-lines" class="lyrics-lines"></div>
-      </div>
-    </section>
+   <!-- Lyrics Bookmarks：飄在星河裡的一頁頁書籤 -->
+<section id="lyrics-bookmarks" aria-label="Moonlight Sonata 歌詞書籤">
+  <div class="bookmark-cloud" id="bookmark-cloud" aria-live="polite"></div>
+</section>
+
 
     <!-- Modal -->
     <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
@@ -901,25 +926,19 @@
   })();
   </script>
 
-  <!-- 歌詞流動 JS（你的原版邏輯） -->
-  <script>
-  (() => {
-    'use strict';
+<script>
+(() => {
+  'use strict';
 
-    const videoEl        = document.getElementById("moonlight-video");
-    const lyricsStreamEl = document.getElementById("lyrics-stream");
-    const lyricsLinesEl  = document.getElementById("lyrics-lines");
+  const cloud = document.getElementById("bookmark-cloud");
+  if (!cloud) {
+    console.warn("[Bookmarks] bookmark-cloud not found");
+    return;
+  }
 
-    if (!videoEl || !lyricsStreamEl || !lyricsLinesEl) {
-      console.warn("[Lyrics] elements not found");
-      return;
-    }
+  const videoEl = document.getElementById("moonlight-video");
 
-    const START_AT       = 14.0;
-    const LINE_INTERVAL  = 3.2;
-    const HEADER_INTERVAL= 2.2;
-
-    const LYRICS_TEXT = `
+  const LYRICS_TEXT = `
 Moonlight Sonata
 
 Verse 1
@@ -965,166 +984,179 @@ Luna, Luna, keeper of the quiet glow
 Washing over everything we know
 Luna, Luna, in your tender tide
 We are perfectly alight, inside
-    `.trim();
+  `.trim();
 
-    let flowLines      = [];
-    let flowStartTimes = [];
-    let renderedIndex  = -1;
-    let flowReady      = false;
+  /* ---------- 解析歌詞成 section ---------- */
+  function parseSections() {
+    const lines = LYRICS_TEXT.split("\n").map(l => l.trim());
+    const sections = [];
+    let currentTitle = null;
+    let buffer = [];
 
-    const normalizeLine = s => s.trim().replace(/\s+/g, " ").toLowerCase();
+    const sectionPattern = /^(Verse\s+\d+|Pre-Chorus|Chorus|Bridge|Outro)\b/i;
 
-    function prepareFlowLines(){
-      const raw  = LYRICS_TEXT.split("\n").map(l => l.trimEnd());
-      const seen = new Set();
-      const res  = [];
+    for (let raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
 
-      for (const r of raw){
-        const line = r.trim();
-        if(line === ""){
-          res.push({text:"",kind:"space"});
-          continue;
-        }
-
-        const isHeader = /^(Moonlight Sonata|Verse|Chorus|Bridge|Outro|Pre-Chorus)/i.test(line);
-        const kind = isHeader ? "header" : "lyric";
-
-        if(kind === "lyric"){
-          const key = normalizeLine(line);
-          if(seen.has(key)) continue;
-          seen.add(key);
-        }
-        res.push({text:line,kind});
-      }
-      flowLines = res;
-    }
-
-    function buildTimeline(){
-      flowStartTimes = [];
-
-      const FIRST_LYRIC_AT = START_AT;
-      const SPACE_INTERVAL = 0.8;
-
-      const firstLyricIndex = flowLines.findIndex(x => x.kind === "lyric");
-      if(firstLyricIndex === -1){
-        let t = FIRST_LYRIC_AT;
-        for(const item of flowLines){
-          flowStartTimes.push(t);
-          if(item.kind==="header")      t += HEADER_INTERVAL;
-          else if(item.kind==="space")  t += SPACE_INTERVAL;
-          else                          t += LINE_INTERVAL;
-        }
-        flowReady = true;
-        return;
+      if (!currentTitle && /^Moonlight Sonata$/i.test(line)) {
+        continue; // 跳過標題行
       }
 
-      let preDuration = 0;
-      for(let i=0; i<firstLyricIndex; i++){
-        const item = flowLines[i];
-        if(item.kind==="header")      preDuration += HEADER_INTERVAL;
-        else if(item.kind==="space")  preDuration += SPACE_INTERVAL;
-        else                          preDuration += LINE_INTERVAL;
-      }
-
-      let t = Math.max(0, FIRST_LYRIC_AT - preDuration);
-
-      for(const item of flowLines){
-        flowStartTimes.push(t);
-        if(item.kind==="header")      t += HEADER_INTERVAL;
-        else if(item.kind==="space")  t += SPACE_INTERVAL;
-        else                          t += LINE_INTERVAL;
-      }
-
-      flowReady = true;
-    }
-
-    function renderSkeleton(){
-      lyricsLinesEl.innerHTML = "";
-      flowLines.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "lyric-line";
-        div.textContent = item.text;
-
-        if(item.kind==="header"){
-          div.classList.add("section");
-          div.dataset.kind="header";
-        } else if(item.kind==="space"){
-          div.dataset.kind="space";
-          div.style.height="8px";
-          div.style.opacity="1";
-          div.style.transform="none";
-        } else {
-          div.dataset.kind="lyric";
+      const m = line.match(sectionPattern);
+      if (m) {
+        if (currentTitle && buffer.length) {
+          sections.push({ title: currentTitle, text: buffer.join("\n") });
         }
-
-        if(item.kind!=="space"){
-          div.style.opacity="0";
-          div.style.transform="translateY(14px)";
-        }
-        lyricsLinesEl.appendChild(div);
-      });
-    }
-
-    function showLyrics(){
-      lyricsStreamEl.style.display = "block";
-      lyricsLinesEl.classList.add("is-flowing");
-    }
-    function hideLyrics(){
-      lyricsStreamEl.style.display = "none";
-      lyricsLinesEl.classList.remove("is-flowing");
-      renderedIndex = -1;
-      [...lyricsLinesEl.querySelectorAll(".lyric-line")].forEach(el=>{
-        el.classList.remove("flow-in");
-        if(el.dataset.kind!=="space"){
-          el.style.opacity="0";
-          el.style.transform="translateY(14px)";
-        }
-      });
-    }
-
-    function update(){
-      if(!flowReady) return;
-
-      const ct  = videoEl.currentTime;
-      const all = [...lyricsLinesEl.querySelectorAll(".lyric-line")];
-
-      let idx = renderedIndex;
-      while(idx + 1 < flowStartTimes.length && ct >= flowStartTimes[idx + 1]){
-        idx++;
-      }
-      if(idx === renderedIndex) return;
-      renderedIndex = idx;
-
-      for(let i=0;i<=renderedIndex;i++){
-        const el = all[i];
-        if(!el || el.dataset.kind==="space") continue;
-        if(!el.classList.contains("flow-in")){
-          el.classList.add("flow-in");
-        }
+        currentTitle = m[1];
+        buffer = [];
+      } else if (currentTitle) {
+        buffer.push(line);
       }
     }
+    if (currentTitle && buffer.length) {
+      sections.push({ title: currentTitle, text: buffer.join("\n") });
+    }
 
-    videoEl.addEventListener("loadedmetadata", ()=>{
-      prepareFlowLines();
-      buildTimeline();
-      renderSkeleton();
+    // Chorus / Pre-Chorus 重複出現，只取第一次
+    const seen = new Set();
+    const unique = [];
+    for (const sec of sections) {
+      const key = sec.title.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      unique.push(sec);
+    }
+    return unique;
+  }
+
+  /* ---------- 建立卡片 DOM ---------- */
+
+  function createCard(section) {
+    const card = document.createElement("button");
+    card.className = "bookmark-card";
+    card.type = "button";
+    card.setAttribute("aria-label", `${section.title} 歌詞卡片（點擊翻面）`);
+
+    const inner = document.createElement("div");
+    inner.className = "bookmark-inner";
+
+    // 正面
+    const front = document.createElement("div");
+    front.className = "bookmark-face bookmark-front";
+
+    const tag = document.createElement("div");
+    tag.className = "bookmark-tag";
+    tag.textContent = "Moonlight Sonata";
+
+    const title = document.createElement("div");
+    title.className = "bookmark-title";
+    title.textContent = section.title;
+
+    const hint = document.createElement("div");
+    hint.className = "bookmark-hint";
+    hint.textContent = "click to flip";
+
+    front.appendChild(tag);
+    front.appendChild(title);
+    front.appendChild(hint);
+
+    // 反面
+    const back = document.createElement("div");
+    back.className = "bookmark-face bookmark-back";
+
+    const label = document.createElement("div");
+    label.className = "bookmark-section-label";
+    label.textContent = section.title;
+
+    const body = document.createElement("div");
+    body.className = "bookmark-lyrics";
+    body.textContent = section.text;
+
+    back.appendChild(label);
+    back.appendChild(body);
+
+    inner.appendChild(front);
+    inner.appendChild(back);
+    card.appendChild(inner);
+
+    // 點擊翻面
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      card.classList.toggle("is-flipped");
     });
 
-    videoEl.addEventListener("play", ()=>{
-      if(!flowReady){
-        prepareFlowLines();
-        buildTimeline();
-        renderSkeleton();
+    // 鍵盤也可翻
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        card.classList.toggle("is-flipped");
       }
-      showLyrics();
-      update();
     });
 
-    videoEl.addEventListener("timeupdate", update);
-    videoEl.addEventListener("pause", hideLyrics);
-    videoEl.addEventListener("ended", hideLyrics);
-  })();
-  </script>
+    return card;
+  }
+
+  /* ---------- 軌道動畫：像行星在夜空中繞圈 ---------- */
+
+  const orbitCards = []; // { el, radius, phase }
+
+  function initBookmarks() {
+    const sections = parseSections();
+    cloud.innerHTML = "";
+
+    const minDim = Math.min(window.innerWidth, window.innerHeight);
+    const baseRadius = minDim * 0.36;         // 離中心一段距離，不蓋住唱片
+    const radiusJitter = 60;                  // 每張略有不同
+
+    sections.forEach((sec, idx) => {
+      const card = createCard(sec);
+      cloud.appendChild(card);
+
+      const radius = baseRadius + (idx - (sections.length-1)/2) * (radiusJitter / 2);
+      const phase  = (idx / sections.length) * Math.PI * 2;
+
+      orbitCards.push({
+        el: card,
+        radius,
+        phase
+      });
+    });
+  }
+
+  function animate(timeMs){
+    const t = timeMs / 1000; // 秒
+    const playing = videoEl && !videoEl.paused && !videoEl.ended;
+
+    // 播放時轉快一點，暫停時很慢
+    const speed = playing ? 0.22 : 0.06;  // 弧度/秒
+
+    orbitCards.forEach((obj, i) => {
+      const angle = speed * t + obj.phase;
+
+      const x = Math.cos(angle) * obj.radius;
+      const y = Math.sin(angle) * obj.radius;
+
+      // 以畫面中心為原點，把卡片推到軌道上
+      obj.el.style.transform =
+        `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  initBookmarks();
+  requestAnimationFrame(animate);
+
+  // 窗口尺寸改變時，重新計算半徑，避免跑出螢幕
+  window.addEventListener("resize", () => {
+    orbitCards.length = 0;
+    initBookmarks();
+  });
+})();
+</script>
+
+</script>
 
   <!-- Three.js 粒子背景 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
