@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shirley's AI Music Studio | 月光奏鳴曲</title>
 
-  <!-- 字體：保留 Orbitron 的科技感，但加一支更優雅的襯線做標題層次 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ---------------------------------- */
+      /* ---------------------------------- */
     /* 1. 全域變數與基底 */
     /* ---------------------------------- */
     :root{
@@ -393,131 +392,132 @@
       filter: brightness(1.05);
     }
 
-      /* ---------------------------------- */
-/* Lyrics Stream: 流水歌詞 */
-/* ---------------------------------- */
-#lyrics-stream{
-  width:min(90vw, 760px);
-  margin-top: clamp(-6px, -0.5vh, 4px); /* 往上靠近播放器 */
-  position:relative;
-  display:none;
-  z-index:3;
-}
-#lyrics-stream{
-  transform: translateY(-6px); /* 再多貼一點 */
-}
-.lyrics-glass{
-  position:relative;
-  background: var(--glass);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius: 20px;
-  box-shadow:
-    0 18px 55px rgba(0,0,0,.7),
-    0 0 28px rgba(114,245,255,.18),
-    inset 0 0 0 1px rgba(255,255,255,.04);
-  backdrop-filter: blur(10px) saturate(1.05);
-  overflow:hidden;
-  padding: 14px 14px 10px;
-}
-
-/* 上方小標題，讓它更「精品」 */
-.lyrics-header{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  padding: 2px 6px 10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  margin-bottom:8px;
-}
-.lyrics-title{
-  font-family:"Cormorant Garamond", serif;
-  font-size:1.25rem;
-  letter-spacing:.08em;
-  text-shadow: 0 0 12px rgba(114,245,255,.35);
-}
-.lyrics-sub{
-  font-size:.8rem;
-  letter-spacing:.22em;
-  color:var(--ink-dim);
+    /* ---------------------------------- */
+    /* Lyrics Stream: 流水歌詞 */
+    /* ---------------------------------- */
+    #lyrics-stream{
+      width:min(90vw, 760px);
+      margin-top: clamp(-6px, -0.5vh, 4px); /* 往上靠近播放器 */
+      position:relative;
+      display:none;
+      z-index:3;
+      transform: translateY(-6px); /* 再多貼一點 */
+    }
+    .lyrics-glass{
+      position:relative;
+      background: var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      box-shadow:
+        0 18px 55px rgba(0,0,0,.7),
+        0 0 28px rgba(114,245,255,.18),
+        inset 0 0 0 1px rgba(255,255,255,.04);
+      backdrop-filter: blur(10px) saturate(1.05);
+      overflow:hidden;
+      padding: 14px 14px 10px;
+    }
+    #lyrics-stream{
+  pointer-events: none;
 }
 
-/* 可視區：像一條細緻的水道 */
-.lyrics-lines{
-  height: clamp(160px, 24vh, 220px);
-  overflow:hidden;
-  position:relative;
-  padding: 8px 6px 2px;
-  mask-image: linear-gradient(to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%);
-}
+    /* 上方小標題，讓它更「精品」 */
+    .lyrics-header{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      padding: 2px 6px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      margin-bottom:8px;
+    }
+    .lyrics-title{
+      font-family:"Cormorant Garamond", serif;
+      font-size:1.25rem;
+      letter-spacing:.08em;
+      text-shadow: 0 0 12px rgba(114,245,255,.35);
+    }
+    .lyrics-sub{
+      font-size:.8rem;
+      letter-spacing:.22em;
+      color:var(--ink-dim);
+    }
 
-/* 單行歌詞：玻璃字＋微光 */
-.lyric-line{
-  font-size: clamp(.92rem, 2.2vw, 1.02rem);
-  line-height:1.7;
-  letter-spacing:.04em;
-  color:var(--ink);
-  text-shadow:
-    0 0 10px rgba(114,245,255,.25),
-    0 0 1px rgba(255,255,255,.8);
-  opacity:0;
-  transform: translateY(14px);
-  filter: blur(.2px);
-  margin: 2px 0;
-  white-space:pre-wrap;
-}
+    /* 可視區：像一條細緻的水道 */
+    .lyrics-lines{
+      height: clamp(160px, 24vh, 220px);
+      overflow:hidden;
+      position:relative;
+      padding: 8px 6px 2px;
+      mask-image: linear-gradient(to bottom,
+        transparent 0%,
+        black 12%,
+        black 88%,
+        transparent 100%);
+    }
 
-/* 「流水」進場：慢慢浮上來、淡入、像潮汐 */
-.lyric-line.flow-in{
-  animation: flowIn 1.6s ease forwards;
-}
+    /* 單行歌詞：玻璃字＋微光 */
+    .lyric-line{
+      font-size: clamp(.92rem, 2.2vw, 1.02rem);
+      line-height:1.7;
+      letter-spacing:.04em;
+      color:var(--ink);
+      text-shadow:
+        0 0 10px rgba(114,245,255,.25),
+        0 0 1px rgba(255,255,255,.8);
+      opacity:0;
+      transform: translateY(14px);
+      filter: blur(.2px);
+      margin: 2px 0;
+      white-space:pre-wrap;
+    }
 
-@keyframes flowIn{
-  0%{
-    opacity:0;
-    transform: translateY(18px);
-    letter-spacing:.09em;
-    filter: blur(2px);
-  }
-  60%{
-    opacity:.95;
-    transform: translateY(0px);
-    letter-spacing:.04em;
-    filter: blur(.2px);
-  }
-  100%{
-    opacity:1;
-    transform: translateY(-2px);
-  }
-}
+    /* 「流水」進場：慢慢浮上來、淡入、像潮汐 */
+    .lyric-line.flow-in{
+      animation: flowIn 1.6s ease forwards;
+    }
 
-/* 整體隨時間慢慢往上漂，像水流 */
-.lyrics-lines.is-flowing{
-  animation: slowDriftUp 18s linear infinite;
-}
+    @keyframes flowIn{
+      0%{
+        opacity:0;
+        transform: translateY(18px);
+        letter-spacing:.09em;
+        filter: blur(2px);
+      }
+      60%{
+        opacity:.95;
+        transform: translateY(0px);
+        letter-spacing:.04em;
+        filter: blur(.2px);
+      }
+      100%{
+        opacity:1;
+        transform: translateY(-2px);
+      }
+    }
 
-@keyframes slowDriftUp{
-  0%{ transform: translateY(0); }
-  100%{ transform: translateY(-18%); }
-}
+    /* 整體隨時間慢慢往上漂，像水流 */
+    .lyrics-lines.is-flowing{
+      animation: slowDriftUp 18s linear infinite;
+    }
 
-/* 小分節字樣（Verse/Chorus） */
-.lyric-line.section{
-  margin-top:10px;
-  font-weight:700;
-  color:var(--accent-strong);
-  text-shadow: 0 0 12px rgba(159,255,230,.6);
-  letter-spacing:.12em;
-}
+    @keyframes slowDriftUp{
+      0%{ transform: translateY(0); }
+      100%{ transform: translateY(-18%); }
+    }
 
-/* prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce){
-  .lyrics-lines.is-flowing{ animation:none !important; }
-  .lyric-line.flow-in{ animation:none !important; opacity:1; transform:none; }
-}
+    /* 小分節字樣（Verse/Chorus） */
+    .lyric-line.section{
+      margin-top:10px;
+      font-weight:700;
+      color:var(--accent-strong);
+      text-shadow: 0 0 12px rgba(159,255,230,.6);
+      letter-spacing:.12em;
+    }
+
+    /* prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      .lyrics-lines.is-flowing{ animation:none !important; }
+      .lyric-line.flow-in{ animation:none !important; opacity:1; transform:none; }
+    }
 
     /* ---------------------------------- */
     /* 7. 精緻 Modal（取代 alert） */
@@ -579,24 +579,44 @@
     @media (prefers-reduced-motion: reduce){
       *{ animation:none !important; transition:none !important; }
     }
-      /* 播放器+歌詞一組，組內距離很近 */
-.media-stack{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap: 6px; /* 你要更貼就 2~4px */
-}
-/* 讓 lyrics-stream 不再自己推開 */
-#lyrics-stream{
-  width:min(90vw, 760px);
-  margin-top: 0;
-  position:relative;
-  display:none;
-  z-index:3;
-}
+
+    /* 播放器+歌詞一組，組內距離很近 */
+    .media-stack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 6px; /* 你要更貼就 2~4px */
+    }
+    /* 讓 lyrics-stream 不再自己推開 */
+    #lyrics-stream{
+      width:min(90vw, 760px);
+      margin-top: 0;
+      position:relative;
+      display:none;
+      z-index:3;
+    }
+
+    /* ================================ */
+    /* Three.js 粒子背景容器（新增）     */
+    /* ================================ */
+    #particle-bg{
+      position:fixed;
+      inset:0;
+      z-index:0;              /* 置底 */
+      pointer-events:none;    /* 不擋任何互動 */
+    }
+    #main-container,
+    .modal-backdrop{
+      position:relative;
+      z-index:2;              /* UI 在粒子上方 */
+    }
   </style>
 </head>
+
 <body>
+  <!-- Three.js Particle Background（新增） -->
+  <div id="particle-bg" aria-hidden="true"></div>
+
   <div id="main-container" aria-live="polite">
     <h1 id="main-title">
       Shirley’s AI Music Studio
@@ -630,183 +650,174 @@
     </section>
 
     <div class="media-stack">
-  <section id="video-player-container" aria-label="月光奏鳴曲影片播放器">
-      <video id="moonlight-video" loop playsinline>
-        <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <div id="play-overlay">
-        <button class="play-button" id="toggle-play" aria-label="播放/暫停">▶</button>
-      </div>
-    </section>
-  </div>
+      <section id="video-player-container" aria-label="月光奏鳴曲影片播放器">
+        <video id="moonlight-video" loop playsinline>
+          <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div id="play-overlay">
+          <button class="play-button" id="toggle-play" aria-label="播放/暫停">▶</button>
+        </div>
+      </section>
+    </div>
     
     <!-- Lyrics Stream -->
- <section id="lyrics-stream" aria-label="Moonlight Sonata 歌詞" aria-hidden="true">
-  <div class="lyrics-glass">
-    <div class="lyrics-header">
-      <div class="lyrics-title">Moonlight Sonata</div>
-      <div class="lyrics-sub">Lyrics Flow</div>
-    </div>
-    <div id="lyrics-lines" class="lyrics-lines"></div>
-  </div>
-</section>
+    <section id="lyrics-stream" aria-label="Moonlight Sonata 歌詞" aria-hidden="true">
+      <div class="lyrics-glass">
+        <div class="lyrics-header">
+          <div class="lyrics-title">Moonlight Sonata</div>
+          <div class="lyrics-sub">Lyrics Flow</div>
+        </div>
+        <div id="lyrics-lines" class="lyrics-lines"></div>
+      </div>
+    </section>
 
-  <!-- Modal -->
-  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal">
-      <h3 id="modal-title">Status</h3>
-      <p id="modal-desc">內容</p>
-      <div class="actions">
-        <button id="modal-ok">OK</button>
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal">
+        <h3 id="modal-title">Status</h3>
+        <p id="modal-desc">內容</p>
+        <div class="actions">
+          <button id="modal-ok">OK</button>
+        </div>
       </div>
     </div>
   </div>
+<script>
+(() => {
+  'use strict';
 
-  <script>
-    const VOCAL_START = 14.0;
-    const mainContainer = document.getElementById('main-container');
-    const roseElement = document.getElementById('fendala-rose');
-    const pointerHand = document.getElementById('pointer-hand');
-    const statusPoints = document.querySelectorAll('.status-point');
-    const videoPlayerContainer = document.getElementById('video-player-container');
-    const videoElement = document.getElementById('moonlight-video');
-    const togglePlayButton = document.getElementById('toggle-play');
+  const mainContainer = document.getElementById('main-container');
+  const roseElement = document.getElementById('fendala-rose');
+  const pointerHand = document.getElementById('pointer-hand');
+  const statusPoints = document.querySelectorAll('.status-point');
+  const videoPlayerContainer = document.getElementById('video-player-container');
+  const videoElement = document.getElementById('moonlight-video');
+  const togglePlayButton = document.getElementById('toggle-play');
 
-    const modalBackdrop = document.getElementById('modal-backdrop');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
-    const modalOk = document.getElementById('modal-ok');
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDesc = document.getElementById('modal-desc');
+  const modalOk = document.getElementById('modal-ok');
 
-    const statusAngles = {
-      dead: 0,
-      emo: 90,
-      charging: 180,
-      learning: 270,
-    };
-    const statusText = {
-      dead: "擺爛中",
-      emo: "EMO中",
-      charging: "充電中",
-      learning: "學習中",
-    };
-    const statusDesc = {
-      dead: "進入低能量模式，暫停輸出，保留餘裕。",
-      emo: "情緒沉澱中，讓音樂陪我走一段路。",
-      charging: "補給能量中，緩慢回到最佳狀態。",
-      learning: "吸收新知與靈感，準備下一次綻放。",
-    };
+  const statusAngles = { dead: 0, emo: 90, charging: 180, learning: 270 };
+  const statusText = {
+    dead: "擺爛中", emo: "EMO中", charging: "充電中", learning: "學習中"
+  };
+  const statusDesc = {
+    dead: "進入低能量模式，暫停輸出，保留餘裕。",
+    emo: "情緒沉澱中，讓音樂陪我走一段路。",
+    charging: "補給能量中，緩慢回到最佳狀態。",
+    learning: "吸收新知與靈感，準備下一次綻放。",
+  };
 
-    const defaultAngle = 0;
+  const defaultAngle = 0;
+
+  function setRose(status){
     roseElement.className = "";
-    roseElement.classList.add("rose-unopened");
+    roseElement.classList.add(`rose-${status}`);
+  }
 
-    function setRose(status){
-      roseElement.className = "";
-      roseElement.classList.add(`rose-${status}`);
-    }
+  function openModal(status){
+    modalTitle.textContent = statusText[status] || "Status";
+    modalDesc.textContent = statusDesc[status] || "";
+    modalBackdrop.style.display = "grid";
+    modalBackdrop.setAttribute("aria-hidden","false");
+    modalOk.focus();
+  }
+  function closeModal(){
+    modalBackdrop.style.display = "none";
+    modalBackdrop.setAttribute("aria-hidden","true");
+  }
 
-    function openModal(status){
-      modalTitle.textContent = statusText[status] || "Status";
-      modalDesc.textContent = statusDesc[status] || "";
-      modalBackdrop.style.display = "grid";
-      modalBackdrop.setAttribute("aria-hidden","false");
-      modalOk.focus();
-    }
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-      modalBackdrop.setAttribute("aria-hidden","true");
-    }
-    modalOk.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e)=>{
-      if(e.target === modalBackdrop) closeModal();
-    });
+  modalOk.addEventListener("click", closeModal);
+  modalBackdrop.addEventListener("click", (e)=>{
+    if(e.target === modalBackdrop) closeModal();
+  });
 
-    // 狀態點互動
-    statusPoints.forEach(point => {
-      const status = point.dataset.status;
-      const targetAngle = statusAngles[status];
+  // 初始化玫瑰
+  roseElement.className = "";
+  roseElement.classList.add("rose-unopened");
 
-      const hoverIn = () => {
-        if (videoElement.paused) {
-          pointerHand.style.transform = `rotate(${targetAngle}deg)`;
-          setRose(status);
-        }
-      };
-      const hoverOut = () => {
-        if (videoElement.paused) {
-          pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
-          setRose("unopened");
-        }
-      };
+  // 狀態點互動
+  statusPoints.forEach(point => {
+    const status = point.dataset.status;
+    const targetAngle = statusAngles[status];
 
-      point.addEventListener("mouseover", hoverIn);
-      point.addEventListener("mouseout", hoverOut);
-      point.addEventListener("focus", hoverIn);
-      point.addEventListener("blur", hoverOut);
-
-      point.addEventListener("click", (e) => {
-        if (status !== "learning") {
-          e.preventDefault();
-          if (!videoElement.paused) videoElement.pause();
-          openModal(status);
-        }
-      });
-
-      // 鍵盤 Enter/Space 也能點
-      point.addEventListener("keydown", (e)=>{
-        if(e.key === "Enter" || e.key === " "){
-          point.click();
-        }
-      });
-    });
-
-    // 影片控制
-    togglePlayButton.addEventListener("click", () => {
+    const hoverIn = () => {
       if (videoElement.paused) {
-        videoElement.play().catch(err => {
-          console.error("Video play failed:", err);
-          openModal("emo");
-        });
-      } else {
-        videoElement.pause();
+        pointerHand.style.transform = `rotate(${targetAngle}deg)`;
+        setRose(status);
+      }
+    };
+    const hoverOut = () => {
+      if (videoElement.paused) {
+        pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
+        roseElement.className = "";
+        roseElement.classList.add("rose-unopened");
+      }
+    };
+
+    point.addEventListener("mouseover", hoverIn);
+    point.addEventListener("mouseout", hoverOut);
+    point.addEventListener("focus", hoverIn);
+    point.addEventListener("blur", hoverOut);
+
+    point.addEventListener("click", (e) => {
+      if (status !== "learning") {
+        e.preventDefault();
+        if (!videoElement.paused) videoElement.pause();
+        openModal(status);
       }
     });
+  });
 
-    videoElement.addEventListener("click", () => {
-      if (!videoElement.paused) videoElement.pause();
-    });
-
-    videoElement.addEventListener("play", () => {
-      togglePlayButton.textContent = "⏸";
-      videoPlayerContainer.classList.add("playing");
-      mainContainer.classList.add("is-playing");
-
-      pointerHand.style.transform = `rotate(${statusAngles.emo}deg)`;
-      setRose("emo");
-    });
-
-    videoElement.addEventListener("pause", () => {
-      togglePlayButton.textContent = "▶";
-      videoPlayerContainer.classList.remove("playing");
-      mainContainer.classList.remove("is-playing");
-
-      pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
-      setRose("unopened");
-    });
-
-    videoElement.addEventListener("ended", () => {
+  // 播放/暫停按鈕
+  togglePlayButton.addEventListener("click", () => {
+    if (videoElement.paused) {
+      videoElement.play().catch(()=>openModal("emo"));
+    } else {
       videoElement.pause();
-      videoElement.currentTime = 0;
-    });
-      /* ---------------------------------- */
-/* ---------------------------------- */
-/* Lyrics Stream Logic (SYNCED) */
-/* ---------------------------------- */
-const lyricsStream = document.getElementById("lyrics-stream");
-const lyricsLinesEl = document.getElementById("lyrics-lines");
+    }
+  });
 
-const LYRICS_TEXT = `
+  // 點影片本體暫停
+  videoElement.addEventListener("click", () => {
+    if (!videoElement.paused) videoElement.pause();
+  });
+
+  videoElement.addEventListener("play", () => {
+    togglePlayButton.textContent = "⏸";
+    videoPlayerContainer.classList.add("playing");
+    mainContainer.classList.add("is-playing");
+    pointerHand.style.transform = `rotate(${statusAngles.emo}deg)`;
+    setRose("emo");
+  });
+
+  videoElement.addEventListener("pause", () => {
+    togglePlayButton.textContent = "▶";
+    videoPlayerContainer.classList.remove("playing");
+    mainContainer.classList.remove("is-playing");
+    pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
+    roseElement.className = "";
+    roseElement.classList.add("rose-unopened");
+  });
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  const videoEl = document.getElementById("moonlight-video");
+  const lyricsStreamEl = document.getElementById("lyrics-stream");
+  const lyricsLinesEl = document.getElementById("lyrics-lines");
+
+  const START_AT = 14.0;
+  const LINE_INTERVAL = 3.2;
+  const HEADER_INTERVAL = 2.2;
+
+  const LYRICS_TEXT = `
 Moonlight Sonata
 
 Verse 1
@@ -852,188 +863,250 @@ Luna, Luna, keeper of the quiet glow
 Washing over everything we know
 Luna, Luna, in your tender tide
 We are perfectly alight, inside
-`.trim();
+  `.trim();
 
-let lyricEls = [];
-let lyricTimeline = []; // 每行的開始時間 (秒)
-let lastActiveIndex = -1;
-let timelineReady = false;
+  let flowLines = [];
+  let flowStartTimes = [];
+  let renderedIndex = -1;
+  let flowReady = false;
 
-function buildLyrics(){
-  lyricsLinesEl.innerHTML = "";
-  const lines = LYRICS_TEXT.split("\n");
+  const normalizeLine = s => s.trim().replace(/\s+/g, " ").toLowerCase();
 
-  lines.forEach((raw) => {
-    const line = raw.trimEnd();
-    const div = document.createElement("div");
-    div.className = "lyric-line";
-    div.textContent = line;
+  function prepareFlowLines(){
+    const raw = LYRICS_TEXT.split("\n").map(l => l.trimEnd());
+    const seen = new Set();
+    const res = [];
 
-    // 分節/標題行
-    const isHeader = /^(Moonlight Sonata|Verse|Chorus|Bridge|Outro|Pre-Chorus)/i.test(line);
-    if (isHeader){
-      div.classList.add("section");
-      div.dataset.kind = "header";
-    } else {
-      div.dataset.kind = "lyric";
+    for (const r of raw){
+      const line = r.trim();
+      if(line === ""){
+        res.push({text:"",kind:"space"});
+        continue;
+      }
+
+      const isHeader = /^(Moonlight Sonata|Verse|Chorus|Bridge|Outro|Pre-Chorus)/i.test(line);
+      const kind = isHeader ? "header" : "lyric";
+
+      if(kind === "lyric"){
+        const key = normalizeLine(line);
+        if(seen.has(key)) continue;     // ✅ 去重
+        seen.add(key);
+      }
+      res.push({text:line,kind});
+    }
+    flowLines = res;
+  }
+
+  function buildTimeline(){
+    flowStartTimes = [];
+    let t = START_AT;
+
+    for(const item of flowLines){
+      flowStartTimes.push(t);
+      if(item.kind==="header") t += HEADER_INTERVAL;
+      else if(item.kind==="space") t += 0.8;
+      else t += LINE_INTERVAL;
+    }
+    flowReady = true;
+  }
+
+  function renderSkeleton(){
+    lyricsLinesEl.innerHTML = "";
+    flowLines.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "lyric-line";
+      div.textContent = item.text;
+
+      if(item.kind==="header"){
+        div.classList.add("section");
+        div.dataset.kind="header";
+      } else if(item.kind==="space"){
+        div.dataset.kind="space";
+        div.style.height="8px";
+        div.style.opacity="1";
+        div.style.transform="none";
+      } else {
+        div.dataset.kind="lyric";
+      }
+
+      if(item.kind!=="space"){
+        div.style.opacity="0";
+        div.style.transform="translateY(14px)";
+      }
+      lyricsLinesEl.appendChild(div);
+    });
+  }
+
+  function showLyrics(){
+    lyricsStreamEl.style.display = "block";
+    lyricsLinesEl.classList.add("is-flowing");
+  }
+  function hideLyrics(){
+    lyricsStreamEl.style.display = "none";
+    lyricsLinesEl.classList.remove("is-flowing");
+    renderedIndex = -1;
+    [...lyricsLinesEl.querySelectorAll(".lyric-line")].forEach(el=>{
+      el.classList.remove("flow-in");
+      if(el.dataset.kind!=="space"){
+        el.style.opacity="0";
+        el.style.transform="translateY(14px)";
+      }
+    });
+  }
+
+  function update(){
+    if(!flowReady) return;
+
+    const ct = videoEl.currentTime;
+    const all = [...lyricsLinesEl.querySelectorAll(".lyric-line")];
+
+    let idx = renderedIndex;
+    while(idx + 1 < flowStartTimes.length && ct >= flowStartTimes[idx + 1]){
+      idx++;
+    }
+    if(idx === renderedIndex) return;
+    renderedIndex = idx;
+
+    for(let i=0;i<=renderedIndex;i++){
+      const el = all[i];
+      if(!el || el.dataset.kind==="space") continue;
+
+      if(!el.classList.contains("flow-in")){
+        el.classList.add("flow-in");
+        const targetTop = el.offsetTop - lyricsLinesEl.clientHeight * 0.55;
+        lyricsLinesEl.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      }
+    }
+  }
+
+  videoEl.addEventListener("loadedmetadata", ()=>{
+    prepareFlowLines();
+    buildTimeline();
+    renderSkeleton();
+  });
+
+  videoEl.addEventListener("play", ()=>{
+    if(!flowReady){
+      prepareFlowLines();
+      buildTimeline();
+      renderSkeleton();
+    }
+    showLyrics();
+    update();
+  });
+
+  videoEl.addEventListener("timeupdate", update);
+  videoEl.addEventListener("pause", hideLyrics);
+  videoEl.addEventListener("ended", hideLyrics);
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const NUM_PARTICLES = 10000;
+  const SPHERE_RADIUS = 100;
+  const MOUSE_REPEL_RADIUS = 60;
+  const REPEL_STRENGTH = 1.5;
+  const DAMPING = 0.94;
+
+  let scene, camera, renderer;
+  let particles, positions, velocities;
+  const mousePos = new THREE.Vector2();
+
+  function initParticlesBG() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+    camera.position.z = 200;
+
+    renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    document.getElementById("particle-bg").appendChild(renderer.domElement);
+    createParticles();
+
+    addEventListener("mousemove", onMouseMove);
+    addEventListener("resize", onWindowResize);
+  }
+
+  function createParticles() {
+    const geometry = new THREE.BufferGeometry();
+    positions = new Float32Array(NUM_PARTICLES * 3);
+    velocities = Array(NUM_PARTICLES).fill(0).map(()=>new THREE.Vector3());
+
+    for(let i=0;i<NUM_PARTICLES;i++){
+      const i3=i*3;
+      const phi=Math.acos(Math.random()*2-1);
+      const theta=Math.random()*Math.PI*2;
+
+      positions[i3]     = SPHERE_RADIUS * Math.sin(phi) * Math.cos(theta);
+      positions[i3 + 1] = SPHERE_RADIUS * Math.sin(phi) * Math.sin(theta);
+      positions[i3 + 2] = SPHERE_RADIUS * Math.cos(phi);
     }
 
-    // 空行
-    if (line === ""){
-      div.style.height = "8px";
-      div.style.opacity = "1";
-      div.style.transform = "none";
-      div.dataset.skip = "1";
-      div.dataset.kind = "skip";
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions,3));
+    const material = new THREE.PointsMaterial({
+      color:0x00ffff, size:0.5, transparent:true, opacity:0.8, depthWrite:false
+    });
+
+    particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+  }
+
+  function onMouseMove(e){
+    mousePos.x = (e.clientX/innerWidth)*2-1;
+    mousePos.y = -(e.clientY/innerHeight)*2+1;
+  }
+
+  function updateParticles(){
+    const arr = particles.geometry.attributes.position.array;
+
+    let vector = new THREE.Vector3(mousePos.x, mousePos.y, 0.5).unproject(camera);
+    const dir = vector.sub(camera.position).normalize();
+    const distance = -camera.position.z / dir.z;
+    const mouse3D = camera.position.clone().add(dir.multiplyScalar(distance));
+
+    for(let i=0;i<NUM_PARTICLES;i++){
+      const i3=i*3;
+      const pos = new THREE.Vector3(arr[i3],arr[i3+1],arr[i3+2]);
+      const vel = velocities[i];
+
+      const dvec = pos.clone().sub(mouse3D);
+      const d = dvec.length();
+      if(d<MOUSE_REPEL_RADIUS){
+        const strength = REPEL_STRENGTH*(MOUSE_REPEL_RADIUS-d)/MOUSE_REPEL_RADIUS;
+        vel.add(dvec.normalize().multiplyScalar(strength));
+      }
+
+      vel.multiplyScalar(DAMPING);
+      pos.add(vel);
+
+      arr[i3]=pos.x; arr[i3+1]=pos.y; arr[i3+2]=pos.z;
     }
 
-    lyricsLinesEl.appendChild(div);
-  });
-
-  lyricEls = [...lyricsLinesEl.querySelectorAll(".lyric-line")];
-}
-
-function buildTimeline(){
-  const duration = videoElement.duration;
-  if (!Number.isFinite(duration) || duration <= 0) return;
-
-  const headers = lyricEls.filter(el => el.dataset.kind === "header");
-  const lyrics = lyricEls.filter(el => el.dataset.kind === "lyric");
-
-  /* ===== 你可以微調的參數 ===== */
-  const INTRO_REVEAL_END = VOCAL_START; // header 出現到人聲前結束
-  const HEADER_PAD_START = 0.6;        // 前奏 0.6s 後才出第一個 header
-  const HEADER_EASE = 1.15;            // >1 代表越後面越慢（更有「沉入夜裡」感）
-
-  const SEC_PER_LINE = 3.0;            // 一般歌詞停留
-  const SEC_PER_SECTION = 4.2;         // 這裡只影響 lyric 軸的段落（通常不太用到）
-  const END_PAD = 1.2;
-  /* ================================= */
-
-  /* -------- Header 軸：0 ~ VOCAL_START -------- */
-  if (headers.length){
-    const span = Math.max(0.5, INTRO_REVEAL_END - HEADER_PAD_START);
-    headers.forEach((el, i) => {
-      // 讓 header 在前奏內「由快到慢」浮現
-      const u = i / Math.max(1, headers.length - 1);
-      const eased = Math.pow(u, HEADER_EASE);
-      const startTime = HEADER_PAD_START + eased * span;
-      el.dataset.start = startTime.toString();
-    });
+    particles.geometry.attributes.position.needsUpdate=true;
   }
 
-  /* -------- Lyric 軸：VOCAL_START 之後同步 -------- */
-  if (lyrics.length){
-    let draft = [];
-    let t = 0;
-    const weights = lyrics.map(el =>
-      el.classList.contains("section") ? 1.8 : 1.0
-    );
-
-    const totalWeight = weights.reduce((a,b)=>a+b,0);
-
-    lyrics.forEach((el, i) => {
-      draft.push(t);
-      t += (el.classList.contains("section") ? SEC_PER_SECTION : SEC_PER_LINE);
-    });
-
-    const draftTotal = t + END_PAD;
-    const usableDuration = Math.max(1, duration - VOCAL_START - END_PAD);
-
-    let scale = usableDuration / draftTotal;
-    scale = Math.min(scale, 1.25);
-    scale = Math.max(scale, 0.72);
-
-    draft = draft.map(x => VOCAL_START + x * scale);
-
-    lyrics.forEach((el, i) => {
-      el.dataset.start = draft[i].toString();
-    });
+  function animateParticlesBG(){
+    requestAnimationFrame(animateParticlesBG);
+    updateParticles();
+    particles.rotation.y += 0.001;
+    renderer.render(scene, camera);
   }
 
-  /* skip 空行 */
-  lyricEls.forEach(el=>{
-    if (el.dataset.kind === "skip") el.dataset.start = "-1";
-  });
-
-  timelineReady = true;
-}
-function showLyrics(){
-  lyricsStream.style.display = "block";
-  lyricsStream.setAttribute("aria-hidden","false");
-  lyricsLinesEl.classList.add("is-flowing");
-}
-
-function hideLyrics(){
-  lyricsStream.style.display = "none";
-  lyricsStream.setAttribute("aria-hidden","true");
-  lyricsLinesEl.classList.remove("is-flowing");
-  lastActiveIndex = -1;
-
-  // 重置所有行狀態
-  lyricEls.forEach(el=>{
-    el.classList.remove("flow-in");
-    el.style.opacity = el.dataset.skip ? "1" : "0";
-    el.style.transform = el.dataset.skip ? "none" : "translateY(14px)";
-  });
-}
-
-// 用 currentTime 找出目前該亮到哪一行
-function updateActiveLyric(){
-  if (!timelineReady) return;
-  const ct = videoElement.currentTime;
-
-  // 依時間切軸：前奏看 header，人聲後看 lyric
-  const pool =
-    ct < VOCAL_START
-      ? lyricEls.filter(el => el.dataset.kind === "header")
-      : lyricEls.filter(el => el.dataset.kind === "lyric");
-
-  let activeEl = null;
-
-  for (let i = 0; i < pool.length; i++){
-    const start = parseFloat(pool[i].dataset.start);
-    if (start >= 0 && ct >= start) activeEl = pool[i];
+  function onWindowResize(){
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
   }
 
-  // 沒找到就不動（避免 NaN 亂跳）
-  if (!activeEl) return;
-
-  // 如果同一行就不重複做事
-  const activeIndex = lyricEls.indexOf(activeEl);
-  if (activeIndex === lastActiveIndex) return;
-  lastActiveIndex = activeIndex;
-
-  // 進場動畫
-  activeEl.classList.add("flow-in");
-
-  // 捲動保持在中段（水道效果）
-  const targetTop = activeEl.offsetTop - lyricsLinesEl.clientHeight * 0.55;
-  lyricsLinesEl.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
-}
-
-/* --- lifecycle --- */
-
-// 影片 metadata 一好就建時間軸（確保 duration 可用）
-videoElement.addEventListener("loadedmetadata", () => {
-  buildLyrics();
-  buildTimeline();
-});
-
-// 播放時顯示、同步更新
-videoElement.addEventListener("play", () => {
-  if (!lyricEls.length) buildLyrics();
-  if (!timelineReady) buildTimeline();
-  showLyrics();
-  updateActiveLyric(); // 立刻對一次
-});
-
-// 隨播放進度更新
-videoElement.addEventListener("timeupdate", updateActiveLyric);
-
-// 暫停/結束就收起
-videoElement.addEventListener("pause", hideLyrics);
-videoElement.addEventListener("ended", hideLyrics);
-  </script>
+  initParticlesBG();
+  animateParticlesBG();
+})();
+</script>
 </body>
 </html>
