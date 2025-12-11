@@ -35,7 +35,7 @@
       --font-ui:"Orbitron", system-ui, sans-serif;
       --font-serif:"Cormorant Garamond", serif;
 
-      --container-size:min(88vw, 620px);
+      --container-size:min(78vw, 520px);
       --petal-w:clamp(150px, 19vw, 220px);
       --petal-h:clamp(210px, 28vw, 300px);
       --center-size:clamp(104px, 12vw, 150px);
@@ -49,20 +49,29 @@
     html, body { height: 100%; }
     * { box-sizing: border-box; }
 
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding: var(--page-padding);
-      font-family:var(--font-ui);
-      color:var(--ivory);
-      background:
-        radial-gradient(1200px 820px at 50% 28%, var(--bg-4) 0%, var(--bg-3) 26%, var(--bg-2) 55%, var(--bg-1) 78%, var(--bg-0) 100%);
-      overflow:hidden;
-      position:relative;
-      letter-spacing:.02em;
-    }
+   body{
+  margin:0;
+  min-height:100vh;
+  
+  /* ✅ 改成正常直向排版：從上到下 */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+
+  padding: var(--page-padding);
+  font-family:var(--font-ui);
+  color:var(--ivory);
+  background:
+    radial-gradient(1200px 820px at 50% 28%, var(--bg-4) 0%, var(--bg-3) 26%, var(--bg-2) 55%, var(--bg-1) 78%, var(--bg-0) 100%);
+
+  /* ✅ 只鎖水平，開放垂直捲動 */
+  overflow-x:hidden;
+  overflow-y:auto;
+
+  position:relative;
+  letter-spacing:.02em;
+}
 
     /* ---------------------------------- */
     /* 2) Starfield + Nebula + Floating Sparks */
