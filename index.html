@@ -40,22 +40,37 @@
       --radius-2xl: 28px;
     }
 
-    html, body { height: 100%; }
     * { box-sizing: border-box; }
+body{
+  margin:0;
+  min-height:100vh;
 
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      color:var(--ink);
-      font-family:"Orbitron", system-ui, sans-serif;
-      background:
-        radial-gradient(1200px 800px at 50% 40%, var(--bg-2) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
-      overflow:hidden;
-      position:relative;
-      letter-spacing: .02em;
-    }
+  color:var(--ink);
+  font-family:"Orbitron", system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 50% 40%, var(--bg-2) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+
+  overflow-x:hidden;
+  position:relative;
+  letter-spacing:.02em;
+}
+
+/* 桌機：整個 UI 鎖在畫面正中央，不捲動 */
+@media (min-width: 900px){
+  body{
+    display:grid;
+    place-items:center;
+    overflow-y:hidden;   /* 不要上下捲動，粒子球體 & 表盤保持對齊 */
+  }
+}
+
+/* 手機 / 平板：改用 block 排版，可以上下捲動 */
+@media (max-width: 899.98px){
+  body{
+    display:block;
+    overflow-y:auto;
+  }
+}
 
     /* 星塵 */
     body::before{
@@ -89,15 +104,31 @@
       0%,100%{opacity:.55; transform:scale(1);}
       50%{opacity:.85; transform:scale(1.02);}
     }
+#main-container{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(18px, 3vh, 28px);
+}
 
-    #main-container{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:clamp(18px, 3vh, 28px);
-      position:relative;
-      z-index:2;
-    }
+/* 桌機：在 body 的 grid 中垂直置中 */
+@media (min-width: 900px){
+  #main-container{
+    min-height:100vh;
+    justify-content:center;
+    padding:0;
+  }
+}
+
+/* 手機 / 平板：在頁面上端開始，下面留空給歌詞捲軸 */
+@media (max-width: 899.98px){
+  #main-container{
+    justify-content:flex-start;
+    padding:32px 0 120px;
+  }
+}
 
     /* ---------------------------------- */
     /* Title：月光藝術主標                  */
@@ -490,71 +521,230 @@
       filter: brightness(1.05);
     }
 /* ---------------------------------- */
-/* Lyrics Bookmarks：星河書籤卡片（軌道版） */
+/* Lyrics Bookmarks：捲軸歌詞清單（響應式） */
 /* ---------------------------------- */
 
 #lyrics-bookmarks{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;   /* 容器本身不吃滑鼠 */
-  z-index: 7;
+  position: relative;
+  z-index: 5;
+  margin: 64px auto 120px;
+  max-width: min(640px, 94vw);
+  padding: 0 16px;
+  pointer-events: auto;
 }
 
 .bookmark-cloud{
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-/* 卡片：固定在畫面中心，由 JS 用 transform 推到軌道位置 */
-.bookmark-card{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  width: min(320px, 60vw);
-  height: min(260px, 50vh);
-
-  perspective: 1100px;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-/* flip 的內層，只負責 3D 翻轉 */
-.bookmark-inner{
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transition: transform .7s cubic-bezier(.2,.8,.2,1);
-}
-
-/* 正反兩面通用基底 */
-.bookmark-face{
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  padding: 14px 16px;
-  backface-visibility: hidden;
-  box-shadow:
-    0 18px 40px rgba(0,0,0,.78),
-    0 0 26px rgba(114,245,255,.32);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 18px;
 }
 
-/* 正面：標題卡 */
-.bookmark-front{
+/* 整個捲軸按鈕 */
+.bookmark-card{
+  position: relative;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  opacity: 0;
+  transform: translateY(24px) scale(0.97);
+  transition:
+    opacity .5s ease,
+    transform .5s ease;
+}
+    /* body 加上 lyrics-ready class 後，捲軸淡入滑上來 */
+body.lyrics-ready .bookmark-card{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 做一點階梯延遲，讓它一卷一卷浮出來 */
+.bookmark-card:nth-child(1){ transition-delay: .00s; }
+.bookmark-card:nth-child(2){ transition-delay: .05s; }
+.bookmark-card:nth-child(3){ transition-delay: .10s; }
+.bookmark-card:nth-child(4){ transition-delay: .15s; }
+.bookmark-card:nth-child(5){ transition-delay: .20s; }
+.bookmark-card:nth-child(6){ transition-delay: .25s; }
+
+/* 展開時：捲軸微微抬起、光暈變強 */
+.bookmark-card.is-open .bookmark-inner{
+  transform: translateY(-3px);
+  box-shadow: 0 26px 60px rgba(0,0,0,.95);
+  border-color: rgba(114,245,255,.95);
+}
+
+.bookmark-card:focus-visible{
+  outline: 2px solid var(--accent-1, rgba(114,245,255,.9));
+  outline-offset: 4px;
+}
+
+/* 捲軸外框 */
+.bookmark-inner{
+  position: relative;
+  width: 100%;
+  border-radius: 22px;
   background:
-    radial-gradient(circle at 20% 0%,
-      rgba(255,255,255,.18),
-      transparent 55%),
-    linear-gradient(145deg,
-      rgba(10,16,26,.96),
-      rgba(4,8,16,.98));
-  border:1px solid rgba(159,255,230,.45);
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,.10), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(159,255,230,.12), transparent 55%),
+    linear-gradient(180deg, rgba(10,16,26,.98), rgba(3,8,14,.98));
+  border: 1px solid rgba(159,255,230,.5);
+  box-shadow: 0 18px 40px rgba(0,0,0,.78);
+  overflow: hidden;
+  transition:
+    box-shadow .25s ease,
+    transform .25s ease,
+    border-color .25s ease;
+/* 捲軸上方的極光光帶 */
+
+
+  /* 捲軸上方的極光光帶 */
+/* ===== 捲軸卡片：雙極光交錯光帶 ===== */
+
+/* 第一條：偏青綠色的主極光 */
+.bookmark-inner::before{
+  content:"";
+  position:absolute;
+  inset:-45%;
+  background:
+    linear-gradient(120deg,
+      transparent 0%,
+      rgba(114,245,255,0.00) 10%,
+      rgba(114,245,255,0.22) 26%,
+      rgba(159,255,230,0.30) 40%,
+      rgba(207,216,255,0.26) 54%,
+      rgba(159,255,230,0.14) 68%,
+      transparent 84%,
+      transparent 100%);
+  opacity:.55;
+  mix-blend-mode:screen;
+  filter: blur(7px);
+  transform: translate3d(-35%, -18%, 0) rotate(10deg);
+  pointer-events:none;
+  animation: aurora-slide-1 11s ease-in-out infinite alternate;
 }
 
+/* 第二條：偏紫金色的輔極光（角度相反，速度不同） */
+.bookmark-inner::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:
+    linear-gradient(-130deg,
+      transparent 0%,
+      rgba(180,120,255,0.00) 12%,
+      rgba(180,120,255,0.22) 32%,
+      rgba(255,220,170,0.26) 46%,
+      rgba(159,255,230,0.18) 60%,
+      rgba(114,245,255,0.10) 72%,
+      transparent 88%,
+      transparent 100%);
+  opacity:.45;
+  mix-blend-mode:screen;
+  filter: blur(8px);
+  transform: translate3d(28%, -10%, 0) rotate(-6deg);
+  pointer-events:none;
+  animation: aurora-slide-2 13s ease-in-out infinite alternate-reverse;
+}
+
+/* hover / 展開時，兩條光帶都亮一點 */
+.bookmark-card:hover .bookmark-inner::before,
+.bookmark-card.is-open .bookmark-inner::before,
+.bookmark-card:hover .bookmark-inner::after,
+.bookmark-card.is-open .bookmark-inner::after{
+  opacity:.95;
+}
+
+/* 第一條極光的路徑 */
+@keyframes aurora-slide-1{
+  0%{
+    transform: translate3d(-42%, -22%, 0) rotate(12deg);
+  }
+  50%{
+    transform: translate3d(-6%, 4%, 0) rotate(4deg);
+  }
+  100%{
+    transform: translate3d(26%, -14%, 0) rotate(-4deg);
+  }
+}
+/* 第二條極光的路徑（路徑、節奏都不一樣） */
+@keyframes aurora-slide-2{
+  0%{
+    transform: translate3d(30%, -18%, 0) rotate(-10deg);
+  }
+  40%{
+    transform: translate3d(-4%, -4%, 0) rotate(-2deg);
+  }
+  100%{
+    transform: translate3d(-28%, 10%, 0) rotate(6deg);
+  }
+}
+/* hover 時讓極光稍微變亮 */
+.bookmark-card:hover .bookmark-inner::before,
+.bookmark-card.is-open .bookmark-inner::before{
+  opacity:.9;
+}
+
+/* 極光滑動動畫 */
+@keyframes aurora-slide{
+  0%{
+    transform: translate3d(-35%, -16%, 0) rotate(8deg);
+  }
+  50%{
+    transform: translate3d(0%, 4%, 0) rotate(2deg);
+  }
+  100%{
+    transform: translate3d(28%, -12%, 0) rotate(-6deg);
+  }
+}
+
+}
+    
+
+.bookmark-card:hover .bookmark-inner{
+  box-shadow: 0 22px 52px rgba(0,0,0,.9);
+  transform: translateY(-2px);
+  border-color: rgba(114,245,255,.9);
+}
+
+/* 捲軸上下的圓邊效果 */
+.bookmark-scroll-cap{
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 0 100%, rgba(255,255,255,.18), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(255,255,255,.18), transparent 55%),
+    linear-gradient(to right,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.02),
+      rgba(255,255,255,.08));
+}
+
+.bookmark-scroll-cap.top{
+  top: 0;
+  opacity: .8;
+}
+.bookmark-scroll-cap.bottom{
+  bottom: 0;
+  opacity: .7;
+}
+
+/* 捲軸「標題列」 */
+.bookmark-face{
+  position: relative;
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 原本的 tag / title / hint 繼續沿用 */
 .bookmark-tag{
   font-family:"Orbitron", sans-serif;
   font-size:.7rem;
@@ -565,36 +755,33 @@
 }
 
 .bookmark-title{
-  margin-top:10px;
   font-family:"Cormorant Garamond", serif;
-  font-size:1.6rem;
-  letter-spacing:.16em;
-  color:rgba(231,247,247,.96);
-  text-shadow:
-    0 0 16px rgba(114,245,255,.4),
-    0 0 30px rgba(159,255,230,.5);
+  font-size:1.4rem;
+  letter-spacing:.12em;
+  text-transform:capitalize;
+  color:rgba(231,247,247,.95);
 }
 
 .bookmark-hint{
-  margin-top:auto;
-  font-size:.8rem;
-  letter-spacing:.16em;
-  color:rgba(231,247,247,.75);
-  text-align:right;
+  font-size:.75rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(231,247,247,.7);
   opacity:.9;
 }
 
-/* 反面：歌詞內容卡 */
+/* 展開區（歌詞本體） */
 .bookmark-back{
-  background:
-    radial-gradient(circle at 0% 0%,
-      rgba(159,255,230,.16),
-      transparent 55%),
-    linear-gradient(145deg,
-      rgba(5,10,20,.98),
-      rgba(3,6,12,.98));
-  border:1px solid rgba(207,216,255,.45);
-  transform: rotateY(180deg);
+  padding: 4px 18px 16px;
+  border-top: 1px dashed rgba(159,255,230,.35);
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  overflow: hidden;
+  transition:
+    max-height .35s ease,
+    opacity .25s ease,
+    transform .35s ease;
 }
 
 .bookmark-section-label{
@@ -607,35 +794,64 @@
 }
 
 .bookmark-lyrics{
-  flex:1;
   font-family:"Cormorant Garamond", serif;
   font-size:.95rem;
   letter-spacing:.03em;
   line-height:1.6;
   white-space:pre-line;
   color:rgba(231,247,247,.94);
-
-  /* 優先讓它整張卡顯示完；真的超出就微捲動 */
-  overflow:auto;
-  scrollbar-width:none;        /* Firefox: 隱藏捲軸 */
+  max-height: 260px;          /* 內容太長時，內部再滾動 */
+  overflow-y: auto;
+  scrollbar-width:none;
 }
 .bookmark-lyrics::-webkit-scrollbar{
-  display:none;                /* Chrome: 隱藏捲軸 */
+  display:none;
 }
 
-/* 卡片翻轉狀態 */
-.bookmark-card.is-flipped .bookmark-inner{
-  transform: rotateY(180deg);
+/* 展開狀態：捲軸打開 */
+.bookmark-card.is-open .bookmark-back{
+  max-height: 260px;          /* 可視需要調大，例如 50vh */
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* 小螢幕：略縮小但仍偏大，歌詞還是看得到 */
+/* 手機版優化 */
 @media (max-width: 600px){
-  .bookmark-card{
-    width: 80vw;
-    height: min(280px, 55vh);
+  #lyrics-bookmarks{
+    margin: 40px auto 80px;
+    padding: 0 12px;
+  }
+  .bookmark-inner{
+    border-radius: 18px;
   }
   .bookmark-title{
-    font-size:1.3rem;
+    font-size: 1.2rem;
+  }
+}
+    /* 桌機版：捲軸繞著表盤轉一圈 */
+@media (min-width: 900px){
+  #lyrics-bookmarks{
+    position:absolute;
+    inset:0;
+    margin:0;
+    padding:0;
+    max-width:none;
+    pointer-events:none;      /* 先關掉容器的滑鼠事件 */
+  }
+
+  .bookmark-cloud{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+
+  .bookmark-card{
+    position:absolute;
+    width:clamp(220px, 22vw, 280px);  /* 比以前小很多，不會擋滿畫面 */
+    margin:0;
+    pointer-events:auto;              /* 卡片本身可以點 */
+    opacity:1;                        /* 直接顯示，由 JS 控制位置與縮放 */
+    transform:translate(-50%, -50%);
   }
 }
 
@@ -761,9 +977,159 @@
       </div>
     </section>
 
-   <!-- Lyrics Bookmarks：飄在星河裡的一頁頁書籤 -->
+  <!-- Lyrics Bookmarks：捲軸歌詞 -->
 <section id="lyrics-bookmarks" aria-label="Moonlight Sonata 歌詞書籤">
-  <div class="bookmark-cloud" id="bookmark-cloud" aria-live="polite"></div>
+  <div class="bookmark-cloud">
+
+    <!-- Verse 1 -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Verse 1</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Verse 1</div>
+          <div class="bookmark-lyrics">
+Close your eyes, let the tide of night pull you deep
+Where silver whispers through the willow weep
+Every worry, every weight you carry, set it free
+On this silent sea, just breathe
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+    <!-- Pre-Chorus -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Pre-Chorus</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Pre-Chorus</div>
+          <div class="bookmark-lyrics">
+Feel the shadows soften, turning into silk
+As the constellations witness, spilling their light like milk
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+    <!-- Chorus -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Chorus</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Chorus</div>
+          <div class="bookmark-lyrics">
+Luna, Luna, keeper of the quiet glow
+Washing over every secret that we know
+Luna, Luna, in your phosphorescent tide
+All our fractured pieces learn to rest inside
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+    <!-- Verse 2 -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Verse 2</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Verse 2</div>
+          <div class="bookmark-lyrics">
+See the dust of stars on your windowpane
+A reminder that even darkness is not in vain
+It's a blanket, a cradle, a celestial embrace
+A sanctuary in this vast and silent space
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+    <!-- Bridge -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Bridge</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Bridge</div>
+          <div class="bookmark-lyrics">
+Hush now
+The moon is listening
+All is understood
+In this velvet nothingness
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+    <!-- Outro -->
+    <button class="bookmark-card" type="button" aria-expanded="false">
+      <div class="bookmark-inner">
+        <div class="bookmark-scroll-cap top"></div>
+
+        <div class="bookmark-face">
+          <div class="bookmark-tag">Moonlight Sonata</div>
+          <div class="bookmark-title">Outro</div>
+          <div class="bookmark-hint">點擊展開歌詞</div>
+        </div>
+
+        <div class="bookmark-back">
+          <div class="bookmark-section-label">Outro</div>
+          <div class="bookmark-lyrics">
+Luna, Luna, keeper of the quiet glow
+Washing over everything we know
+Luna, Luna, in your tender tide
+We are perfectly alight, inside
+          </div>
+        </div>
+
+        <div class="bookmark-scroll-cap bottom"></div>
+      </div>
+    </button>
+
+  </div>
 </section>
 
 
@@ -925,239 +1291,132 @@
     console.log("[Moonlight] init done");
   })();
   </script>
-
 <script>
-(() => {
-  'use strict';
+  // 捲軸：展開/收起 + 桌機軌道繞圈
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = Array.from(document.querySelectorAll(".bookmark-card"));
+    if (!cards.length) return;
 
-  const cloud = document.getElementById("bookmark-cloud");
-  if (!cloud) {
-    console.warn("[Bookmarks] bookmark-cloud not found");
-    return;
-  }
-
-  const videoEl = document.getElementById("moonlight-video");
-
-  const LYRICS_TEXT = `
-Moonlight Sonata
-
-Verse 1
-Close your eyes, let the tide of night pull you deep
-Where silver whispers through the willow weep
-Every worry, every weight you carry, set it free
-On this silent sea, just breathe
-
-Pre-Chorus
-Feel the shadows soften, turning into silk
-As the constellations witness, spilling their light like milk
-
-Chorus
-Luna, Luna, keeper of the quiet glow
-Washing over every secret that we know
-Luna, Luna, in your phosphorescent tide
-All our fractured pieces learn to rest inside
-
-Verse 2
-See the dust of stars on your windowpane
-A reminder that even darkness is not in vain
-It's a blanket, a cradle, a celestial embrace
-A sanctuary in this vast and silent space
-
-Pre-Chorus
-Let the cool air hold you, like a long-lost friend
-This is not an ending, but a gentle bend
-
-Chorus
-Luna, Luna, keeper of the quiet glow
-Washing over every secret that we know
-Luna, Luna, in your phosphorescent tide
-All our fractured pieces learn to rest inside
-
-Bridge
-Hush now
-The moon is listening
-All is understood
-In this velvet nothingness
-
-Outro
-Luna, Luna, keeper of the quiet glow
-Washing over everything we know
-Luna, Luna, in your tender tide
-We are perfectly alight, inside
-  `.trim();
-
-  /* ---------- 解析歌詞成 section ---------- */
-  function parseSections() {
-    const lines = LYRICS_TEXT.split("\n").map(l => l.trim());
-    const sections = [];
-    let currentTitle = null;
-    let buffer = [];
-
-    const sectionPattern = /^(Verse\s+\d+|Pre-Chorus|Chorus|Bridge|Outro)\b/i;
-
-    for (let raw of lines) {
-      const line = raw.trim();
-      if (!line) continue;
-
-      if (!currentTitle && /^Moonlight Sonata$/i.test(line)) {
-        continue; // 跳過標題行
-      }
-
-      const m = line.match(sectionPattern);
-      if (m) {
-        if (currentTitle && buffer.length) {
-          sections.push({ title: currentTitle, text: buffer.join("\n") });
+    // 1. 捲軸展開 / 收起（同時間只打開一卷）
+    cards.forEach(card => {
+      const setOpenState = (targetCard, isOpen) => {
+        targetCard.classList.toggle("is-open", isOpen);
+        targetCard.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        const hint = targetCard.querySelector(".bookmark-hint");
+        if (hint) {
+          hint.textContent = isOpen ? "點擊收起歌詞" : "點擊展開歌詞";
         }
-        currentTitle = m[1];
-        buffer = [];
-      } else if (currentTitle) {
-        buffer.push(line);
-      }
-    }
-    if (currentTitle && buffer.length) {
-      sections.push({ title: currentTitle, text: buffer.join("\n") });
-    }
+      };
 
-    // Chorus / Pre-Chorus 重複出現，只取第一次
-    const seen = new Set();
-    const unique = [];
-    for (const sec of sections) {
-      const key = sec.title.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      unique.push(sec);
-    }
-    return unique;
-  }
+      card.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const willOpen = !card.classList.contains("is-open");
 
-  /* ---------- 建立卡片 DOM ---------- */
+        // 先把其他捲軸關掉
+        cards.forEach(c => {
+          if (c !== card) setOpenState(c, false);
+        });
+        // 再切換這一卷
+        setOpenState(card, willOpen);
+      });
 
-  function createCard(section) {
-    const card = document.createElement("button");
-    card.className = "bookmark-card";
-    card.type = "button";
-    card.setAttribute("aria-label", `${section.title} 歌詞卡片（點擊翻面）`);
-
-    const inner = document.createElement("div");
-    inner.className = "bookmark-inner";
-
-    // 正面
-    const front = document.createElement("div");
-    front.className = "bookmark-face bookmark-front";
-
-    const tag = document.createElement("div");
-    tag.className = "bookmark-tag";
-    tag.textContent = "Moonlight Sonata";
-
-    const title = document.createElement("div");
-    title.className = "bookmark-title";
-    title.textContent = section.title;
-
-    const hint = document.createElement("div");
-    hint.className = "bookmark-hint";
-    hint.textContent = "click to flip";
-
-    front.appendChild(tag);
-    front.appendChild(title);
-    front.appendChild(hint);
-
-    // 反面
-    const back = document.createElement("div");
-    back.className = "bookmark-face bookmark-back";
-
-    const label = document.createElement("div");
-    label.className = "bookmark-section-label";
-    label.textContent = section.title;
-
-    const body = document.createElement("div");
-    body.className = "bookmark-lyrics";
-    body.textContent = section.text;
-
-    back.appendChild(label);
-    back.appendChild(body);
-
-    inner.appendChild(front);
-    inner.appendChild(back);
-    card.appendChild(inner);
-
-    // 點擊翻面
-    card.addEventListener("click", (e) => {
-      e.stopPropagation();
-      card.classList.toggle("is-flipped");
-    });
-
-    // 鍵盤也可翻
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        card.classList.toggle("is-flipped");
-      }
-    });
-
-    return card;
-  }
-
-  /* ---------- 軌道動畫：像行星在夜空中繞圈 ---------- */
-
-  const orbitCards = []; // { el, radius, phase }
-
-  function initBookmarks() {
-    const sections = parseSections();
-    cloud.innerHTML = "";
-
-    const minDim = Math.min(window.innerWidth, window.innerHeight);
-    const baseRadius = minDim * 0.36;         // 離中心一段距離，不蓋住唱片
-    const radiusJitter = 60;                  // 每張略有不同
-
-    sections.forEach((sec, idx) => {
-      const card = createCard(sec);
-      cloud.appendChild(card);
-
-      const radius = baseRadius + (idx - (sections.length-1)/2) * (radiusJitter / 2);
-      const phase  = (idx / sections.length) * Math.PI * 2;
-
-      orbitCards.push({
-        el: card,
-        radius,
-        phase
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          card.click();
+        }
       });
     });
-  }
 
-  function animate(timeMs){
-    const t = timeMs / 1000; // 秒
-    const playing = videoEl && !videoEl.paused && !videoEl.ended;
+    // 2. 桌機版：捲軸繞著表盤轉一圈
+    const clock = document.getElementById("clock-interface");
+    let frameId = null;
+    let orbitActive = false;
 
-    // 播放時轉快一點，暫停時很慢
-    const speed = playing ? 0.22 : 0.06;  // 弧度/秒
+    function resetCardsLayout() {
+      // 回到直式版要把 inline style 清掉
+      cards.forEach(card => {
+        card.style.left = "";
+        card.style.top = "";
+        card.style.transform = "";
+        card.style.zIndex = "";
+      });
+    }
 
-    orbitCards.forEach((obj, i) => {
-      const angle = speed * t + obj.phase;
+    function stopOrbit() {
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+      orbitActive = false;
+      resetCardsLayout();
+    }
 
-      const x = Math.cos(angle) * obj.radius;
-      const y = Math.sin(angle) * obj.radius;
+    function startOrbit() {
+      if (!clock || orbitActive) return;
+      orbitActive = true;
 
-      // 以畫面中心為原點，把卡片推到軌道上
-      obj.el.style.transform =
-        `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+      const startTime = performance.now();
+
+      const animate = (now) => {
+        // 視窗變窄就自動停用軌道，回到直式
+        if (window.innerWidth < 900) {
+          stopOrbit();
+          return;
+        }
+
+        const t = (now - startTime) * 0.00006; // 速度（數字越大越快）
+        const rect = clock.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        // 軌道半徑：跟表盤與視窗大小綁在一起，避免太大
+        const baseR = rect.width * 0.78;
+        const maxR  = Math.min(window.innerWidth, window.innerHeight) * 0.60;
+        const radius = Math.min(baseR, maxR);
+
+        const step = (Math.PI * 2) / cards.length;
+
+        cards.forEach((card, i) => {
+          const angle = t + i * step;
+
+          const x = cx + radius * Math.cos(angle);
+          const y = cy + radius * Math.sin(angle);
+
+          // 依照位置調整深度：在「前面」的比較亮、比較大
+          const depth = (Math.sin(angle) + 1) / 2; // 0 ~ 1
+          const scale = 0.85 + depth * 0.2;        // 0.85 ~ 1.05
+          const z     = 10 + Math.round(depth * 10);
+
+          card.style.left = x + "px";
+          card.style.top  = y + "px";
+          card.style.transform = `translate(-50%, -50%) scale(${scale})`;
+          card.style.zIndex = String(z);
+        });
+
+        frameId = requestAnimationFrame(animate);
+      };
+
+      frameId = requestAnimationFrame(animate);
+    }
+
+    function handleLayout() {
+      if (window.innerWidth >= 900) {
+        // 桌機：啟動軌道
+        if (!orbitActive) startOrbit();
+      } else {
+        // 手機 / 平板：停用軌道，回到直式捲軸
+        stopOrbit();
+      }
+    }
+
+    handleLayout();
+    window.addEventListener("resize", () => {
+      // 簡單處理，直接重新判斷一次
+      handleLayout();
     });
-
-    requestAnimationFrame(animate);
-  }
-
-  initBookmarks();
-  requestAnimationFrame(animate);
-
-  // 窗口尺寸改變時，重新計算半徑，避免跑出螢幕
-  window.addEventListener("resize", () => {
-    orbitCards.length = 0;
-    initBookmarks();
   });
-})();
 </script>
-
-</script>
-
   <!-- Three.js 粒子背景 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
