@@ -12,7 +12,6 @@
     /* 1) Tokens — Deep Burgundy + Blue Velvet Sky */
     /* ---------------------------------- */
     :root{
-      /* 更深酒紅（去粉、偏勃根地） */
       --burg-0:#f7e9ee;
       --burg-1:#d8a1ad;
       --burg-2:#a63b55;
@@ -20,16 +19,13 @@
       --burg-4:#4e0b1f;
       --burg-5:#24040e;
 
-      /* 金色流光 */
       --gold-0:#fff3c8;
       --gold-1:#ffd36b;
       --gold-2:#ffb400;
 
-      /* 文字 */
       --ivory:#fff7fb;
       --ink:#120915;
 
-      /* 藍絲絨背景 */
       --bg-0:#050814;
       --bg-1:#08162d;
       --bg-2:#0a2342;
@@ -39,7 +35,6 @@
       --font-ui:"Orbitron", system-ui, sans-serif;
       --font-serif:"Cormorant Garamond", serif;
 
-      /* Responsive geometry */
       --container-size:min(88vw, 620px);
       --petal-w:clamp(150px, 19vw, 220px);
       --petal-h:clamp(210px, 28vw, 300px);
@@ -71,6 +66,7 @@
 
     /* ---------------------------------- */
     /* 2) Starfield + Nebula + Floating Sparks */
+    /* 重新調整 z-index，讓 three.js 星系在中間層 */
     /* ---------------------------------- */
     body::before{
       content:"";
@@ -96,7 +92,7 @@
       opacity:.75;
       filter: blur(.15px);
       animation: starDrift 34s linear infinite;
-      z-index:-3;
+      z-index:-5;
     }
     @keyframes starDrift{ to{ transform: translateY(3%) translateX(-1.5%); } }
 
@@ -108,17 +104,26 @@
         radial-gradient(980px 760px at 72% 20%, rgba(35,98,220,.10), transparent 66%),
         radial-gradient(1000px 780px at 50% 72%, rgba(255,211,107,.06), transparent 60%);
       animation: nebulaBreathe 10s ease-in-out infinite;
-      z-index:-2;
+      z-index:-4;
     }
     @keyframes nebulaBreathe{
       0%,100%{opacity:.5; transform:scale(1);}
       50%{opacity:.85; transform:scale(1.03);}
     }
 
+    /* three.js 星系背景 canvas */
+    #stars-bg{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-3;
+      display:block;
+    }
+
     .spark-field{
       position:fixed; inset:0;
       pointer-events:none;
-      z-index:-1;
+      z-index:-2;
       overflow:hidden;
     }
     .spark{
@@ -138,29 +143,97 @@
 
     /* ---------------------------------- */
     /* 3) Title */
-    /* ---------------------------------- */
-    #page-title{
-      font-family:var(--font-serif);
-      font-weight:600;
-      font-size:clamp(1.6rem, 2.4vw, 2.2rem);
-      letter-spacing:.09em;
-      text-align:center;
-      margin:0 0 var(--title-bottom-gap) 0;
-      color:var(--ivory);
-      text-shadow:
-        0 0 16px rgba(166,59,85,.55),
-        0 0 50px rgba(255,211,107,.18);
-      z-index:5;
-    }
-    #page-title small{
-      display:block;
-      font-family:var(--font-ui);
-      font-size:.74em;
-      letter-spacing:.22em;
-      color:rgba(255,247,251,.92);
-      margin-top:5px;
-    }
+    /* === 超主題性標題：漸層發光 + 藝術感特效 === */
+#page-title{
+  position: relative;
+  margin-bottom: 14px;               /* 跟 Knowledge Map 保持一點呼吸空間 */
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 4.3vw, 3.6rem);  /* 整體放大：桌機更像主視覺標題 */
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 
+  /* 金粉漸層文字 */
+  background: linear-gradient(
+    120deg,
+    #fff7fb 0%,
+    #ffe9b8 28%,
+    #ffd36b 50%,
+    #ffb400 65%,
+    #f7e9ee 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* 外圈柔光 */
+  text-shadow:
+    0 0 24px rgba(255,243,200,0.9),
+    0 0 60px rgba(166,59,85,0.55);
+
+  /* 慢速呼吸光效 */
+  animation: titleGlow 7s ease-in-out infinite;
+}
+
+/* 標題底下加一道發光的細線，拉出主視覺感 */
+#page-title::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width: clamp(140px, 32vw, 260px);
+  height: 2px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(255,243,200,0) 0, rgba(255,243,200,0.9) 40%, transparent 70%),
+    linear-gradient(90deg, rgba(255,243,200,0) 0%, rgba(255,211,107,0.9) 50%, rgba(255,243,200,0) 100%);
+  box-shadow:
+    0 0 12px rgba(255,243,200,0.9),
+    0 0 22px rgba(166,59,85,0.6);
+}
+
+/* 副標：放大＋輕微閃爍感 */
+#page-title small{
+  display:block;
+  margin-top: 8px;
+  font-family: var(--font-ui);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  letter-spacing: 0.18em;
+  color: rgba(255,247,251,0.96);
+  text-shadow:
+    0 0 12px rgba(255,243,200,0.8),
+    0 0 30px rgba(60,120,250,0.6);
+  animation: subtitleShimmer 5.5s ease-in-out infinite;
+}
+
+/* 主標光效：慢慢亮起又暗下去 */
+@keyframes titleGlow{
+  0%, 100%{
+    text-shadow:
+      0 0 18px rgba(255,243,200,0.7),
+      0 0 40px rgba(166,59,85,0.4);
+    transform: translateY(0);
+  }
+  45%{
+    text-shadow:
+      0 0 28px rgba(255,243,200,1),
+      0 0 80px rgba(166,59,85,0.7);
+    transform: translateY(-2px);
+  }
+}
+
+/* 副標細緻一點的閃動 */
+@keyframes subtitleShimmer{
+  0%, 100%{
+    opacity: 0.9;
+    letter-spacing: 0.16em;
+  }
+  40%{
+    opacity: 1;
+    letter-spacing: 0.2em;
+  }
+}
     /* ---------------------------------- */
     /* 4) Navigation Panel */
     /* ---------------------------------- */
@@ -220,6 +293,7 @@
         0 1px 3px rgba(0,0,0,.9),
         0 0 8px rgba(166,59,85,.35);
       transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+      cursor:pointer;
     }
     .nav-item strong{
       color:#fff;
@@ -242,7 +316,28 @@
       border-color: rgba(255,211,107,.35);
       box-shadow: 0 6px 16px rgba(0,0,0,.5), 0 0 10px rgba(255,211,107,.25);
     }
+/* === 壓縮垂直間距：標題 ↔ 導航 ↔ 花朵 ↔ 返回主頁 === */
 
+/* 標題跟導航靠近一點 */
+#page-title{
+  margin-bottom: 14px;   /* 原本比較大，改成 4px */
+}
+
+/* 導航跟花朵靠近一點 */
+#nav-panel{
+  margin-bottom: 8px;   /* 原本用變數，這裡直接收緊 */
+}
+
+/* 花朵本身上下都縮小 */
+#flower-rotator{
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* 花朵和「返回主頁」之間也縮小 */
+#back-button{
+  margin-top: 6px;      /* 原本最多會到 24px，改成 6px 就好 */
+}
     /* ---------------------------------- */
     /* 5) Flower motion wrapper */
     /* ---------------------------------- */
@@ -253,14 +348,15 @@
       place-items:center;
       position:relative;
       z-index:3;
-
-      /* ✅ 整朵花慢慢旋轉 + 浮動 */
-      animation:
+      /* ✅ 原本有旋轉與浮動動畫，已移除，改為靜止 */
+      /* animation:
         flowerSpin 90s linear infinite,
-        flowerFloat 9s ease-in-out infinite;
+        flowerFloat 9s ease-in-out infinite; */
       transform-origin:center center;
       filter: drop-shadow(0 16px 48px rgba(0,0,0,.7));
     }
+
+    /* 保留 keyframes（以後需要可以再用）
     @keyframes flowerSpin{
       from{ transform: rotate(0deg); }
       to{ transform: rotate(360deg); }
@@ -268,7 +364,7 @@
     @keyframes flowerFloat{
       0%,100%{ translate: 0 0; }
       50%{ translate: 0 -8px; }
-    }
+    } */
 
     /* ---------------------------------- */
     /* 6) Flower container */
@@ -280,13 +376,14 @@
       display:grid;
       place-items:center;
 
-      /* 脈動呼吸 */
-      animation: slowPulse 12s ease-in-out infinite;
+      /* 原本有脈動動畫，改為靜止 */
+      /* animation: slowPulse 12s ease-in-out infinite; */
     }
-    @keyframes slowPulse{
+
+    /*@keyframes slowPulse{
       0%,100%{transform:scale(1);}
       50%{transform:scale(1.02);}
-    }
+    }*/
 
     /* ---------------------------------- */
     /* 7) Center core */
@@ -323,15 +420,17 @@
         0 0 8px rgba(255,211,107,.9);
 
       z-index:30;
-      animation: centerBreathe 6s ease-in-out infinite;
-    }
-    @keyframes centerBreathe{
-      0%,100%{transform:scale(1);}
-      50%{transform:scale(1.06);}
+      /* 原本有 centerBreathe，改為靜止 */
+      /* animation: centerBreathe 6s ease-in-out infinite; */
     }
 
+    /*@keyframes centerBreathe{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.06);}
+    }*/
+
     /* ---------------------------------- */
-    /* 8) Petals — Deep Burgundy Velvet + sway */
+    /* 8) Petals — Deep Burgundy Velvet */
     /* ---------------------------------- */
     .petal{
       --angle:0deg;
@@ -411,42 +510,13 @@
         filter .45s ease,
         background .45s ease;
 
-      /* ✅ 每瓣輕微搖曳，不同相位 */
-      animation:
+      /* 原本有 petalBreathe + petalSway，這裡改成預設不動 */
+      /* animation:
         petalBreathe 7.2s ease-in-out infinite,
-        petalSway 5.5s ease-in-out infinite;
+        petalSway 5.5s ease-in-out infinite; */
       z-index:2;
       cursor:pointer;
       isolation:isolate;
-    }
-
-    /* 讓每瓣搖曳不同步 */
-    .petal:nth-child(1){ animation-delay: 0s, 0.2s; }
-    .petal:nth-child(2){ animation-delay: 0.4s, 0.6s; }
-    .petal:nth-child(3){ animation-delay: 0.8s, 0.1s; }
-    .petal:nth-child(4){ animation-delay: 1.2s, 0.9s; }
-    .petal:nth-child(5){ animation-delay: 1.6s, 0.3s; }
-    .petal:nth-child(6){ animation-delay: 2.0s, 1.1s; }
-    .petal:nth-child(7){ animation-delay: 2.4s, 0.5s; }
-    .petal:nth-child(8){ animation-delay: 2.8s, 1.3s; }
-    .petal:nth-child(9){ animation-delay: 3.2s, 0.7s; }
-    .petal:nth-child(10){ animation-delay: 3.6s, 1.5s; }
-    .petal:nth-child(11){ animation-delay: 4.0s, 0.9s; }
-
-    /* 搖曳：在原 tilt 上加減 1deg */
-    @keyframes petalSway{
-      0%,100%{
-        transform:
-          rotate(var(--angle))
-          translateY(calc(var(--lift) * -1))
-          rotate(calc(var(--tilt) - 1deg));
-      }
-      50%{
-        transform:
-          rotate(var(--angle))
-          translateY(calc(var(--lift) * -1))
-          rotate(calc(var(--tilt) + 1deg));
-      }
     }
 
     .petal::after{
@@ -474,25 +544,126 @@
       mix-blend-mode: soft-light;
       pointer-events:none;
     }
+/* nav 點擊時用的「sparkling + 持續跳動」效果 */
+/* nav 點擊時用的「乾淨版 sparkling + 彈跳」 */
+.petal.nav-highlight{
+  animation:
+    petalNavBounce 0.9s ease-in-out infinite,
+    petalGlow 1.4s ease-in-out infinite;
+  z-index: 12;
+}
 
-    @keyframes petalBreathe{
-      0%,100%{
-        filter: drop-shadow(0 0 6px rgba(166,59,85,1));
-        box-shadow:
-          inset 0 14px 34px rgba(247,233,238,1),
-          inset 0 -34px 62px rgba(36,4,14,.88),
-          0 8px 24px rgba(0,0,0,.6),
-          0 0 12px rgba(255,211,107,.24);
-      }
-      50%{
-        filter: drop-shadow(0 0 9px rgba(166,59,85,1));
-        box-shadow:
-          inset 0 16px 38px rgba(247,233,238,1),
-          inset 0 -38px 68px rgba(36,4,14,1),
-          0 12px 30px rgba(0,0,0,.65),
-          0 0 18px rgba(255,211,107,.4);
-      }
-    }
+/* 柔和的金色光暈（取代滿版圓點） */
+.petal.nav-highlight::before{
+  opacity: 1;
+  background:
+    radial-gradient(130% 170% at 50% 0%,
+      rgba(255,243,220,0.95) 0%,
+      rgba(255,211,107,0.45) 32%,
+      rgba(166,59,85,0.0) 62%);
+  mix-blend-mode: screen;
+  filter: blur(2px);
+  animation: petalHalo 1.4s ease-in-out infinite;
+}
+
+/* 一道斜向掃過去的亮光，營造 sparkling 感 */
+.petal.nav-highlight::after{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  clip-path: inherit;
+  background:
+    linear-gradient(120deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.95) 45%,
+      rgba(255,255,255,0) 80%);
+  mix-blend-mode: screen;
+  opacity:0;
+  transform: translateX(-120%) rotate(8deg);
+  animation: shimmerSweep 1.8s linear infinite;
+}
+
+/* 花瓣本體彈跳（飛出去又回來） */
+@keyframes petalNavBounce{
+  0%{
+    transform:
+      rotate(var(--angle))
+      translateY(calc(var(--lift) * -1))
+      rotate(var(--tilt))
+      scale(1);
+  }
+  50%{
+    transform:
+      rotate(var(--angle))
+      translateY(calc(var(--lift) * -1 - 50px))
+      rotate(var(--tilt))
+      scale(1.18);
+  }
+  100%{
+    transform:
+      rotate(var(--angle))
+      translateY(calc(var(--lift) * -1 - 10px))
+      rotate(var(--tilt))
+      scale(1.06);
+  }
+}
+
+/* 光暈一明一暗（更有立體感） */
+@keyframes petalGlow{
+  0%{
+    box-shadow:
+      inset 0 16px 38px rgba(247,233,238,0.9),
+      inset 0 -38px 64px rgba(20,2,7,1),
+      0 12px 32px rgba(0,0,0,.7),
+      0 0 18px rgba(255,211,107,.6);
+    filter: drop-shadow(0 0 10px rgba(255,211,107,.8));
+  }
+  50%{
+    box-shadow:
+      inset 0 28px 80px rgba(247,233,238,1),
+      inset 0 -80px 120px rgba(10,0,4,1),
+      0 24px 70px rgba(0,0,0,.95),
+      0 0 34px rgba(255,243,200,1),
+      0 0 60px rgba(255,211,107,1);
+    filter: drop-shadow(0 0 26px rgba(255,243,200,1));
+  }
+  100%{
+    box-shadow:
+      inset 0 20px 48px rgba(247,233,238,1),
+      inset 0 -48px 80px rgba(20,2,7,1),
+      0 18px 45px rgba(0,0,0,.8),
+      0 0 22px rgba(255,211,107,.8);
+    filter: drop-shadow(0 0 16px rgba(255,211,107,.9));
+  }
+}
+
+/* 光暈本身的輕微呼吸感 */
+@keyframes petalHalo{
+  0%  { opacity: .65; transform: scale(0.98); }
+  50% { opacity: 1;   transform: scale(1.05); }
+  100%{ opacity: .7;  transform: scale(1.0); }
+}
+
+/* 斜向亮光掃過去，製造乾淨的 sparkle 感 */
+@keyframes shimmerSweep{
+  0%{
+    transform: translateX(-130%) rotate(8deg);
+    opacity: 0;
+  }
+  25%{
+    opacity: 0.95;
+  }
+  60%{
+    opacity: 0.9;
+  }
+  100%{
+    transform: translateX(130%) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+
+
 
     .petal:hover,
     .petal:focus-visible{
@@ -509,7 +680,6 @@
         0 0 22px rgba(255,211,107,.85);
 
       filter: drop-shadow(0 0 12px rgba(255,211,107,1));
-      animation:none;
       outline:none;
       z-index:8;
     }
@@ -620,25 +790,31 @@
 
   <!-- Navigation panel -->
   <section id="nav-panel" aria-label="花園導覽（知識地圖）">
-    <h2 class="nav-title">Knowledge Map · 文法花園導覽</h2>
+   <h2 class="nav-title">
+  Knowledge Map · 文法花園導覽
+  <small style="display:block;font-size:.75em;opacity:.8;">
+    （點這裡可關閉花瓣閃爍效果）
+  </small>
+</h2>
     <div class="nav-grid">
-      <div class="nav-item full">
+      <!-- ✅ data-petal 對應下方花瓣索引 0-10 -->
+      <div class="nav-item full" data-petal="0">
         <strong>1) Learn 5 Sentence Structures</strong><br>
       </div>
-      <div class="nav-item"><strong>2) Learn Simple Tenses</strong></div>
-      <div class="nav-item"><strong>3) Learn Progressive Tenses</strong></div>
-      <div class="nav-item"><strong>4) Learn Perfect Tenses</strong></div>
-      <div class="nav-item"><strong>5) Learn To do V.S. doing</strong></div>
-      <div class="nav-item"><strong>6) Learn V-ing V.S. V-ed</strong></div>
-      <div class="nav-item"><strong>7) Learn Noun Clauses</strong></div>
-      <div class="nav-item"><strong>8) Learn Adjective Clauses</strong></div>
-      <div class="nav-item"><strong>9) Learn Adverb Clauses</strong></div>
-      <div class="nav-item"><strong>10) Learn Inverted Sentences</strong></div>
-      <div class="nav-item"><strong>11) Learn Subjunctive Mood</strong></div>
+      <div class="nav-item" data-petal="1"><strong>2) Learn Simple Tenses</strong></div>
+      <div class="nav-item" data-petal="2"><strong>3) Learn Progressive Tenses</strong></div>
+      <div class="nav-item" data-petal="3"><strong>4) Learn Perfect Tenses</strong></div>
+      <div class="nav-item" data-petal="4"><strong>5) Learn To do V.S. doing</strong></div>
+      <div class="nav-item" data-petal="5"><strong>6) Learn V-ing V.S. V-ed</strong></div>
+      <div class="nav-item" data-petal="6"><strong>7) Learn Noun Clauses</strong></div>
+      <div class="nav-item" data-petal="7"><strong>8) Learn Adjective Clauses</strong></div>
+      <div class="nav-item" data-petal="8"><strong>9) Learn Adverb Clauses</strong></div>
+      <div class="nav-item" data-petal="9"><strong>10) Learn Inverted Sentences</strong></div>
+      <div class="nav-item" data-petal="10"><strong>11) Learn Subjunctive Mood</strong></div>
     </div>
   </section>
 
-  <!-- ✅ Flower Motion Wrapper -->
+  <!-- Flower -->
   <div id="flower-rotator" aria-hidden="false">
     <div id="petal-container" role="navigation" aria-label="AI 學習樂🎵園 11個文法學習入口">
 
@@ -698,6 +874,183 @@
   <button id="back-button" onclick="window.location.href='https://ducj-creator.github.io/Shirley-AI-Music-Studio/'">
     返回主頁
   </button>
+
+  <!-- three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    /* ---------------------------------- */
+    /* Three.js 浩瀚星系粒子背景（稍微調整成背景用） */
+    /* ---------------------------------- */
+  const NUM_PARTICLES = 15000;
+const GALAXY_RADIUS = 150;
+const MOUSE_REPEL_RADIUS = 60;
+
+const BASE_COLOR = new THREE.Color(0x44aaff);
+const MAX_PARTICLE_SIZE = 0.8;
+
+// --- Three.js 核心變數 ---
+let scene, camera, renderer;
+let particles, positions, basePositions, mousePos;
+
+let time = 0;           // 用來讓星星隨時間旋轉、呼吸
+mousePos = new THREE.Vector2();
+
+
+    function initGalaxy() {
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 300;
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha:true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.domElement.id = "stars-bg";
+      document.body.appendChild(renderer.domElement);
+
+      createParticlesGalaxy();
+
+      window.addEventListener('mousemove', onMouseMoveGalaxy, false);
+      window.addEventListener('resize', onWindowResizeGalaxy, false);
+    }
+
+   function createParticlesGalaxy() {
+  const geometry = new THREE.BufferGeometry();
+  
+  positions = new Float32Array(NUM_PARTICLES * 3);
+  basePositions = new Float32Array(NUM_PARTICLES * 3); // 👈 新增：記錄原始星系分佈
+  
+  const sizes = new Float32Array(NUM_PARTICLES);
+
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    const i3 = i * 3;
+
+    let x = (Math.random() - 0.5) * GALAXY_RADIUS * 2.5; 
+    let y = (Math.random() - 0.5) * GALAXY_RADIUS * 2.5; 
+    let z = (Math.random() - 0.5) * GALAXY_RADIUS * 2.5;
+    
+    const distance = Math.sqrt(x * x + y * y + z * z);
+    if (distance > GALAXY_RADIUS) {
+      x *= (GALAXY_RADIUS / distance);
+      y *= (GALAXY_RADIUS / distance);
+      z *= (GALAXY_RADIUS / distance);
+    }
+
+    positions[i3]     = x;
+    positions[i3 + 1] = y;
+    positions[i3 + 2] = z;
+
+    basePositions[i3]     = x;      // 👈 把原始位置存下來
+    basePositions[i3 + 1] = y;
+    basePositions[i3 + 2] = z;
+
+    sizes[i] = Math.random() * MAX_PARTICLE_SIZE + 0.2;
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+  const material = new THREE.PointsMaterial({
+    color: BASE_COLOR,
+    size: MAX_PARTICLE_SIZE,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 1.0,
+    blending: THREE.AdditiveBlending
+  });
+
+  particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+  
+  const ambientLight = new THREE.AmbientLight(0x404040, 5);
+  scene.add(ambientLight);
+}
+
+
+    function onMouseMoveGalaxy(event) {
+      mousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+
+    // 背景只需要緩慢旋轉，不再做物理模擬，避免星系「塌縮消失」
+function updateParticlesGalaxy() {
+  if (!particles) return;
+
+  time += 0.003; // 控制整體動畫速度，數字越大動得越快
+
+  const p_positions = particles.geometry.attributes.position.array;
+
+  // 把 2D 滑鼠座標換成 3D 空間中的一個點，給排斥力用
+  const vector = new THREE.Vector3(mousePos.x, mousePos.y, 0.5);
+  vector.unproject(camera); 
+  const dir = vector.sub(camera.position).normalize();
+  const distance = -camera.position.z / dir.z; 
+  const mouse3D = camera.position.clone().add(dir.multiplyScalar(distance));
+
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    const i3 = i * 3;
+
+    // 原始位置（像是真實軌道的中心）
+    const bx = basePositions[i3];
+    const by = basePositions[i3 + 1];
+    const bz = basePositions[i3 + 2];
+
+    // -------- 1) 繞 Y 軸旋轉，製造星系盤的感覺 --------
+    const r = Math.sqrt(bx * bx + bz * bz);         // 水平半徑
+    const baseAngle = Math.atan2(bz, bx);           // 原始角度
+    const swirlSpeed = 0.15;                        // 星系自轉速度
+
+    // 每顆星星跟著時間往前轉一點點
+    const angle = baseAngle + time * swirlSpeed;
+
+    // 半徑做一點「呼吸」，看起來比較有生命
+    const radius =
+      r * (1 + Math.sin(time * 1.3 + i * 0.002) * 0.03);
+
+    let x = Math.cos(angle) * radius;
+    let z = Math.sin(angle) * radius;
+
+    // -------- 2) 在 Y 軸方向做微微的上下飄 --------
+    let y = by + Math.sin(time * 2.1 + i * 0.01) * 1.2;
+
+    // -------- 3) 滑鼠附近有輕微排斥力（像是被「撥開」） --------
+    const dx = x - mouse3D.x;
+    const dy = y - mouse3D.y;
+    const dz = z - mouse3D.z;
+    const d  = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+    if (d < MOUSE_REPEL_RADIUS && d > 0.0001) {
+      const strength = (MOUSE_REPEL_RADIUS - d) / MOUSE_REPEL_RADIUS * 1.2;
+      x += (dx / d) * strength;
+      y += (dy / d) * strength;
+      z += (dz / d) * strength;
+    }
+
+    // 寫回幾何的 position
+    p_positions[i3]     = x;
+    p_positions[i3 + 1] = y;
+    p_positions[i3 + 2] = z;
+  }
+
+  particles.geometry.attributes.position.needsUpdate = true;
+}
+
+  function animateGalaxy() {
+  requestAnimationFrame(animateGalaxy);
+
+  updateParticlesGalaxy();   // 裡面已經幫我們轉 y/z 了
+  renderer.render(scene, camera);
+}
+
+    function onWindowResizeGalaxy() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    initGalaxy();
+    animateGalaxy();
+  </script>
 
   <script>
     /* ---------------------------------- */
@@ -768,6 +1121,40 @@
       requestAnimationFrame(draw);
     }
     draw();
+
+    /* ---------------------------------- */
+   const navItems = document.querySelectorAll('#nav-panel .nav-item');
+const petals = document.querySelectorAll('#petal-container .petal');
+
+navItems.forEach(item => {
+  const index = item.getAttribute('data-petal');
+  if (index === null) return;
+
+  item.addEventListener('click', () => {
+    const i = parseInt(index, 10);
+    if (!petals[i]) return;
+
+    // 先把所有花瓣的 nav-highlight 拿掉
+    petals.forEach(p => p.classList.remove('nav-highlight'));
+
+    const petal = petals[i];
+
+    // 重新觸發動畫（保險作法：強制重算 layout 再加 class）
+    void petal.offsetWidth;
+    petal.classList.add('nav-highlight');
+
+    // ❌ 不要再移除 nav-highlight，讓它一直跳
+    // setTimeout(...) 已刪除
+  });
+});
+// 點「Knowledge Map · 文法花園導覽」標題時，把所有閃爍關掉
+const navTitle = document.querySelector('.nav-title');
+if (navTitle) {
+  navTitle.style.cursor = 'pointer';
+  navTitle.addEventListener('click', () => {
+    petals.forEach(p => p.classList.remove('nav-highlight'));
+  });
+}
   </script>
 </body>
 </html>
