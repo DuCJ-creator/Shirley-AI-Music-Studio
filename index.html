@@ -98,31 +98,110 @@
       position:relative;
       z-index:2;
     }
+/* ---------------------------------- */
+#main-title{
+  position: relative;
+  margin: 0 0 10px 0;
+  text-align: center;
+  line-height: 1.05;
 
-    /* ---------------------------------- */
-    /* 2. 標題（更高級的字體層次） */
-    /* ---------------------------------- */
-    #main-title{
-      font-family:"Cormorant Garamond", serif;
-      font-weight:600;
-      font-size:clamp(1.8rem, 3.2vw, 2.4rem);
-      letter-spacing: .06em;
-      color:var(--ink);
-      text-shadow:
-        0 0 18px rgba(114,245,255,.35),
-        0 0 40px rgba(159,255,230,.25);
-      margin:0 0 6px 0;
-      text-align:center;
-      transform: translateY(2px);
-    }
-    #main-title small{
-      display:block;
-      font-family:"Orbitron", sans-serif;
-      font-size:.75em;
-      letter-spacing:.22em;
-      color:var(--ink-dim);
-      margin-top:6px;
-    }
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.2vw, 3.6rem);  /* ✅ 更大 */
+  letter-spacing: .08em;
+
+  color: rgba(235, 250, 250, 0.98);
+  text-shadow:
+    0 0 12px rgba(255,255,255,.35),
+    0 0 26px rgba(114,245,255,.55),
+    0 0 60px rgba(159,255,230,.35);
+
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.55));
+  transform: translateY(2px);
+}
+     background: linear-gradient(90deg,
+    rgba(231,247,247,.9),
+    rgba(159,255,230,1),
+    rgba(207,216,255,1),
+    rgba(231,247,247,.9));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color: transparent;
+  background-size: 220% 100%;
+  animation: title-shimmer 10s ease-in-out infinite;
+}
+
+@keyframes title-shimmer{
+  0%,100%{ background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+}
+
+/* 柔霧光暈讓標題更「月光」 */
+#main-title::after{
+  content:"";
+  position:absolute;
+  left:50%; top:55%;
+  width: 140%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at center,
+      rgba(159,255,230,.18),
+      rgba(114,245,255,.08) 40%,
+      rgba(0,0,0,0) 70%);
+  filter: blur(28px);
+  opacity: .9;
+  z-index: -1;
+  animation: title-breathe 7s ease-in-out infinite;
+}
+
+@keyframes title-breathe{
+  0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.75; }
+  50%{ transform:translate(-50%,-50%) scale(1.05); opacity:1; }
+}
+
+/* Studio 字樣做科技細節層 */
+#main-title .studio{
+  display:inline-block;
+  font-family:"Orbitron", sans-serif;
+  font-weight:700;
+  font-size: .52em;               /* ✅ 輔標 */
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+
+  margin-bottom: 8px;
+  text-shadow:
+    0 0 10px rgba(114,245,255,.35),
+    0 0 22px rgba(159,255,230,.25);
+}
+
+/* 中文副標更像詩句 */
+#main-title small{
+  display:block;
+  margin-top: 10px;
+
+  font-family:"Cormorant Garamond", serif;
+  font-size: clamp(1.2rem, 2.8vw, 1.7rem);   /* ✅ 中文也放大 */
+  letter-spacing: .22em;
+  font-weight: 600;
+
+  color: rgba(231,247,247,.9);
+  text-shadow:
+    0 0 10px rgba(114,245,255,.35),
+    0 0 26px rgba(207,216,255,.35);
+  opacity:.95;
+}
+
+/* 讓標題整體有一點「漂浮感」 */
+#main-title{
+  animation: title-float 9s ease-in-out infinite;
+}
+@keyframes title-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-6px); }
+}
+
 
     /* ---------------------------------- */
     /* 3. 表盤：雙層環＋精緻玻璃 */
@@ -392,43 +471,46 @@
       filter: brightness(1.05);
     }
 
-    /* ---------------------------------- */
-    /* Lyrics Stream: 流水歌詞 */
-    /* ---------------------------------- */
-    #lyrics-stream{
-      width:min(90vw, 760px);
-      margin-top: clamp(-6px, -0.5vh, 4px); /* 往上靠近播放器 */
-      position:relative;
-      display:none;
-      z-index:3;
-      transform: translateY(-6px); /* 再多貼一點 */
-    }
-    .lyrics-glass{
-      position:relative;
-      background: var(--glass);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: 20px;
-      box-shadow:
-        0 18px 55px rgba(0,0,0,.7),
-        0 0 28px rgba(114,245,255,.18),
-        inset 0 0 0 1px rgba(255,255,255,.04);
-      backdrop-filter: blur(10px) saturate(1.05);
-      overflow:hidden;
-      padding: 14px 14px 10px;
-    }
+/* ---------------------------------- */
+/* Lyrics Stream: 流動歌詞（無盒子版） */
+/* ---------------------------------- */
+#lyrics-stream{
+  position: fixed;
+  inset: 0;                 /* 佔滿全螢幕 */
+  display: none;
+  pointer-events: none;
+  z-index: 8;               /* 在 UI 上面漂 */
+}
+
+/* 外層完全透明，只做定位 */
+.lyrics-glass{
+  position: absolute;
+  left: 50%;
+  bottom: 8vh;              /* 歌詞漂在下方偏中 */
+  transform: translateX(-50%);
+  width: min(92vw, 860px);
+
+  background: transparent;  /* ✅ 無背景 */
+  border: none;             /* ✅ 無框 */
+  box-shadow: none;         /* ✅ 無陰影 */
+  backdrop-filter: none;    /* ✅ 無玻璃 */
+  padding: 0;
+}
     #lyrics-stream{
   pointer-events: none;
 }
 
     /* 上方小標題，讓它更「精品」 */
-    .lyrics-header{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      padding: 2px 6px 10px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      margin-bottom:8px;
-    }
+   .lyrics-header{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  padding: 0 6px 10px;
+  border: none;             /* ✅ 無分隔線 */
+  margin-bottom: 6px;
+  opacity: .75;             /* 淡淡的就好 */
+  filter: drop-shadow(0 0 10px rgba(114,245,255,.35));
+}
     .lyrics-title{
       font-family:"Cormorant Garamond", serif;
       font-size:1.25rem;
@@ -442,18 +524,32 @@
     }
 
     /* 可視區：像一條細緻的水道 */
-    .lyrics-lines{
-      height: clamp(160px, 24vh, 220px);
-      overflow:hidden;
-      position:relative;
-      padding: 8px 6px 2px;
-      mask-image: linear-gradient(to bottom,
-        transparent 0%,
-        black 12%,
-        black 88%,
-        transparent 100%);
-    }
+.lyrics-lines{
+  height: clamp(240px, 45vh, 520px); /* ✅ 更像整片漂浮區 */
+  overflow: hidden;
+  position: relative;
+  padding: 10px 8px 0;
 
+  /* 淡入淡出邊緣，像在空氣裡流動 */
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%);
+}
+    .lyric-line{
+  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  line-height: 1.9;            /* 更有呼吸 */
+  letter-spacing: .06em;
+  color: var(--ink);
+  text-shadow:
+    0 0 14px rgba(114,245,255,.3),
+    0 0 2px rgba(255,255,255,.9);
+  opacity: 0;
+  transform: translateY(18px);
+  margin: 4px 0;
+  white-space: pre-wrap;
+}
     /* 單行歌詞：玻璃字＋微光 */
     .lyric-line{
       font-size: clamp(.92rem, 2.2vw, 1.02rem);
@@ -618,10 +714,11 @@
   <div id="particle-bg" aria-hidden="true"></div>
 
   <div id="main-container" aria-live="polite">
-    <h1 id="main-title">
-      Shirley’s AI Music Studio
-      <small>月光奏鳴曲</small>
-    </h1>
+   <h1 id="main-title">
+  <span class="studio">Shirley’s AI Music Studio</span>
+  Moonlight Sonata
+  <small>月光奏鳴曲</small>
+</h1>
 
     <section id="clock-interface" aria-label="狀態表盤">
       <div class="clock-face">
@@ -897,18 +994,49 @@ We are perfectly alight, inside
     flowLines = res;
   }
 
-  function buildTimeline(){
-    flowStartTimes = [];
-    let t = START_AT;
+function buildTimeline(){
+  flowStartTimes = [];
 
+  const FIRST_LYRIC_AT = START_AT; // 你設定的 14 秒
+  const SPACE_INTERVAL = 0.8;
+
+  // 1) 找到第一句真正 lyric 的 index
+  const firstLyricIndex = flowLines.findIndex(x => x.kind === "lyric");
+  if(firstLyricIndex === -1){
+    // 沒有 lyric 就照原本走
+    let t = FIRST_LYRIC_AT;
     for(const item of flowLines){
       flowStartTimes.push(t);
       if(item.kind==="header") t += HEADER_INTERVAL;
-      else if(item.kind==="space") t += 0.8;
+      else if(item.kind==="space") t += SPACE_INTERVAL;
       else t += LINE_INTERVAL;
     }
     flowReady = true;
+    return;
   }
+
+  // 2) 計算「第一句 lyric 之前」總共需要多少時間
+  let preDuration = 0;
+  for(let i=0; i<firstLyricIndex; i++){
+    const item = flowLines[i];
+    if(item.kind==="header") preDuration += HEADER_INTERVAL;
+    else if(item.kind==="space") preDuration += SPACE_INTERVAL;
+    else preDuration += LINE_INTERVAL; // 理論上不會進來，但保險
+  }
+
+  // 3) 把起始時間往前推，讓 preDuration 剛好塞進 14 秒內
+  let t = Math.max(0, FIRST_LYRIC_AT - preDuration);
+
+  // 4) 重新產生每行開始時間
+  for(const item of flowLines){
+    flowStartTimes.push(t);
+    if(item.kind==="header") t += HEADER_INTERVAL;
+    else if(item.kind==="space") t += SPACE_INTERVAL;
+    else t += LINE_INTERVAL;
+  }
+
+  flowReady = true;
+}
 
   function renderSkeleton(){
     lyricsLinesEl.innerHTML = "";
@@ -973,12 +1101,9 @@ We are perfectly alight, inside
 
       if(!el.classList.contains("flow-in")){
         el.classList.add("flow-in");
-        const targetTop = el.offsetTop - lyricsLinesEl.clientHeight * 0.55;
-        lyricsLinesEl.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
       }
     }
   }
-
   videoEl.addEventListener("loadedmetadata", ()=>{
     prepareFlowLines();
     buildTimeline();
