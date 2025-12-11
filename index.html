@@ -323,6 +323,15 @@
       z-index:5;
       pointer-events:none;
     }
+/* 播放時：讓指針跟著唱片一起轉 */
+@keyframes pointer-spin{
+  to { transform: rotate(360deg); }
+}
+
+/* main-container 有 is-playing class 時，指針開始慢速旋轉 */
+#main-container.is-playing #pointer-hand{
+  animation: pointer-spin 24s linear infinite;
+}
 
     /* ---------------------------------- */
     /* 5. 狀態點 */
