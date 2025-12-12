@@ -52,6 +52,27 @@ body{
 }
 
     /* ---------------------------------- */
+    /* ✅ 2.5) 故鄉溪畔風景圖 (右下角浮動，已調整參數讓它可見) */
+    /* ---------------------------------- */
+    @keyframes image-float{
+      0%,100%{transform:translate(0,0);}
+      50%{transform:translate(4px,-8px);}
+    }
+    #creek-image{
+      position:fixed;
+      bottom: -20px; /* 從 -60px 調整為 -20px，讓底部可見 */
+      right: -20px; /* 從 -80px 調整為 -20px，讓右側可見 */
+      width: clamp(300px, 30vw, 400px); /* 尺寸響應式調整 */
+      opacity: .85; /* 從 0.6 提高到 0.85，讓它更顯眼 */
+      z-index: -1; /* 從 -10 調整為 -1，確保它在背景之上，但仍在前景內容之下 */
+      pointer-events: none;
+      filter: drop-shadow(0 0 15px rgba(80,180,255,.3)) brightness(1); /* 調整陰影和亮度 */
+      animation: image-float 15s ease-in-out infinite alternate;
+      transform-origin: 50% 100%;
+    }
+
+
+    /* ---------------------------------- */
     /* 3) 全頁螢火蟲（多，但柔和） */
     /* ---------------------------------- */
     @keyframes firefly-glow{
@@ -237,6 +258,33 @@ body{
       letter-spacing:.2px;
       text-shadow:0 1px 10px rgba(0,0,0,.85);
     }
+
+    /* 新增音樂版本切換按鈕組樣式 */
+    #version-selector{
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    .version-btn{
+        padding: 8px 15px;
+        border: none;
+        border-radius: 999px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .2s ease;
+        background: rgba(255,255,255,.2);
+        color: var(--text-main);
+        border: 1px solid rgba(255,255,255,.5);
+        backdrop-filter: blur(4px);
+    }
+    .version-btn.active{
+        background: var(--moon-gold);
+        color: var(--midnight-navy);
+        box-shadow: 0 4px 10px rgba(0,0,0,.4);
+        border-color: var(--moon-gold);
+        transform: translateY(-2px);
+    }
+
     #music-player{
       width:min(520px,92%);
       border-radius:999px;
@@ -478,6 +526,9 @@ body{
       .lyrics-table td:last-child{
         padding-top:0;
       }
+      #creek-image {
+          display: none; /* 手機上移除浮動圖案 */
+      }
     }
     .content-section {
     scroll-margin-top: 320px; /* 給 frozen header 的安全距離 */
@@ -523,6 +574,8 @@ body{
 </head>
 
 <body>
+  <img id="creek-image" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/country%20creek.png" alt="故鄉溪畔的夜景插畫" aria-hidden="true">
+
   <div id="info-card-wrapper">
     <div id="info-card">
       <div class="header-fireflies" aria-hidden="true">
@@ -534,9 +587,15 @@ body{
       <h2>Author：Shirley & AI Shirley老師&她的AI工具人</h2>
 
       <div id="music-box-container">
-        <p>🎵 Click to play the creek's quiet melody | 點擊播放溪畔的靜謐旋律</p>
+        <p>🎵 Select a Version to Play | 選擇版本播放</p>
+        
+        <div id="version-selector">
+            <button class="version-btn active" data-src="https://ducj-creator.github.io/releases/my%20country%20creek.mp3">Version 1</button>
+            <button class="version-btn" data-src="https://ducj-creator.github.io/releases/my%20country%20creek%20%20v2.mp3">Version 2</button>
+        </div>
+        
         <audio controls id="music-player" preload="metadata">
-          <source src="https://ducj-creator.github.io/releases/my%20country%20creek.mp3" type="audio/mpeg">
+          <source src="https://ducj-creator.github.io/releases/my%20country%20creek.mp3" type="audio/mpeg" id="music-source">
           Your browser does not support the audio element.
         </audio>
       </div>
@@ -560,7 +619,6 @@ body{
 
   <div id="content-container">
 
-    <!-- ✅ Lyrics Section (Aligned Table Version) -->
     <div id="lyrics-section" class="content-section" style="display:block;">
       <h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
 
@@ -651,8 +709,7 @@ body{
       </div>
     </div>
 
-  <!-- ✅ Words Section (原樣) -->
-<div id="words-section" class="content-section">
+  <div id="words-section" class="content-section">
   <h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡 (Hover to Flip!)</h2>
   <div class="word-grid">
 
@@ -809,8 +866,7 @@ body{
   </div>
 </div>
 
-  <!-- ✅ Grammar Section (原樣) -->
-<div id="grammar-section" class="content-section">
+  <div id="grammar-section" class="content-section">
   <h2 class="section-header">📐 5 Simple Sentence Structures | 五大句型結構分析</h2>
 
   <div class="grammar-card sv-type">
@@ -860,7 +916,6 @@ body{
 
 </div>
 
-<!-- ✅ Rhetoric Section (原樣) -->
 <div id="rhetoric-section" class="content-section">
   <h2 class="section-header">💡 Rhetorical Devices | 修辭手法分析</h2>
 
@@ -903,7 +958,6 @@ body{
   </div>
 
 </div>
-<!-- ✅ Challenge Section (原樣) -->
 <div id="challenge-section" class="content-section">
   <h2 class="section-header">🎯 Writing Challenge | 練習挑戰</h2>
 
@@ -952,14 +1006,61 @@ function showSection(sectionId) {
   // 4. 捲到整體內容容器頂端（不去算 header 高度，穩定很多）
   const container = document.getElementById('content-container');
   if (container) {
-    const top = container.getBoundingClientRect().top + window.pageYOffset - 12;
+    // 確保有設定 header 高度變數
+    const headerWrapper = document.getElementById('info-card-wrapper');
+    const headerHeight = headerWrapper ? headerWrapper.offsetHeight : 0;
+    document.documentElement.style.setProperty('--header-offset', `${headerHeight}px`);
+
+    // 捲動目標計算
+    let top = container.getBoundingClientRect().top + window.pageYOffset - 12;
+    // 確保在手機版時，如果 header 不 fixed，可以捲到 container 頂部
+    if (window.innerWidth > 720) {
+      top -= headerHeight;
+    }
+    
     window.scrollTo({ top, behavior: 'smooth' });
   }
 }
 
-window.onload = function() {
-  showSection('lyrics-section');
-};
+document.addEventListener('DOMContentLoaded', function() {
+    // 預設顯示歌詞區塊
+    showSection('lyrics-section');
+
+    // 獲取元素
+    const musicPlayer = document.getElementById('music-player');
+    const musicSource = document.getElementById('music-source');
+    const versionButtons = document.querySelectorAll('.version-btn');
+
+    // 設置版本切換事件
+    versionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const newSrc = this.getAttribute('data-src');
+            
+            // 1. 切換播放源
+            musicSource.src = newSrc;
+            musicPlayer.load(); // 重新載入音檔
+            
+            // 2. 更新按鈕的 active 狀態
+            versionButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 3. (可選) 載入新音檔後自動播放
+            // musicPlayer.play();
+        });
+    });
+
+    // 動態設定 CSS 變數：--header-offset
+    const headerWrapper = document.getElementById('info-card-wrapper');
+    function updateHeaderOffset() {
+        if (headerWrapper) {
+            document.documentElement.style.setProperty('--header-offset', `${headerWrapper.offsetHeight}px`);
+        }
+    }
+    
+    // 頁面載入和視窗大小變更時更新
+    updateHeaderOffset();
+    window.addEventListener('resize', updateHeaderOffset);
+});
 </script>
 </body>
 </html>
