@@ -124,7 +124,7 @@
     #stars-bg{
       position:fixed;
       inset:0;
-      pointer-events:none;
+      /* 移除 pointer-events:none，讓滑鼠滾輪事件可以被 window 捕捉 */
       z-index:-3;
       display:block;
     }
@@ -782,7 +782,6 @@
 </head>
 
 <body>
-  <!-- floating light streaks -->
   <div class="spark-field" aria-hidden="true">
     <div class="spark" style="top:12%; left:-10%; animation-duration:14s; animation-delay:-2s;"></div>
     <div class="spark" style="top:30%; left:-20%; animation-duration:18s; animation-delay:-6s; opacity:.45;"></div>
@@ -797,7 +796,6 @@
     <small>Learn Grammar with AI Songs</small>
   </h1>
 
-  <!-- Navigation panel -->
   <section id="nav-panel" aria-label="花園導覽（知識地圖）">
    <h2 class="nav-title">
   Knowledge Map · 文法花園導覽
@@ -806,7 +804,6 @@
   </small>
 </h2>
     <div class="nav-grid">
-      <!-- ✅ data-petal 對應下方花瓣索引 0-10 -->
       <div class="nav-item full" data-petal="0">
         <strong>1) Learn 5 Sentence Structures</strong><br>
       </div>
@@ -823,11 +820,9 @@
     </div>
   </section>
 
-  <!-- Flower -->
   <div id="flower-rotator" aria-hidden="false">
     <div id="petal-container" role="navigation" aria-label="AI 學習樂🎵園 11個文法學習入口">
 
-      <!-- 11 petals, 360/11 ≈ 32.727deg -->
       <a class="petal layer-a" style="--angle:-65.45deg; --tilt:-4deg"
          href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%201.html"
          target="_blank" rel="noopener">
@@ -884,33 +879,32 @@
     返回主頁
   </button>
 
-  <!-- three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <script>
     /* ---------------------------------- */
-    /* Three.js 浩瀚星系粒子背景（稍微調整成背景用） */
+    /* Three.js 浩瀚星系粒子背景 (已移除滑鼠排斥力，改為支援滾輪/觸控縮放) */
     /* ---------------------------------- */
   const NUM_PARTICLES = 15000;
 const GALAXY_RADIUS = 150;
-const MOUSE_REPEL_RADIUS = 60;
 
 const BASE_COLOR = new THREE.Color(0x44aaff);
 const MAX_PARTICLE_SIZE = 0.8;
+const ZOOM_MIN = 50;  // 最小縮放距離 (拉近)
+const ZOOM_MAX = 600; // 最大縮放距離 (拉遠)
 
 // --- Three.js 核心變數 ---
 let scene, camera, renderer;
-let particles, positions, basePositions, mousePos;
+let particles, positions, basePositions;
 
 let time = 0;           // 用來讓星星隨時間旋轉、呼吸
-mousePos = new THREE.Vector2();
 
 
     function initGalaxy() {
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 300;
+      camera.position.z = 300; // 初始攝影機距離
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha:true });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -919,7 +913,8 @@ mousePos = new THREE.Vector2();
 
       createParticlesGalaxy();
 
-      window.addEventListener('mousemove', onMouseMoveGalaxy, false);
+      // ❌ 移除 onMouseMoveGalaxy 的監聽器
+      // window.addEventListener('mousemove', onMouseMoveGalaxy, false); 
       window.addEventListener('resize', onWindowResizeGalaxy, false);
     }
 
@@ -927,7 +922,7 @@ mousePos = new THREE.Vector2();
   const geometry = new THREE.BufferGeometry();
   
   positions = new Float32Array(NUM_PARTICLES * 3);
-  basePositions = new Float32Array(NUM_PARTICLES * 3); // 👈 新增：記錄原始星系分佈
+  basePositions = new Float32Array(NUM_PARTICLES * 3); // 記錄原始星系分佈
   
   const sizes = new Float32Array(NUM_PARTICLES);
 
@@ -949,7 +944,7 @@ mousePos = new THREE.Vector2();
     positions[i3 + 1] = y;
     positions[i3 + 2] = z;
 
-    basePositions[i3]     = x;      // 👈 把原始位置存下來
+    basePositions[i3]     = x;      // 把原始位置存下來
     basePositions[i3 + 1] = y;
     basePositions[i3 + 2] = z;
 
@@ -976,10 +971,11 @@ mousePos = new THREE.Vector2();
 }
 
 
-    function onMouseMoveGalaxy(event) {
+    // ❌ 移除 onMouseMoveGalaxy 函式
+    /* function onMouseMoveGalaxy(event) {
       mousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
       mousePos.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }
+    } */
 
     // 背景只需要緩慢旋轉，不再做物理模擬，避免星系「塌縮消失」
 function updateParticlesGalaxy() {
@@ -989,12 +985,12 @@ function updateParticlesGalaxy() {
 
   const p_positions = particles.geometry.attributes.position.array;
 
-  // 把 2D 滑鼠座標換成 3D 空間中的一個點，給排斥力用
-  const vector = new THREE.Vector3(mousePos.x, mousePos.y, 0.5);
+  // ❌ 移除滑鼠 3D 座標計算
+  /* const vector = new THREE.Vector3(mousePos.x, mousePos.y, 0.5);
   vector.unproject(camera); 
   const dir = vector.sub(camera.position).normalize();
   const distance = -camera.position.z / dir.z; 
-  const mouse3D = camera.position.clone().add(dir.multiplyScalar(distance));
+  const mouse3D = camera.position.clone().add(dir.multiplyScalar(distance)); */
 
   for (let i = 0; i < NUM_PARTICLES; i++) {
     const i3 = i * 3;
@@ -1022,8 +1018,8 @@ function updateParticlesGalaxy() {
     // -------- 2) 在 Y 軸方向做微微的上下飄 --------
     let y = by + Math.sin(time * 2.1 + i * 0.01) * 1.2;
 
-    // -------- 3) 滑鼠附近有輕微排斥力（像是被「撥開」） --------
-    const dx = x - mouse3D.x;
+    // ❌ 移除滑鼠排斥力計算
+    /* const dx = x - mouse3D.x;
     const dy = y - mouse3D.y;
     const dz = z - mouse3D.z;
     const d  = Math.sqrt(dx*dx + dy*dy + dz*dz);
@@ -1033,7 +1029,7 @@ function updateParticlesGalaxy() {
       x += (dx / d) * strength;
       y += (dy / d) * strength;
       z += (dz / d) * strength;
-    }
+    } */
 
     // 寫回幾何的 position
     p_positions[i3]     = x;
@@ -1059,6 +1055,70 @@ function updateParticlesGalaxy() {
 
     initGalaxy();
     animateGalaxy();
+
+
+    /* ================================== */
+    /* ✅ 新增：滾輪與觸控縮放功能 */
+    /* ================================== */
+
+    // 1. 滑鼠滾輪縮放 (Mouse Wheel Zoom)
+    function onDocumentMouseWheel(event) {
+        event.preventDefault(); // 防止頁面滾動
+
+        // event.deltaY > 0 表示向下滾動 (拉遠/Zoom Out)
+        // event.deltaY < 0 表示向上滾動 (拉近/Zoom In)
+        
+        // 調整相機 Z 位置 (距離)
+        camera.position.z += event.deltaY * 0.08; // 0.08 是縮放速度/靈敏度
+
+        // 限制相機距離的上下限，避免飛太近或太遠
+        camera.position.z = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, camera.position.z));
+    }
+    window.addEventListener('wheel', onDocumentMouseWheel, { passive: false });
+
+
+    // 2. 觸控捏合縮放 (Pinch-to-Zoom)
+    let touchDistance = 0;
+
+    function getTouchDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    function onTouchStart(event) {
+        if (event.touches.length === 2) {
+            // 記錄初始雙指距離
+            touchDistance = getTouchDistance(event.touches[0], event.touches[1]);
+        }
+    }
+
+    function onTouchMove(event) {
+        if (event.touches.length === 2) {
+            event.preventDefault(); // 防止頁面滾動
+
+            const newDistance = getTouchDistance(event.touches[0], event.touches[1]);
+            // 距離變化量 (正值表示距離變大/放大/拉近)
+            const delta = newDistance - touchDistance;
+            
+            // 將距離變化量轉換為相機 Z 軸移動
+            // 距離變大(delta>0) -> 縮放/拉近 (camera.position.z 變小)
+            // 距離變小(delta<0) -> 縮放/拉遠 (camera.position.z 變大)
+            camera.position.z -= delta * 0.5; // 0.5 是觸控靈敏度
+            
+            camera.position.z = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, camera.position.z));
+            
+            // 更新距離供下一個移動事件使用
+            touchDistance = newDistance; 
+            
+            // 需要手動更新投影矩陣，確保縮放即時生效
+            camera.updateProjectionMatrix();
+        }
+    }
+    
+    window.addEventListener('touchstart', onTouchStart, { passive: false });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+
   </script>
 
   <script>
