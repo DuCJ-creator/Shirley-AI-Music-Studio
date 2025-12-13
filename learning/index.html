@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
+    /* ... 保持所有現有的 CSS Styles ... */
     /* ---------------------------------- */
     /* 1) Tokens — Deep Burgundy + Blue Velvet Sky */
     /* ---------------------------------- */
@@ -738,6 +739,34 @@
       z-index:999;
       mix-blend-mode: screen;
     }
+    
+    /* ---------------------------------- */
+    /* 12) 新增的音樂控制按鈕樣式 */
+    /* ---------------------------------- */
+    #audio-control{
+      position: fixed; /* 固定在螢幕上 */
+      top: var(--page-padding); /* 距離頂部邊距 */
+      right: var(--page-padding); /* 距離右側邊距 */
+      width: clamp(36px, 6vw, 44px);
+      height: clamp(36px, 6vw, 44px);
+      border: 1px solid var(--gold-1);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--gold-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--gold-1);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      z-index: 9; /* 確保在最上層 */
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-family: 'Times New Roman', serif; /* 用來顯示🎵圖示 */
+    }
+    #audio-control:hover{
+      background: rgba(255, 211, 107, 0.1);
+      box-shadow: 0 0 12px var(--gold-1);
+    }
 
     /* ---------------------------------- */
     /* 11) Device breakpoints */
@@ -782,6 +811,12 @@
 </head>
 
 <body>
+  <audio id="bgm" loop preload="auto" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/learning%20bg.mp3"></audio>
+
+  <div id="audio-control" aria-label="音樂控制">
+    🎵
+  </div>
+
   <div class="spark-field" aria-hidden="true">
     <div class="spark" style="top:12%; left:-10%; animation-duration:14s; animation-delay:-2s;"></div>
     <div class="spark" style="top:30%; left:-20%; animation-duration:18s; animation-delay:-6s; opacity:.45;"></div>
@@ -1224,6 +1259,85 @@ if (navTitle) {
     petals.forEach(p => p.classList.remove('nav-highlight'));
   });
 }
+  </script>
+
+  <script>
+    const bgm = document.getElementById('bgm');
+    const audioControl = document.getElementById('audio-control');
+    const volumeIcon = '🎵';
+    const mutedIcon = '🔇';
+    let isMuted = false;
+
+    // 網頁瀏覽器通常會阻止沒有使用者互動的音訊自動播放。
+    // 這裡我們嘗試在頁面載入後自動播放，如果失敗（因為瀏覽器限制），
+    // 則等待第一次使用者點擊（任何地方）後再播放。
+
+    // 1. 嘗試自動播放
+    function attemptPlay() {
+      // 設置初始音量（例如 0.2，避免太吵）
+      bgm.volume = 0.2;
+      
+      const playPromise = bgm.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // 自動播放被阻止 (通常是手機/Chrome 限制)
+          // 這時我們將按鈕設為「靜音」圖示，並等待使用者點擊
+          console.log("Audio autoplay prevented. Waiting for user interaction.");
+          bgm.muted = true;
+          isMuted = true;
+          audioControl.innerHTML = mutedIcon;
+        });
+      }
+    }
+
+    // 2. 切換播放/靜音狀態
+    function toggleMute() {
+      if (bgm.muted) {
+        // 取消靜音 (Unmute)
+        bgm.muted = false;
+        isMuted = false;
+        audioControl.innerHTML = volumeIcon;
+        
+        // 如果音樂還沒開始播放，嘗試播放它
+        if (bgm.paused) {
+             const playPromise = bgm.play();
+             if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // 這裡不應該發生，但作為預防措施
+                    console.error("Manual play failed after unmute:", error);
+                });
+            }
+        }
+      } else {
+        // 靜音 (Mute)
+        bgm.muted = true;
+        isMuted = true;
+        audioControl.innerHTML = mutedIcon;
+      }
+    }
+    
+    // 3. 處理點擊事件
+    audioControl.addEventListener('click', toggleMute);
+
+    // 4. 首次載入時執行
+    window.onload = attemptPlay;
+    
+    // 5. 監聽音樂播放成功後的事件，確保按鈕顯示正確
+    bgm.addEventListener('play', () => {
+        // 如果音樂開始播放，且沒有被手動設為靜音，則顯示音量圖示
+        if (!bgm.muted) {
+            audioControl.innerHTML = volumeIcon;
+        }
+    });
+
+    // 6. 監聽音樂暫停事件，確保按鈕顯示正確（非必需，但更完整）
+    bgm.addEventListener('pause', () => {
+         // 如果音樂被暫停，即使不是靜音狀態，也顯示靜音圖示，表示當前沒有聲音
+         // 這裡選擇不更動，只讓 `toggleMute` 決定圖示。
+    });
+
+
   </script>
 </body>
 </html>
