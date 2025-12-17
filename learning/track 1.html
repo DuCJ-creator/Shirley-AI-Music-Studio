@@ -52,7 +52,7 @@ body{
 }
 
     /* ---------------------------------- */
-    /* ✅ 2.5) 故鄉溪畔風景圖 (右下角浮動，已調整參數讓它可見) */
+    /* ✅ 2.5) 故鄉溪畔風景圖 (右下角浮動) */
     /* ---------------------------------- */
     @keyframes image-float{
       0%,100%{transform:translate(0,0);}
@@ -60,13 +60,13 @@ body{
     }
     #creek-image{
       position:fixed;
-      bottom: -20px; /* 從 -60px 調整為 -20px，讓底部可見 */
-      right: -20px; /* 從 -80px 調整為 -20px，讓右側可見 */
-      width: clamp(300px, 30vw, 400px); /* 尺寸響應式調整 */
-      opacity: .85; /* 從 0.6 提高到 0.85，讓它更顯眼 */
-      z-index: -1; /* 從 -10 調整為 -1，確保它在背景之上，但仍在前景內容之下 */
+      bottom: -20px;
+      right: -20px;
+      width: clamp(300px, 30vw, 400px);
+      opacity: .85;
+      z-index: -1;
       pointer-events: none;
-      filter: drop-shadow(0 0 15px rgba(80,180,255,.3)) brightness(1); /* 調整陰影和亮度 */
+      filter: drop-shadow(0 0 15px rgba(80,180,255,.3)) brightness(1);
       animation: image-float 15s ease-in-out infinite alternate;
       transform-origin: 50% 100%;
     }
@@ -91,7 +91,6 @@ body{
       position:fixed; inset:0;
       pointer-events:none;
       background:transparent;
-
       box-shadow:
         6vw 14vh 2px 1px var(--firefly),
         12vw 38vh 1px 1px var(--firefly),
@@ -107,68 +106,84 @@ body{
         88vw 60vh 2px 1px var(--firefly),
         92vw 16vh 1px 1px var(--firefly),
         94vw 74vh 1px 1px var(--firefly);
-
       animation: firefly-drift 36s linear infinite, firefly-glow 3s ease-in-out infinite;
       z-index:-1;
     }
 
     /* ---------------------------------- */
-    /* 4) Header：玻璃匣子 + 月光邊 + 少量水光 */
+    /* 4) Header：Crystal Glass Style (UPDATED) */
     /* ---------------------------------- */
-    #info-card-wrapper{
-      position:fixed; top:0; left:0; width:100%;
-      z-index:1000;
-      background: rgba(9,18,30,.72);  /* 仍是夜，但比前版亮 */
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.12);
-      box-shadow:0 8px 24px rgba(0,0,0,.40);
+    
+    #info-card-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+
+      /* Crystal Glass Effect Settings */
+      /* 1. Background: Deep semi-transparent tint to match theme but allow visibility */
+      background: linear-gradient(
+        180deg,
+        rgba(15, 25, 45, 0.85) 0%,
+        rgba(20, 30, 60, 0.65) 100%
+      );
+
+      /* 2. The Blur: This is key for the "Crystal" look.
+         It blurs content BEHIND the header, making text ON TOP readable. */
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+      /* 3. The Edges: Crisp borders to simulate cut glass */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3); /* Inner shine on top */
     }
 
-    #info-card{
-      width:92%;
-      max-width:1040px;
-      margin:0 auto;
-      position:relative;
-      overflow:hidden;
-
-      background:
-        linear-gradient(135deg,
-          rgba(255,255,255,.20) 0%,
-          rgba(255,255,255,.14) 45%,
-          rgba(18,72,66,.20) 100%),
-        radial-gradient(140% 120% at 50% 115%,
-          rgba(120,200,190,.35) 0%,
-          rgba(120,200,190,0) 68%);
-
-      backdrop-filter: blur(14px) saturate(125%);
-      border:1.6px solid var(--card-border);
-      border-top:none;
-      border-radius:0 0 20px 20px;
-      box-shadow: var(--card-shadow);
-      padding:18px 34px 14px 34px;
-      animation: creek-band-flow 9s ease-in-out infinite;
+    #info-card {
+      width: 92%;
+      max-width: 1040px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      
+      /* Simplify inner card to blend with the wrapper */
+      background: transparent; 
+      border: none;
+      padding: 18px 34px 14px 34px;
+      
+      /* Text shadow for maximum readability on glass */
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     }
 
-    /* 月光金邊 */
-    #info-card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      border-radius:0 0 20px 20px;
-      padding:2px;
-      background: linear-gradient(135deg,
-        rgba(255,255,255,.95),
-        rgba(230,216,168,.7),
-        rgba(255,255,255,.9));
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor;
-              mask-composite:exclude;
-      pointer-events:none;
-      opacity:.9;
+    /* Optional: A subtle shine passing through the crystal */
+    #info-card-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%
+      );
+      transform: skewX(-25deg);
+      pointer-events: none;
+      animation: crystal-shine 8s infinite;
+    }
+    
+    @keyframes crystal-shine {
+      0% { left: -50%; opacity: 0; }
+      20% { opacity: 1; }
+      40% { left: 150%; opacity: 0; }
+      100% { left: 150%; opacity: 0; }
     }
 
-    /* Header 內螢火蟲 */
+    /* Header 內螢火蟲 - 調整亮度以適應玻璃 */
     @keyframes header-firefly{
       0%,100%{transform:translate(0,0); opacity:.25;}
       50%{transform:translate(10px,-8px); opacity:.8;}
@@ -189,61 +204,25 @@ body{
     .header-fireflies span:nth-child(7){top:16%; left:90%; animation-delay:.4s;}
     .header-fireflies span:nth-child(8){top:40%; left:92%; animation-delay:2.1s; width:3.5px;height:3.5px;}
 
-    /* 減量水光 */
-    @keyframes creek-shimmer{
-      0%   { background-position: 0% 50%, 0 0; opacity:.20;}
-      50%  { background-position: 100% 50%, 120px 40px; opacity:.45;}
-      100% { background-position: 0% 50%, 0 0; opacity:.22;}
-    }
-    #info-card::after{
-      content:"";
-      position:absolute; inset:0;
-      pointer-events:none;
-
-      background:
-        linear-gradient(115deg,
-          rgba(120,210,198,0.0) 0%,
-          rgba(120,210,198,0.50) 40%,
-          rgba(255,255,255,0.0) 75%),
-        repeating-radial-gradient(circle at 20% 125%,
-          rgba(255,255,255,0.14) 0 6px,
-          rgba(255,255,255,0.0) 6px 18px);
-
-      background-size:
-        240% 100%,
-        240px 160px;
-      animation: creek-shimmer 12s ease-in-out infinite;
-      mix-blend-mode: normal;
-    }
-
-    /* 底部淡淡水流帶 */
-    @keyframes creek-band-flow{
-      0%{background-position:0 0, 0% 100%; opacity:.45;}
-      50%{background-position:0 0, 100% 100%; opacity:.7;}
-      100%{background-position:0 0, 0% 100%; opacity:.5;}
-    }
-
     /* Title / Author */
     #info-card h1{
       text-align:center;
       font-size:2.2em;
       margin:2px 0 6px 0;
-      color:var(--ivory);
+      color: #ffffff; /* Pure white for contrast */
       letter-spacing:.6px;
       font-weight:900;
       position:relative; z-index:2;
-      text-shadow:
-        0 2px 18px rgba(0,0,0,.85),
-        0 0 4px rgba(255,255,255,.25);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 10px rgba(180, 220, 255, 0.4); /* Enhanced shadow */
     }
     #info-card h2{
       text-align:center;
       font-size:1.12em;
       margin:0 0 8px 0;
-      color:var(--text-sub);
+      color: var(--river-mist); /* Lighter subtitle */
       font-weight:700;
       position:relative; z-index:2;
-      text-shadow:0 1px 10px rgba(0,0,0,.8);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
     #music-box-container{
@@ -259,7 +238,7 @@ body{
       text-shadow:0 1px 10px rgba(0,0,0,.85);
     }
 
-    /* 新增音樂版本切換按鈕組樣式 */
+    /* 按鈕樣式優化 */
     #version-selector{
         display: flex;
         gap: 10px;
@@ -272,15 +251,18 @@ body{
         font-weight: 700;
         cursor: pointer;
         transition: all .2s ease;
-        background: rgba(255,255,255,.2);
+        background: rgba(255,255,255,.15); /* More transparent */
         color: var(--text-main);
-        border: 1px solid rgba(255,255,255,.5);
+        border: 1px solid rgba(255,255,255,.4);
         backdrop-filter: blur(4px);
+    }
+    .version-btn:hover {
+        background: rgba(255,255,255,0.25);
     }
     .version-btn.active{
         background: var(--moon-gold);
         color: var(--midnight-navy);
-        box-shadow: 0 4px 10px rgba(0,0,0,.4);
+        box-shadow: 0 0 15px rgba(255, 232, 168, 0.4);
         border-color: var(--moon-gold);
         transform: translateY(-2px);
     }
@@ -301,8 +283,8 @@ body{
       margin:6px 0;
       padding-left:22px;
       position:relative;
-      color:var(--text-sub);
-      text-shadow:0 1px 8px rgba(0,0,0,.85);
+      color: #e0e6ff; /* Very light blue for readability */
+      text-shadow:0 2px 8px rgba(0,0,0,.95);
       font-weight:600;
     }
     #info-card li::before{
@@ -314,16 +296,17 @@ body{
     }
 
     /* ---------------------------------- */
-    /* 5) 導航列 */
+    /* 5) 導航列 - Integrated into the Crystal Block */
     /* ---------------------------------- */
    #page-nav{
-  width:100%;
-  background: linear-gradient(135deg, rgba(3,8,30,.98), rgba(40,30,90,.98));
-  padding:14px 0;
-  text-align:center;
-  border-bottom:2px solid rgba(230,216,168,.9);
-  backdrop-filter: blur(8px);
-}
+      width:100%;
+      /* Remove separate background to blend with wrapper */
+      background: rgba(0, 0, 0, 0.2); 
+      padding:14px 0;
+      text-align:center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      /* border-bottom removal for cleaner look */
+    }
 
     #page-nav a{
       text-decoration:none;
@@ -335,14 +318,15 @@ body{
       font-weight:800;
       font-size:1.05em;
       display:inline-block;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.1);
       text-shadow:0 1px 6px rgba(0,0,0,.7);
+      background: rgba(255, 255, 255, 0.05); /* Subtle glass buttons */
     }
     #page-nav a:hover,
     #page-nav a.active{
       background: rgba(230,216,168,.96);
       color: #0c1f1c;
-      box-shadow:0 8px 20px rgba(0,0,0,.40);
+      box-shadow:0 0 15px rgba(230, 216, 168, 0.5);
       border-color: rgba(255,255,255,.85);
       transform:translateY(-1px);
       text-shadow:none;
@@ -550,11 +534,14 @@ body{
   #info-card-wrapper{
     position: static;         /* 不再 fixed，跟著頁面一起捲動 */
     box-shadow: none;
+    background: transparent;  /* remove glass effect on mobile to prevent overlay issues if desired, or keep it */
+    backdrop-filter: none;
   }
 
   #info-card{
     border-radius: 0 0 16px 16px;
     padding: 12px 16px 10px 16px;
+    background: rgba(15, 25, 45, 0.85); /* fallback background for mobile */
   }
 
   #info-card h1{
@@ -601,9 +588,10 @@ body{
       </div>
 
       <ul>
-        <li>Learning Foci 1：5 Simple Sentences Structures (簡單句5大句型)</li>
-        <li>Learning Foci 2：Childhood memory description (童年記憶描寫)</li>
-        <li>Learning Foci 3：Rhetorical Devices (修辭手法)</li>
+        <li>Learning Foci：</li>
+        <li>1. 5 Simple Sentences Structures (簡單句5大句型)</li>
+        <li>2. Childhood memory description (童年記憶描寫)</li>
+        <li>3：Rhetorical Devices (修辭手法)</li>
       </ul>
     </div>
 
