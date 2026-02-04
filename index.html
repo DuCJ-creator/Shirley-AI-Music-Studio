@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shirley's AI Music Studio | Moonlight Sonata</title>
+  <title>Shirley's AI Music Studio | Moonlight Premium</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-0: #05040a; --accent: #9fffe6; --ink: #e7f7f7;
-      --clock-size: min(75vw, 450px);
-      --record-size: 110px;
+      --clock-size: min(72vw, 420px);
+      --record-size: 100px;
     }
 
     body {
@@ -20,86 +20,84 @@
 
     #particle-bg { position: fixed; inset: 0; z-index: 0; }
 
-    /* 原始標題復刻 */
+    /* 標題復刻 */
     #header {
-      position: absolute; top: 12%; left: 8%; z-index: 10;
+      position: absolute; top: 10%; left: 8%; z-index: 10;
       text-align: left; pointer-events: none;
     }
     #main-title {
-      font-size: 2.4rem; letter-spacing: 0.35em; margin: 0; font-weight: 700;
-      text-shadow: 0 0 20px rgba(159,255,230,0.5);
+      font-size: 2.2rem; letter-spacing: 0.35em; margin: 0; font-weight: 700;
+      text-shadow: 0 0 15px rgba(159,255,230,0.5);
     }
     #sub-title {
-      font-family: "Cormorant Garamond", serif; font-size: 1.4rem;
-      letter-spacing: 0.7em; margin-top: 12px; opacity: 0.8;
+      font-family: "Cormorant Garamond", serif; font-size: 1.3rem;
+      letter-spacing: 0.6em; margin-top: 8px; opacity: 0.8;
     }
 
     /* 表盤系統 */
     #clock-container {
-      position: relative; right: 10%;
+      position: relative; right: 5%;
       width: var(--clock-size); height: var(--clock-size);
       z-index: 5;
     }
     .clock-outer {
       position: absolute; inset: 0; border-radius: 50%;
-      border: 1px solid rgba(159, 255, 230, 0.25);
-      background: radial-gradient(circle, rgba(20,20,30,0.8) 0%, #050509 100%);
+      border: 1px solid rgba(159, 255, 230, 0.2);
+      background: radial-gradient(circle, rgba(20,20,30,0.6) 0%, #050509 100%);
     }
 
-    /* 唱片 */
     #record {
       position: absolute; top: 50%; left: 50%;
       width: var(--record-size); height: var(--record-size);
       transform: translate(-50%, -50%); border-radius: 50%;
-      border: 3px solid var(--accent); overflow: hidden;
-      cursor: pointer; z-index: 20; box-shadow: 0 0 25px var(--accent);
+      border: 2px solid var(--accent); overflow: hidden;
+      cursor: pointer; z-index: 20; box-shadow: 0 0 20px var(--accent);
     }
     video { width: 100%; height: 100%; object-fit: cover; }
 
-    /* 指針 */
     #hand {
-      position: absolute; width: 4px; height: 44%;
+      position: absolute; width: 3px; height: 44%;
       background: linear-gradient(to top, var(--accent), transparent);
-      bottom: 50%; left: calc(50% - 2px); transform-origin: bottom center;
-      transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+      bottom: 50%; left: calc(50% - 1.5px); transform-origin: bottom center;
+      transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
       z-index: 10;
     }
 
     /* 導航 */
     .nav-node {
       position: absolute; text-decoration: none; color: var(--ink);
-      z-index: 25; font-size: 0.95rem; font-weight: bold;
-      padding: 12px 24px; border-radius: 30px;
-      background: rgba(10,12,18,0.9); border: 1px solid rgba(159,255,230,0.3);
+      z-index: 25; font-size: 0.85rem; font-weight: bold;
+      padding: 10px 20px; border-radius: 30px;
+      background: rgba(10,12,18,0.85); border: 1px solid rgba(159,255,230,0.2);
       transition: 0.3s; white-space: nowrap;
     }
-    .nav-node:hover { border-color: var(--accent); box-shadow: 0 0 20px var(--accent); transform: translateY(-50%) scale(1.1); }
-    #node-emo { left: -60px; top: 50%; transform: translateY(-50%); }
-    #node-study { right: -60px; top: 50%; transform: translateY(-50%); }
+    .nav-node:hover { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: translateY(-50%) scale(1.1); }
+    #node-emo { left: -50px; top: 50%; transform: translateY(-50%); }
+    #node-study { right: -50px; top: 50%; transform: translateY(-50%); }
 
-    /* 歌詞軌道系統 - 點擊展開 */
+    /* 歌詞軌道 - 改進漂浮邏輯 */
     #lyric-orbit-container { position: absolute; inset: 0; pointer-events: none; }
     .lyric-card {
-      position: absolute; width: 240px; pointer-events: auto;
-      background: rgba(15, 20, 35, 0.85); border: 1px solid rgba(159, 255, 230, 0.2);
-      border-radius: 12px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 15px; overflow: hidden;
+      position: absolute; width: 220px; pointer-events: auto;
+      background: rgba(15, 20, 35, 0.8); border: 1px solid rgba(159, 255, 230, 0.2);
+      border-radius: 10px; transition: width 0.4s, background 0.4s, transform 0.1s linear;
+      padding: 12px; overflow: hidden;
     }
     .lyric-card.expanded {
-      width: 300px; background: rgba(20, 30, 50, 0.95);
-      border-color: var(--accent); z-index: 500 !important;
+      width: 280px; background: rgba(20, 30, 50, 0.98);
+      border-color: var(--accent); z-index: 1000 !important;
     }
     .lyric-title { 
-      font-size: 0.8rem; color: var(--accent); font-weight: bold; 
-      letter-spacing: 2px; cursor: pointer; display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--accent); font-weight: bold; 
+      letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between;
     }
     .lyric-content {
       max-height: 0; opacity: 0; margin-top: 0;
-      font-family: "Cormorant Garamond", serif; font-size: 0.95rem;
-      line-height: 1.5; color: #fff; transition: all 0.5s ease;
+      font-family: "Cormorant Garamond", serif; font-size: 0.9rem;
+      line-height: 1.4; color: #fff; transition: all 0.4s ease;
       white-space: pre-line;
     }
-    .expanded .lyric-content { max-height: 200px; opacity: 1; margin-top: 12px; }
+    .expanded .lyric-content { max-height: 250px; opacity: 1; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -125,30 +123,35 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // 1. 粒子背景
+    // 1. 深度星辰背景 (優化：更細、更多、不發熱)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);
-    camera.position.z = 400;
+    camera.position.z = 500;
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     document.getElementById('particle-bg').appendChild(renderer.domElement);
 
     const geo = new THREE.BufferGeometry();
-    const pArr = new Float32Array(3000 * 3);
-    for(let i=0; i<9000; i++) pArr[i] = (Math.random()-0.5) * 850;
+    const pCount = 6000; // 增加數量
+    const pArr = new Float32Array(pCount * 3);
+    for(let i=0; i<pCount*3; i++) pArr[i] = (Math.random()-0.5) * 1200;
     geo.setAttribute('position', new THREE.BufferAttribute(pArr, 3));
-    const mat = new THREE.PointsMaterial({ color: 0x9fffe6, size: 1.5, transparent: true, opacity: 0.3 });
+    
+    // 縮小 size 到 0.8 - 1.2 營造星塵感
+    const mat = new THREE.PointsMaterial({ color: 0x9fffe6, size: 0.8, transparent: true, opacity: 0.5, sizeAttenuation: true });
     const particles = new THREE.Points(geo, mat);
     scene.add(particles);
 
     function animate() {
       requestAnimationFrame(animate);
-      particles.rotation.y += 0.0006;
+      particles.rotation.y += 0.0004;
+      particles.rotation.z += 0.0002;
       renderer.render(scene, camera);
     }
     animate();
 
-    // 2. 歌詞軌道與展開邏輯
+    // 2. 歌詞數據
     const lyricsData = [
       { t: "Verse 1", c: "Close your eyes, let the tide of night pull you deep\nWhere silver whispers through the willow weep\nEvery worry, every weight you carry, set it free\nOn this silent sea, just breathe" },
       { t: "Pre-Chorus", c: "Feel the shadows soften, turning into silk\nAs the constellations witness, spilling their light like milk" },
@@ -159,10 +162,16 @@
     ];
 
     const container = document.getElementById('lyric-orbit-container');
+    
+    // 初始化位置偏移量，讓卡片一開始就均勻分布
     const cards = lyricsData.map((data, i) => {
       const card = document.createElement('div');
       card.className = 'lyric-card';
       card.innerHTML = `<div class="lyric-title"><span>${data.t}</span><span>＋</span></div><div class="lyric-content">${data.c}</div>`;
+      
+      // 給予每個卡片一個隨機的初始時間偏移
+      card.dataset.offset = Math.random() * 10000; 
+      
       card.onclick = (e) => {
         const isExp = card.classList.contains('expanded');
         document.querySelectorAll('.lyric-card').forEach(c => c.classList.remove('expanded'));
@@ -174,26 +183,32 @@
     });
 
     function updateOrbit() {
-      const time = Date.now() * 0.00015;
-      const centerX = window.innerWidth * 0.78;
+      const now = Date.now();
+      const centerX = window.innerWidth * 0.75;
       const centerY = window.innerHeight * 0.5;
+
       cards.forEach((card, i) => {
-        if(card.classList.contains('expanded')) return; // 展開時停止位移
+        if(card.classList.contains('expanded')) return;
+
+        // 使用初始偏移量，確保一進網頁時卡片就在不同位置
+        const offset = parseFloat(card.dataset.offset);
+        const time = (now + offset) * 0.00012; 
+        
         const angle = time + (i * (Math.PI * 2 / cards.length));
-        const x = centerX + Math.cos(angle) * 120;
-        const y = centerY + Math.sin(angle) * 280;
+        const x = centerX + Math.cos(angle) * 140; // 軌道寬度
+        const y = centerY + Math.sin(angle) * 300; // 軌道高度
         const z = Math.sin(angle);
+
         card.style.left = `${x}px`;
         card.style.top = `${y}px`;
-        card.style.transform = `translate(-50%, -50%) scale(${0.85 + z * 0.15})`;
-        card.style.opacity = 0.5 + (z + 1) * 0.25;
+        card.style.transform = `translate(-50%, -50%) scale(${0.8 + z * 0.12})`;
+        card.style.opacity = 0.4 + (z + 1) * 0.3;
         card.style.zIndex = Math.round((z + 1) * 10);
       });
       requestAnimationFrame(updateOrbit);
     }
     updateOrbit();
 
-    // 3. 基本控制
     const v = document.getElementById('v');
     const hand = document.getElementById('hand');
     function togglePlay() { v.paused ? v.play() : v.pause(); }
