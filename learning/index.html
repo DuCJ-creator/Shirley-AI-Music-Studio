@@ -36,11 +36,12 @@
       --font-ui:"Orbitron", system-ui, sans-serif;
       --font-serif:"Cormorant Garamond", serif;
 
-      --container-size:min(78vw, 520px);
-      --petal-w:clamp(150px, 19vw, 220px);
-      --petal-h:clamp(210px, 28vw, 300px);
-      --center-size:clamp(104px, 12vw, 150px);
-      --lift:clamp(48px, 7vw, 78px);
+      /* 修改：使用更靈活的容器尺寸計算 */
+      --container-size: min(90vh, min(85vw, 650px));
+      --petal-w: clamp(120px, 14vw, 190px);
+      --petal-h: clamp(160px, 20vw, 260px);
+      --center-size: clamp(85px, 10vw, 130px);
+      --lift: clamp(25px, 5vw, 65px);
 
       --title-bottom-gap: clamp(6px, 1.2vh, 10px);
       --nav-bottom-gap: clamp(8px, 1.6vh, 14px);
@@ -359,6 +360,9 @@
       place-items:center;
       position:relative;
       z-index:3;
+      /* ✅ 確保花朵在視窗內 */
+      max-width: 95vw;
+      max-height: 70vh;
       /* ✅ 原本有旋轉與浮動動畫，已移除，改為靜止 */
       /* animation:
         flowerSpin 90s linear infinite,
@@ -800,34 +804,94 @@
     /* ---------------------------------- */
     @media (max-width: 1024px){
       :root{
-        --container-size:min(94vw, 560px);
-        --petal-w:clamp(150px, 24vw, 220px);
-        --petal-h:clamp(210px, 34vw, 320px);
-        --center-size:clamp(100px, 16vw, 150px);
-        --lift:clamp(46px, 8vw, 76px);
+        --container-size:min(90vh, min(90vw, 600px));
+        --petal-w:clamp(110px, 16vw, 180px);
+        --petal-h:clamp(150px, 22vw, 240px);
+        --center-size:clamp(75px, 9vw, 120px);
+        --lift:clamp(20px, 4vw, 60px);
         --title-bottom-gap: clamp(6px, 1.2vh, 10px);
         --nav-bottom-gap: clamp(8px, 1.6vh, 12px);
       }
     }
 
+    @media (max-width: 768px){
+      :root{
+        --container-size:min(85vh, min(95vw, 550px));
+        --petal-w:clamp(100px, 18vw, 160px);
+        --petal-h:clamp(140px, 25vw, 220px);
+        --center-size:clamp(70px, 10vw, 110px);
+        --lift:clamp(18px, 4vw, 50px);
+      }
+      
+      #page-title {
+        font-size: clamp(2.2rem, 6vw, 3rem);
+      }
+      
+      #flower-rotator {
+        max-height: 65vh;
+      }
+    }
+
     @media (max-width: 600px){
       :root{
-        --container-size:min(96vw, 420px);
-        --petal-w:clamp(120px, 30vw, 170px);
-        --petal-h:clamp(170px, 46vw, 240px);
-        --center-size:clamp(88px, 22vw, 120px);
-        --lift:clamp(36px, 10vw, 56px);
+        --container-size:min(80vh, min(98vw, 480px));
+        --petal-w:clamp(90px, 22vw, 140px);
+        --petal-h:clamp(120px, 30vw, 200px);
+        --center-size:clamp(60px, 12vw, 100px);
+        --lift:clamp(15px, 4vw, 40px);
       }
-      #nav-panel{ width:96vw; padding:10px; }
-      .nav-grid{ grid-template-columns:1fr; gap:8px; }
-      .nav-item.full{ grid-column:auto; }
+      
+      #nav-panel{ 
+        width:96vw; 
+        padding:10px; 
+      }
+      
+      .nav-grid{ 
+        grid-template-columns:1fr; 
+        gap:8px; 
+      }
+      
+      .nav-item.full{ 
+        grid-column:auto; 
+      }
+      
+      #flower-rotator {
+        max-height: 60vh;
+      }
+    }
+
+    @media (max-width: 480px){
+      :root{
+        --container-size:min(75vh, min(98vw, 420px));
+        --petal-w:clamp(80px, 26vw, 120px);
+        --petal-h:clamp(110px, 35vw, 180px);
+        --center-size:clamp(55px, 14vw, 90px);
+        --lift:clamp(12px, 4vw, 35px);
+      }
+      
+      #page-title {
+        font-size: clamp(1.8rem, 7vw, 2.5rem);
+        margin-bottom: 10px;
+      }
+      
+      #flower-rotator {
+        max-height: 55vh;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
     }
 
     @media (max-width: 380px){
       :root{
-        --container-size:min(98vw, 360px);
-        --petal-w:clamp(110px, 34vw, 150px);
-        --petal-h:clamp(155px, 50vw, 220px);
+        --container-size:min(70vh, min(98vw, 380px));
+        --petal-w:clamp(70px, 28vw, 110px);
+        --petal-h:clamp(100px, 38vw, 160px);
+        --center-size:clamp(50px, 16vw, 80px);
+        --lift:clamp(10px, 4vw, 30px);
+      }
+      
+      #flower-rotator {
+        max-height: 50vh;
       }
     }
 
@@ -948,6 +1012,92 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <script>
+    /* ================================== */
+    /* ✅ 新增：花朵視窗適配功能 */
+    /* ================================== */
+    let resizeTimeout;
+    
+    function calculateFlowerSize() {
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      
+      // 計算可用空間
+      const header = document.getElementById('page-title');
+      const nav = document.getElementById('nav-panel');
+      const button = document.getElementById('back-button');
+      
+      const headerHeight = header ? header.offsetHeight : 0;
+      const navHeight = nav ? nav.offsetHeight : 0;
+      const buttonHeight = button ? button.offsetHeight : 0;
+      
+      // 計算可用高度
+      const pagePadding = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--page-padding')) || 20;
+      const totalVerticalSpace = headerHeight + navHeight + buttonHeight + (pagePadding * 3) + 60; // 緩衝區
+      const availableHeight = viewportHeight - totalVerticalSpace;
+      
+      // 計算可用寬度
+      const availableWidth = viewportWidth - (pagePadding * 2);
+      
+      // 使用較小值作為限制
+      const maxSize = Math.min(availableHeight, availableWidth, 650);
+      
+      // 確保最小值
+      const minSize = Math.min(viewportHeight * 0.4, viewportWidth * 0.8, 300);
+      const finalSize = Math.max(minSize, maxSize);
+      
+      return {
+        size: finalSize,
+        petalW: Math.max(80, finalSize * 0.24),
+        petalH: Math.max(110, finalSize * 0.34),
+        centerSize: Math.max(60, finalSize * 0.17),
+        lift: Math.max(15, finalSize * 0.1)
+      };
+    }
+    
+    function adjustFlowerForViewport() {
+      const flower = document.getElementById('flower-rotator');
+      if (!flower) return;
+      
+      const sizes = calculateFlowerSize();
+      
+      // 動態設置容器大小
+      flower.style.width = `${sizes.size}px`;
+      flower.style.height = `${sizes.size}px`;
+      
+      // 更新 CSS 變數
+      document.documentElement.style.setProperty('--container-size', `${sizes.size}px`);
+      document.documentElement.style.setProperty('--petal-w', `${sizes.petalW}px`);
+      document.documentElement.style.setProperty('--petal-h', `${sizes.petalH}px`);
+      document.documentElement.style.setProperty('--center-size', `${sizes.centerSize}px`);
+      document.documentElement.style.setProperty('--lift', `${sizes.lift}px`);
+      
+      // 更新中心圓字體大小
+      const center = document.getElementById('learning-center');
+      if (center) {
+        const fontSize = Math.max(12, sizes.centerSize * 0.1);
+        center.style.fontSize = `${fontSize}px`;
+      }
+    }
+    
+    function debounceAdjustFlower() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(adjustFlowerForViewport, 250);
+    }
+    
+    // 初始調整
+    window.addEventListener('load', () => {
+      setTimeout(adjustFlowerForViewport, 100);
+    });
+    
+    // 視窗大小改變時重新調整
+    window.addEventListener('resize', debounceAdjustFlower);
+    
+    // 監聽滾輪事件，在縮放時也調整
+    window.addEventListener('wheel', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(adjustFlowerForViewport, 500);
+    });
+
     /* ---------------------------------- */
     /* Three.js 浩瀚星系粒子背景 (已移除滑鼠排斥力，改為支援滾輪/觸控縮放) */
     /* ---------------------------------- */
