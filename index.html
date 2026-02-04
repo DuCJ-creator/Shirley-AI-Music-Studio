@@ -3,1529 +3,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shirley's AI Music Studio | 月光奏鳴曲</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
-
+  <title>Shirley's AI Music Studio | Moonlight Sonata</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
   <style>
-    /* ---------------------------------- */
-    /* 1. 全域變數與基底 */
-    /* ---------------------------------- */
-    :root{
-      --bg-0:#05040a;
-      --bg-1:#0b0716;
-      --bg-2:#170b2a;
-
-      --ink:#e7f7f7;
-      --ink-dim:rgba(231,247,247,0.75);
-
-      --accent:#9fffe6;
-      --accent-strong:#72f5ff;
-      --accent-dim:rgba(159,255,230,0.25);
-
-      --ring:#cfd8ff;
-      --ring-dim:rgba(207,216,255,0.35);
-
-      --clock-size: min(88vw, 620px);
-      --rose-size: clamp(84px, 18vw, 130px);
-      --point-size: clamp(72px, 14vw, 92px);
-
-      --pointer-width: 12px;
-      --pointer-height: 48%;
-
-      --glass: rgba(8, 10, 18, 0.55);
-      --glass-strong: rgba(8, 10, 18, 0.72);
-
-      --radius-xl: 22px;
-      --radius-2xl: 28px;
+    :root {
+      --bg-0: #05040a; --accent: #9fffe6; --ink: #e7f7f7;
+      --clock-size: min(75vw, 450px);
+      --record-size: 110px;
     }
 
-    * { box-sizing: border-box; }
-body{
-  margin:0;
-  min-height:100vh;
-
-  color:var(--ink);
-  font-family:"Orbitron", system-ui, sans-serif;
-  background:
-    radial-gradient(1200px 800px at 50% 40%, var(--bg-2) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
-
-  overflow-x:hidden;
-  position:relative;
-  letter-spacing:.02em;
-}
-
-/* 桌機：整個 UI 鎖在畫面正中央，不捲動 */
-@media (min-width: 900px){
-  body{
-    display:grid;
-    place-items:center;
-    overflow-y:hidden;   /* 不要上下捲動，粒子球體 & 表盤保持對齊 */
-  }
-}
-
-/* 手機 / 平板：改用 block 排版，可以上下捲動 */
-@media (max-width: 899.98px){
-  body{
-    display:block;
-    overflow-y:auto;
-  }
-}
-
-    /* 星塵 */
-    body::before{
-      content:"";
-      position:absolute; inset:-10%;
-      background:
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 0 70%, transparent 72%),
-        radial-gradient(1px 1px at 80% 30%, rgba(159,255,230,.9) 0 70%, transparent 72%),
-        radial-gradient(1.2px 1.2px at 30% 70%, rgba(255,255,255,.65) 0 70%, transparent 72%),
-        radial-gradient(1px 1px at 70% 80%, rgba(114,245,255,.8) 0 70%, transparent 72%),
-        radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,.5) 0 70%, transparent 72%);
-      opacity:.55;
-      filter: blur(.2px);
-      animation: drift 22s linear infinite;
-      z-index:-2;
-    }
-    @keyframes drift { to { transform: translateY(3%) translateX(-2%); } }
-
-    /* 背景光暈 */
-    body::after{
-      content:"";
-      position:absolute; inset:-20%;
-      background:
-        radial-gradient(800px 600px at 50% 55%, rgba(159,255,230,.08), transparent 60%),
-        radial-gradient(700px 520px at 20% 30%, rgba(207,216,255,.06), transparent 62%),
-        radial-gradient(900px 700px at 80% 25%, rgba(114,245,255,.05), transparent 65%);
-      animation: breathe 10s ease-in-out infinite;
-      z-index:-1;
-    }
-    @keyframes breathe{
-      0%,100%{opacity:.55; transform:scale(1);}
-      50%{opacity:.85; transform:scale(1.02);}
-    }
-#main-container{
-  position:relative;
-  z-index:2;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:clamp(18px, 3vh, 28px);
-}
-
-/* 桌機：在 body 的 grid 中垂直置中 */
-@media (min-width: 900px){
-  #main-container{
-    min-height:100vh;
-    justify-content:center;
-    padding:0;
-  }
-}
-
-/* 手機 / 平板：在頁面上端開始，下面留空給歌詞捲軸 */
-@media (max-width: 899.98px){
-  #main-container{
-    justify-content:flex-start;
-    padding:32px 0 120px;
-  }
-}
-
-    /* ---------------------------------- */
-    /* Title：月光藝術主標                  */
-    /* ---------------------------------- */
-    #main-title{
-      position: relative;
-      margin: 0;
-      margin-bottom: 24px;
-      text-align: center;
-      line-height: 1.15;
-
-      font-family: "Cormorant Garamond", serif;
-      font-weight: 600;
-      font-size: clamp(2.8rem, 5.8vw, 4.2rem);
-      letter-spacing: .14em;
-
-      background: linear-gradient(
-        90deg,
-        rgba(231,247,247,.95),
-        rgba(159,255,230,1),
-        rgba(207,216,255,1),
-        rgba(231,247,247,.95)
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      background-size: 220% 100%;
-      animation: title-shimmer 10s ease-in-out infinite;
-
-      text-shadow:
-        0 0 18px rgba(255,255,255,.38),
-        0 0 36px rgba(114,245,255,.6),
-        0 0 70px rgba(159,255,230,.38);
-
-      filter: drop-shadow(0 10px 26px rgba(0,0,0,.7));
+    body {
+      margin: 0; background: var(--bg-0); color: var(--ink);
+      font-family: "Orbitron", sans-serif; overflow: hidden;
+      height: 100vh; display: flex; align-items: center; justify-content: center;
     }
 
-    /* 上下細線 */
-    #main-title::before,
-    #main-title::after{
-      content: "";
-      position: absolute;
-      left: 50%;
-      width: 72%;
-      max-width: 520px;
-      height: 1px;
-      transform: translateX(-50%);
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(159,255,230,.8),
-        transparent
-      );
-      opacity: .85;
+    #particle-bg { position: fixed; inset: 0; z-index: 0; }
+
+    /* 原始標題復刻 */
+    #header {
+      position: absolute; top: 12%; left: 8%; z-index: 10;
+      text-align: left; pointer-events: none;
     }
-    #main-title::before{
-      top: -18px;
+    #main-title {
+      font-size: 2.4rem; letter-spacing: 0.35em; margin: 0; font-weight: 700;
+      text-shadow: 0 0 20px rgba(159,255,230,0.5);
     }
-    #main-title::after{
-      bottom: -18px;
+    #sub-title {
+      font-family: "Cormorant Garamond", serif; font-size: 1.4rem;
+      letter-spacing: 0.7em; margin-top: 12px; opacity: 0.8;
     }
 
-    @keyframes title-shimmer{
-      0%,100%{ background-position: 0% 50%; }
-      50%{ background-position: 100% 50%; }
+    /* 表盤系統 */
+    #clock-container {
+      position: relative; right: 10%;
+      width: var(--clock-size); height: var(--clock-size);
+      z-index: 5;
+    }
+    .clock-outer {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 1px solid rgba(159, 255, 230, 0.25);
+      background: radial-gradient(circle, rgba(20,20,30,0.8) 0%, #050509 100%);
     }
 
-    #main-title::selection{
-      background: rgba(159,255,230,.18);
+    /* 唱片 */
+    #record {
+      position: absolute; top: 50%; left: 50%;
+      width: var(--record-size); height: var(--record-size);
+      transform: translate(-50%, -50%); border-radius: 50%;
+      border: 3px solid var(--accent); overflow: hidden;
+      cursor: pointer; z-index: 20; box-shadow: 0 0 25px var(--accent);
+    }
+    video { width: 100%; height: 100%; object-fit: cover; }
+
+    /* 指針 */
+    #hand {
+      position: absolute; width: 4px; height: 44%;
+      background: linear-gradient(to top, var(--accent), transparent);
+      bottom: 50%; left: calc(50% - 2px); transform-origin: bottom center;
+      transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+      z-index: 10;
     }
 
-    #main-title .studio{
-      display:block;
-      font-family:"Orbitron", sans-serif;
-      font-weight:700;
-      font-size: .55em;
-      letter-spacing: .4em;
-      text-transform: uppercase;
-      color: rgba(231,247,247,.9);
-      margin-bottom: 10px;
-      text-shadow:
-        0 0 14px rgba(114,245,255,.5),
-        0 0 26px rgba(159,255,230,.45);
+    /* 導航 */
+    .nav-node {
+      position: absolute; text-decoration: none; color: var(--ink);
+      z-index: 25; font-size: 0.95rem; font-weight: bold;
+      padding: 12px 24px; border-radius: 30px;
+      background: rgba(10,12,18,0.9); border: 1px solid rgba(159,255,230,0.3);
+      transition: 0.3s; white-space: nowrap;
     }
+    .nav-node:hover { border-color: var(--accent); box-shadow: 0 0 20px var(--accent); transform: translateY(-50%) scale(1.1); }
+    #node-emo { left: -60px; top: 50%; transform: translateY(-50%); }
+    #node-study { right: -60px; top: 50%; transform: translateY(-50%); }
 
-    #main-title small{
-      display:block;
-      margin-top: 10px;
-      font-family:"Cormorant Garamond", serif;
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
-      letter-spacing: .28em;
-      font-weight: 600;
-      color: rgba(231,247,247,.96);
-      text-shadow:
-        0 0 14px rgba(114,245,255,.4),
-        0 0 32px rgba(207,216,255,.45);
+    /* 歌詞軌道系統 - 點擊展開 */
+    #lyric-orbit-container { position: absolute; inset: 0; pointer-events: none; }
+    .lyric-card {
+      position: absolute; width: 240px; pointer-events: auto;
+      background: rgba(15, 20, 35, 0.85); border: 1px solid rgba(159, 255, 230, 0.2);
+      border-radius: 12px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 15px; overflow: hidden;
     }
-
-    #main-title{
-      animation: title-float 9s ease-in-out infinite,
-                 title-shimmer 10s ease-in-out infinite;
+    .lyric-card.expanded {
+      width: 300px; background: rgba(20, 30, 50, 0.95);
+      border-color: var(--accent); z-index: 500 !important;
     }
-    @keyframes title-float{
-      0%,100%{ transform:translateY(0); }
-      50%{ transform:translateY(-8px); }
+    .lyric-title { 
+      font-size: 0.8rem; color: var(--accent); font-weight: bold; 
+      letter-spacing: 2px; cursor: pointer; display: flex; justify-content: space-between;
     }
-
-    /* ---------------------------------- */
-    /* 3. 表盤 */
-    /* ---------------------------------- */
-    #clock-interface{
-      width:var(--clock-size);
-      height:var(--clock-size);
-      border-radius:50%;
-      position:relative;
-      display:grid;
-      place-items:center;
-
-      background:
-        radial-gradient(circle at 50% 45%, #1b1a23 0%, #0a0a0f 56%, #050509 100%);
-      box-shadow:
-        0 40px 120px rgba(0,0,0,.65),
-        0 0 70px rgba(114,245,255,.18),
-        inset 0 0 0 1px rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      transition: transform .6s ease;
-      isolation:isolate;
+    .lyric-content {
+      max-height: 0; opacity: 0; margin-top: 0;
+      font-family: "Cormorant Garamond", serif; font-size: 0.95rem;
+      line-height: 1.5; color: #fff; transition: all 0.5s ease;
+      white-space: pre-line;
     }
-
-    #clock-interface::before{
-      content:"";
-      position:absolute; inset:-10px;
-      border-radius:50%;
-      background:
-        conic-gradient(from 0deg,
-          rgba(207,216,255,.0),
-          rgba(207,216,255,.5),
-          rgba(159,255,230,.25),
-          rgba(207,216,255,.0));
-      filter: blur(8px);
-      opacity:.7;
-      z-index:-1;
-    }
-
-    .clock-face{
-      width:92%;
-      height:92%;
-      border-radius:50%;
-      position:relative;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(10,12,18,.9), rgba(5,6,9,.98));
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.07),
-        inset 0 0 40px rgba(0,0,0,.9);
-      overflow:hidden;
-    }
-
-    .clock-face::after{
-      content:"";
-      position:absolute; inset:7%;
-      border-radius:50%;
-      background:
-        repeating-conic-gradient(
-          from -90deg,
-          rgba(255,255,255,.0) 0 6deg,
-          rgba(255,255,255,.08) 6deg 6.6deg
-        );
-      mask: radial-gradient(circle, transparent 58%, #000 60%);
-      opacity:.45;
-      pointer-events:none;
-    }
-
-    /* ---------------------------------- */
-    /* 4. 玫瑰＆指針 */
-    /* ---------------------------------- */
-    #rose-container{
-      position:absolute;
-      width:var(--rose-size);
-      height:var(--rose-size);
-      inset:calc(50% - var(--rose-size)/2);
-      z-index:3;
-      display:grid;
-      place-items:center;
-      animation: rose-breathe 6s ease-in-out infinite;
-    }
-    @keyframes rose-breathe{
-      0%,100%{transform:translateZ(0) scale(1); opacity:1;}
-      50%{transform:translateZ(0) scale(1.04); opacity:.96;}
-    }
-    #fendala-rose{
-      width:100%; height:100%;
-      object-fit:contain;
-      transition: transform .6s ease, filter .6s ease, opacity .4s ease;
-      filter:
-        drop-shadow(0 0 12px rgba(159,255,230,.55))
-        saturate(1.05);
-      opacity: 0; /* 直接隱藏，只給 JS 用狀態 class */
-    }
-
-    .rose-unopened{ filter: drop-shadow(0 0 10px rgba(159,255,230,.45)) saturate(1.0); }
-    .rose-dead{ filter: grayscale(.7) brightness(.9) drop-shadow(0 0 6px rgba(207,216,255,.25)); transform:rotate(-4deg) scale(.98); }
-    .rose-emo{ filter: hue-rotate(310deg) saturate(1.3) drop-shadow(0 0 16px rgba(180,120,255,.55)); transform:rotate(2deg) scale(1.03); }
-    .rose-charging{ filter: hue-rotate(40deg) saturate(1.25) drop-shadow(0 0 16px rgba(255,220,120,.5)); transform:scale(1.06); }
-    .rose-learning{ filter: hue-rotate(160deg) saturate(1.4) drop-shadow(0 0 18px rgba(114,245,255,.6)); transform:scale(1.08); }
-
-    #pointer-hand{
-      position:absolute;
-      width:var(--pointer-width);
-      height:var(--pointer-height);
-      top:6%;
-      left:calc(50% - var(--pointer-width)/2);
-      transform-origin:bottom center;
-      background:
-        linear-gradient(to top,
-          rgba(114,245,255,.9),
-          rgba(255,255,255,.65),
-          rgba(0,0,0,0));
-      border-radius:999px;
-      box-shadow:
-        0 0 18px rgba(114,245,255,.7),
-        0 0 35px rgba(159,255,230,.35);
-      transition: transform .7s cubic-bezier(.2,.8,.2,1);
-      z-index:5;
-      pointer-events:none;
-    }
-/* 播放時：讓指針跟著唱片一起轉 */
-@keyframes pointer-spin{
-  to { transform: rotate(360deg); }
-}
-
-/* main-container 有 is-playing class 時，指針開始慢速旋轉 */
-#main-container.is-playing #pointer-hand{
-  animation: pointer-spin 24s linear infinite;
-}
-
-    /* ---------------------------------- */
-    /* 5. 狀態點 */
-    /* ---------------------------------- */
-    .status-point{
-      position:absolute;
-      width:var(--point-size);
-      height:var(--point-size);
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      text-decoration:none;
-      color:var(--ink);
-
-      background:
-        radial-gradient(circle at 30% 25%,
-          rgba(255,255,255,.20),
-          rgba(255,255,255,0) 45%),
-        linear-gradient(160deg, rgba(16,18,30,.9), rgba(6,8,14,.9));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.06),
-        inset 0 -10px 30px rgba(0,0,0,.7),
-        0 8px 28px rgba(0,0,0,.65),
-        0 0 22px rgba(114,245,255,.25);
-      backdrop-filter: blur(6px) saturate(1.1);
-      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
-      cursor:pointer;
-      z-index:6;
-    }
-
-    #point-12{ top:3%; left:calc(50% - var(--point-size)/2); }
-    #point-3{ right:3%; top:calc(50% - var(--point-size)/2); }
-    #point-6{ bottom:3%; left:calc(50% - var(--point-size)/2); }
-    #point-9{ left:3%; top:calc(50% - var(--point-size)/2); }
-
-    .status-point:hover{
-      transform: translateY(-2px) scale(1.12);
-      border-color: rgba(159,255,230,.7);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.08),
-        0 12px 40px rgba(0,0,0,.7),
-        0 0 38px rgba(114,245,255,.45);
-    }
-
-    .status-point:focus-visible{
-      outline:none;
-      box-shadow:
-        0 0 0 3px rgba(114,245,255,.6),
-        0 0 0 8px rgba(114,245,255,.15),
-        inset 0 0 0 1px rgba(255,255,255,.1);
-    }
-
-    .status-point .label{
-      font-size:clamp(.86rem, 2.6vw, 1rem);
-      font-weight:700;
-      letter-spacing:.08em;
-      text-align:center;
-      line-height:1.15;
-      text-shadow:
-        0 0 12px rgba(114,245,255,.45),
-        0 0 1px rgba(255,255,255,.9);
-    }
-
-    .active-point{
-      background:
-        radial-gradient(circle at 30% 25%,
-          rgba(255,255,255,.28),
-          rgba(255,255,255,0) 45%),
-        linear-gradient(160deg, rgba(10,32,38,.95), rgba(4,8,14,.95));
-      border-color: rgba(114,245,255,.8);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.12),
-        0 0 50px rgba(114,245,255,.55),
-        0 10px 35px rgba(0,0,0,.7);
-    }
-
-    /* ---------------------------------- */
-    /* 6. 影片變成表盤中央的黑膠視窗       */
-    /* ---------------------------------- */
-    #video-player-container{
-      position:absolute;
-      width: var(--rose-size);
-      height: var(--rose-size);
-      inset: calc(50% - var(--rose-size)/2);
-      border-radius: 50%;
-      overflow:hidden;
-      display:grid;
-      place-items:center;
-
-      background: radial-gradient(circle at 30% 20%,
-        rgba(255,255,255,.15),
-        rgba(6,8,14,1) 55%);
-
-      border:1px solid rgba(255,255,255,.22);
-      box-shadow:
-        inset 0 0 18px rgba(0,0,0,.9),
-        0 0 28px rgba(114,245,255,.45),
-        0 16px 40px rgba(0,0,0,.85);
-      backdrop-filter: blur(8px) saturate(1.15);
-      z-index: 4;
-      cursor:pointer;
-    }
-
-    #moonlight-video{
-      width:120%;
-      height:120%;
-      object-fit:cover;
-      display:block;
-      transform: scale(1.02);
-      filter: contrast(1.08) saturate(1.1);
-      transition: opacity .3s ease, transform .8s ease;
-      pointer-events:none; /* 點整個 container 就好 */
-    }
-
-    .is-playing #moonlight-video{
-      transform: scale(1.08) rotate(0.4deg);
-    }
-
-    #play-overlay{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      background: radial-gradient(circle at center,
-        rgba(0,0,0,.15),
-        rgba(0,0,0,.55));
-      transition: opacity .3s ease;
-      pointer-events:none;
-    }
-    #video-player-container.playing #play-overlay{
-      opacity:0;
-    }
-
-    .play-button{
-      width:64px; height:64px;
-      display:grid; place-items:center;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,.4);
-      background:
-        radial-gradient(circle at 35% 30%,
-          rgba(255,255,255,.95),
-          rgba(159,255,230,.95) 50%,
-          rgba(114,245,255,.95) 100%);
-      color:#041015;
-      font-size:1.8rem;
-      box-shadow:
-        0 10px 25px rgba(0,0,0,.7),
-        0 0 34px rgba(114,245,255,.9);
-      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
-      pointer-events:auto;
-    }
-    .play-button:hover{
-      transform: translateY(-1px) scale(1.08);
-      box-shadow:
-        0 14px 38px rgba(0,0,0,.8),
-        0 0 50px rgba(114,245,255,1);
-      filter: brightness(1.05);
-    }
-/* ---------------------------------- */
-/* Lyrics Bookmarks：捲軸歌詞清單（響應式） */
-/* ---------------------------------- */
-
-#lyrics-bookmarks{
-  position: relative;
-  z-index: 5;
-  margin: 64px auto 120px;
-  max-width: min(640px, 94vw);
-  padding: 0 16px;
-  pointer-events: auto;
-}
-
-.bookmark-cloud{
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* 整個捲軸按鈕 */
-.bookmark-card{
-  position: relative;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  opacity: 0;
-  transform: translateY(24px) scale(0.97);
-  transition:
-    opacity .5s ease,
-    transform .5s ease;
-}
-    /* body 加上 lyrics-ready class 後，捲軸淡入滑上來 */
-body.lyrics-ready .bookmark-card{
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* 做一點階梯延遲，讓它一卷一卷浮出來 */
-.bookmark-card:nth-child(1){ transition-delay: .00s; }
-.bookmark-card:nth-child(2){ transition-delay: .05s; }
-.bookmark-card:nth-child(3){ transition-delay: .10s; }
-.bookmark-card:nth-child(4){ transition-delay: .15s; }
-.bookmark-card:nth-child(5){ transition-delay: .20s; }
-.bookmark-card:nth-child(6){ transition-delay: .25s; }
-
-/* 展開時：捲軸微微抬起、光暈變強 */
-.bookmark-card.is-open .bookmark-inner{
-  transform: translateY(-3px);
-  box-shadow: 0 26px 60px rgba(0,0,0,.95);
-  border-color: rgba(114,245,255,.95);
-}
-
-.bookmark-card:focus-visible{
-  outline: 2px solid var(--accent-1, rgba(114,245,255,.9));
-  outline-offset: 4px;
-}
-
-/* 捲軸外框 */
-.bookmark-inner{
-  position: relative;
-  width: 100%;
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(255,255,255,.10), transparent 55%),
-    radial-gradient(circle at 100% 0%, rgba(159,255,230,.12), transparent 55%),
-    linear-gradient(180deg, rgba(10,16,26,.98), rgba(3,8,14,.98));
-  border: 1px solid rgba(159,255,230,.5);
-  box-shadow: 0 18px 40px rgba(0,0,0,.78);
-  overflow: hidden;
-  transition:
-    box-shadow .25s ease,
-    transform .25s ease,
-    border-color .25s ease;
-/* 捲軸上方的極光光帶 */
-
-
-  /* 捲軸上方的極光光帶 */
-/* ===== 捲軸卡片：雙極光交錯光帶 ===== */
-
-/* 第一條：偏青綠色的主極光 */
-.bookmark-inner::before{
-  content:"";
-  position:absolute;
-  inset:-45%;
-  background:
-    linear-gradient(120deg,
-      transparent 0%,
-      rgba(114,245,255,0.00) 10%,
-      rgba(114,245,255,0.22) 26%,
-      rgba(159,255,230,0.30) 40%,
-      rgba(207,216,255,0.26) 54%,
-      rgba(159,255,230,0.14) 68%,
-      transparent 84%,
-      transparent 100%);
-  opacity:.55;
-  mix-blend-mode:screen;
-  filter: blur(7px);
-  transform: translate3d(-35%, -18%, 0) rotate(10deg);
-  pointer-events:none;
-  animation: aurora-slide-1 11s ease-in-out infinite alternate;
-}
-
-/* 第二條：偏紫金色的輔極光（角度相反，速度不同） */
-.bookmark-inner::after{
-  content:"";
-  position:absolute;
-  inset:-40%;
-  background:
-    linear-gradient(-130deg,
-      transparent 0%,
-      rgba(180,120,255,0.00) 12%,
-      rgba(180,120,255,0.22) 32%,
-      rgba(255,220,170,0.26) 46%,
-      rgba(159,255,230,0.18) 60%,
-      rgba(114,245,255,0.10) 72%,
-      transparent 88%,
-      transparent 100%);
-  opacity:.45;
-  mix-blend-mode:screen;
-  filter: blur(8px);
-  transform: translate3d(28%, -10%, 0) rotate(-6deg);
-  pointer-events:none;
-  animation: aurora-slide-2 13s ease-in-out infinite alternate-reverse;
-}
-
-/* hover / 展開時，兩條光帶都亮一點 */
-.bookmark-card:hover .bookmark-inner::before,
-.bookmark-card.is-open .bookmark-inner::before,
-.bookmark-card:hover .bookmark-inner::after,
-.bookmark-card.is-open .bookmark-inner::after{
-  opacity:.95;
-}
-
-/* 第一條極光的路徑 */
-@keyframes aurora-slide-1{
-  0%{
-    transform: translate3d(-42%, -22%, 0) rotate(12deg);
-  }
-  50%{
-    transform: translate3d(-6%, 4%, 0) rotate(4deg);
-  }
-  100%{
-    transform: translate3d(26%, -14%, 0) rotate(-4deg);
-  }
-}
-/* 第二條極光的路徑（路徑、節奏都不一樣） */
-@keyframes aurora-slide-2{
-  0%{
-    transform: translate3d(30%, -18%, 0) rotate(-10deg);
-  }
-  40%{
-    transform: translate3d(-4%, -4%, 0) rotate(-2deg);
-  }
-  100%{
-    transform: translate3d(-28%, 10%, 0) rotate(6deg);
-  }
-}
-/* hover 時讓極光稍微變亮 */
-.bookmark-card:hover .bookmark-inner::before,
-.bookmark-card.is-open .bookmark-inner::before{
-  opacity:.9;
-}
-
-/* 極光滑動動畫 */
-@keyframes aurora-slide{
-  0%{
-    transform: translate3d(-35%, -16%, 0) rotate(8deg);
-  }
-  50%{
-    transform: translate3d(0%, 4%, 0) rotate(2deg);
-  }
-  100%{
-    transform: translate3d(28%, -12%, 0) rotate(-6deg);
-  }
-}
-
-}
-    
-
-.bookmark-card:hover .bookmark-inner{
-  box-shadow: 0 22px 52px rgba(0,0,0,.9);
-  transform: translateY(-2px);
-  border-color: rgba(114,245,255,.9);
-}
-
-/* 捲軸上下的圓邊效果 */
-.bookmark-scroll-cap{
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 12px;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 0 100%, rgba(255,255,255,.18), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(255,255,255,.18), transparent 55%),
-    linear-gradient(to right,
-      rgba(255,255,255,.08),
-      rgba(255,255,255,.02),
-      rgba(255,255,255,.08));
-}
-
-.bookmark-scroll-cap.top{
-  top: 0;
-  opacity: .8;
-}
-.bookmark-scroll-cap.bottom{
-  bottom: 0;
-  opacity: .7;
-}
-
-/* 捲軸「標題列」 */
-.bookmark-face{
-  position: relative;
-  padding: 16px 18px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* 原本的 tag / title / hint 繼續沿用 */
-.bookmark-tag{
-  font-family:"Orbitron", sans-serif;
-  font-size:.7rem;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color: rgba(231,247,247,.8);
-  text-shadow: 0 0 10px rgba(114,245,255,.4);
-}
-
-.bookmark-title{
-  font-family:"Cormorant Garamond", serif;
-  font-size:1.4rem;
-  letter-spacing:.12em;
-  text-transform:capitalize;
-  color:rgba(231,247,247,.95);
-}
-
-.bookmark-hint{
-  font-size:.75rem;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:rgba(231,247,247,.7);
-  opacity:.9;
-}
-
-/* 展開區（歌詞本體） */
-.bookmark-back{
-  padding: 4px 18px 16px;
-  border-top: 1px dashed rgba(159,255,230,.35);
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-4px);
-  overflow: hidden;
-  transition:
-    max-height .35s ease,
-    opacity .25s ease,
-    transform .35s ease;
-}
-
-.bookmark-section-label{
-  font-family:"Orbitron", sans-serif;
-  font-size:.7rem;
-  letter-spacing:.26em;
-  text-transform:uppercase;
-  color:rgba(231,247,247,.7);
-  margin-bottom:6px;
-}
-
-.bookmark-lyrics{
-  font-family:"Cormorant Garamond", serif;
-  font-size:.95rem;
-  letter-spacing:.03em;
-  line-height:1.6;
-  white-space:pre-line;
-  color:rgba(231,247,247,.94);
-  max-height: 260px;          /* 內容太長時，內部再滾動 */
-  overflow-y: auto;
-  scrollbar-width:none;
-}
-.bookmark-lyrics::-webkit-scrollbar{
-  display:none;
-}
-
-/* 展開狀態：捲軸打開 */
-.bookmark-card.is-open .bookmark-back{
-  max-height: 260px;          /* 可視需要調大，例如 50vh */
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 手機版優化 */
-@media (max-width: 600px){
-  #lyrics-bookmarks{
-    margin: 40px auto 80px;
-    padding: 0 12px;
-  }
-  .bookmark-inner{
-    border-radius: 18px;
-  }
-  .bookmark-title{
-    font-size: 1.2rem;
-  }
-}
-    /* 桌機版：捲軸繞著表盤轉一圈 */
-@media (min-width: 900px){
-  #lyrics-bookmarks{
-    position:absolute;
-    inset:0;
-    margin:0;
-    padding:0;
-    max-width:none;
-    pointer-events:none;      /* 先關掉容器的滑鼠事件 */
-  }
-
-  .bookmark-cloud{
-    position:relative;
-    width:100%;
-    height:100%;
-  }
-
-  .bookmark-card{
-    position:absolute;
-    width:clamp(220px, 22vw, 280px);  /* 比以前小很多，不會擋滿畫面 */
-    margin:0;
-    pointer-events:auto;              /* 卡片本身可以點 */
-    opacity:1;                        /* 直接顯示，由 JS 控制位置與縮放 */
-    transform:translate(-50%, -50%);
-  }
-}
-
-    /* Modal                              */
-    /* ---------------------------------- */
-    .modal-backdrop{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
-      backdrop-filter: blur(6px);
-      display:none;
-      place-items:center;
-      z-index:999;
-    }
-    .modal{
-      width:min(86vw, 420px);
-      background: var(--glass-strong);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 30px 90px rgba(0,0,0,.8), 0 0 40px rgba(114,245,255,.2);
-      padding:18px 18px 14px;
-      color:var(--ink);
-      transform: translateY(6px);
-      animation: modal-in .25s ease forwards;
-    }
-    @keyframes modal-in{ to { transform: translateY(0); opacity:1; } }
-    .modal h3{
-      margin:0 0 8px 0;
-      font-size:1.1rem;
-      letter-spacing:.12em;
-    }
-    .modal p{
-      margin:0 0 14px 0;
-      color:var(--ink-dim);
-      font-size:.95rem;
-      line-height:1.6;
-      letter-spacing:.04em;
-    }
-    .modal .actions{
-      display:flex; justify-content:flex-end; gap:8px;
-    }
-    .modal button{
-      font-family:"Orbitron", sans-serif;
-      background:rgba(159,255,230,.12);
-      color:var(--ink);
-      border:1px solid rgba(159,255,230,.4);
-      padding:8px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-    .modal button:hover{
-      background:rgba(159,255,230,.2);
-      border-color:rgba(114,245,255,.8);
-      transform: translateY(-1px);
-    }
-
-    /* ---------------------------------- */
-    /* 減少動態偏好                       */
-    /* ---------------------------------- */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation:none !important; transition:none !important; }
-    }
-
-    /* Three.js 粒子背景容器 */
-    #particle-bg{
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
-    }
-    #main-container,
-    .modal-backdrop{
-      position:relative;
-      z-index:2;
-    }
+    .expanded .lyric-content { max-height: 200px; opacity: 1; margin-top: 12px; }
   </style>
 </head>
-
 <body>
-  <div id="particle-bg" aria-hidden="true"></div>
 
-  <div id="main-container" aria-live="polite">
-    <h1 id="main-title">
-      <span class="studio">Shirley’s AI Music Studio</span>
-      <small>月光奏鳴曲</small>
-    </h1>
+  <div id="particle-bg"></div>
 
-    <section id="clock-interface" aria-label="狀態表盤">
-      <div class="clock-face">
-
-        <div id="rose-container" aria-hidden="true">
-          <img id="fendala-rose"
-               src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/rose%20unopened.png"
-               alt="玫瑰狀態圖示">
-        </div>
-
-        <!-- 中央黑膠視窗播放器 -->
-        <section id="video-player-container" aria-label="月光奏鳴曲影片播放器">
-          <video id="moonlight-video" loop playsinline>
-            <source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-          <div id="play-overlay">
-            <button class="play-button" id="toggle-play" aria-label="播放/暫停">▶</button>
-          </div>
-        </section>
-
-        <div id="pointer-hand" aria-hidden="true"></div>
-
-        <a href="#" class="status-point" id="point-12" data-status="dead" data-angle="0" role="button" aria-label="狀態：擺爛中">
-          <span class="label">擺爛中</span>
-        </a>
-        <a href="#" class="status-point" id="point-3" data-status="emo" data-angle="90" role="button" aria-label="狀態：EMO中">
-          <span class="label">EMO中</span>
-        </a>
-        <a href="#" class="status-point" id="point-6" data-status="charging" data-angle="180" role="button" aria-label="狀態：充電中">
-          <span class="label">充電中</span>
-        </a>
-        <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="status-point active-point" id="point-9" data-status="learning" data-angle="270" aria-label="狀態：學習中（前往學習頁）">
-          <span class="label">學習中</span>
-        </a>
-
-      </div>
-    </section>
-
-  <!-- Lyrics Bookmarks：捲軸歌詞 -->
-<section id="lyrics-bookmarks" aria-label="Moonlight Sonata 歌詞書籤">
-  <div class="bookmark-cloud">
-
-    <!-- Verse 1 -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Verse 1</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Verse 1</div>
-          <div class="bookmark-lyrics">
-Close your eyes, let the tide of night pull you deep
-Where silver whispers through the willow weep
-Every worry, every weight you carry, set it free
-On this silent sea, just breathe
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
-    <!-- Pre-Chorus -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Pre-Chorus</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Pre-Chorus</div>
-          <div class="bookmark-lyrics">
-Feel the shadows soften, turning into silk
-As the constellations witness, spilling their light like milk
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
-    <!-- Chorus -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Chorus</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Chorus</div>
-          <div class="bookmark-lyrics">
-Luna, Luna, keeper of the quiet glow
-Washing over every secret that we know
-Luna, Luna, in your phosphorescent tide
-All our fractured pieces learn to rest inside
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
-    <!-- Verse 2 -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Verse 2</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Verse 2</div>
-          <div class="bookmark-lyrics">
-See the dust of stars on your windowpane
-A reminder that even darkness is not in vain
-It's a blanket, a cradle, a celestial embrace
-A sanctuary in this vast and silent space
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
-    <!-- Bridge -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Bridge</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Bridge</div>
-          <div class="bookmark-lyrics">
-Hush now
-The moon is listening
-All is understood
-In this velvet nothingness
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
-    <!-- Outro -->
-    <button class="bookmark-card" type="button" aria-expanded="false">
-      <div class="bookmark-inner">
-        <div class="bookmark-scroll-cap top"></div>
-
-        <div class="bookmark-face">
-          <div class="bookmark-tag">Moonlight Sonata</div>
-          <div class="bookmark-title">Outro</div>
-          <div class="bookmark-hint">點擊展開歌詞</div>
-        </div>
-
-        <div class="bookmark-back">
-          <div class="bookmark-section-label">Outro</div>
-          <div class="bookmark-lyrics">
-Luna, Luna, keeper of the quiet glow
-Washing over everything we know
-Luna, Luna, in your tender tide
-We are perfectly alight, inside
-          </div>
-        </div>
-
-        <div class="bookmark-scroll-cap bottom"></div>
-      </div>
-    </button>
-
+  <div id="header">
+    <h1 id="main-title">SHIRLEY'S AI MUSIC STUDIO</h1>
+    <div id="sub-title">月光奏鳴曲</div>
   </div>
-</section>
 
-
-    <!-- Modal -->
-    <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="modal">
-        <h3 id="modal-title">Status</h3>
-        <p id="modal-desc">內容</p>
-        <div class="actions">
-          <button id="modal-ok">OK</button>
-        </div>
-      </div>
+  <div id="clock-container">
+    <div class="clock-outer"></div>
+    <div id="hand"></div>
+    <a href="#" class="nav-node" id="node-emo" onmouseenter="setHand(-90)">EMO 擺爛中</a>
+    <div id="record" onclick="togglePlay()">
+      <video id="v" loop playsinline><source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4"></video>
     </div>
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-node" id="node-study" onmouseenter="setHand(90)">充電學習中</a>
   </div>
 
-  <!-- 狀態＋播放器 JS -->
-  <script>
-  (() => {
-    'use strict';
+  <div id="lyric-orbit-container"></div>
 
-    console.log("[Moonlight] init script");
-
-    const mainContainer        = document.getElementById('main-container');
-    const roseElement          = document.getElementById('fendala-rose');
-    const pointerHand          = document.getElementById('pointer-hand');
-    const statusPoints         = document.querySelectorAll('.status-point');
-    const videoPlayerContainer = document.getElementById('video-player-container');
-    const videoElement         = document.getElementById('moonlight-video');
-    const togglePlayButton     = document.getElementById('toggle-play');
-
-    const modalBackdrop = document.getElementById('modal-backdrop');
-    const modalTitle    = document.getElementById('modal-title');
-    const modalDesc     = document.getElementById('modal-desc');
-    const modalOk       = document.getElementById('modal-ok');
-
-    if (!videoElement || !togglePlayButton || !videoPlayerContainer) {
-      console.warn("[Moonlight] video element not found");
-      return;
-    }
-
-    const statusAngles = { dead: 0, emo: 90, charging: 180, learning: 270 };
-    const statusText = {
-      dead: "擺爛中",
-      emo: "EMO中",
-      charging: "充電中",
-      learning: "學習中"
-    };
-    const statusDesc = {
-      dead: "進入低能量模式，暫停輸出，保留餘裕。",
-      emo: "情緒沉澱中，讓音樂陪我走一段路。",
-      charging: "補給能量中，緩慢回到最佳狀態。",
-      learning: "吸收新知與靈感，準備下一次綻放。"
-    };
-
-    const defaultAngle = 0;
-
-    function setRose(status){
-      roseElement.className = "";
-      roseElement.classList.add(`rose-${status}`);
-    }
-
-    function openModal(status){
-      modalTitle.textContent = statusText[status] || "Status";
-      modalDesc.textContent  = statusDesc[status] || "";
-      modalBackdrop.style.display = "grid";
-      modalBackdrop.setAttribute("aria-hidden","false");
-      modalOk.focus();
-    }
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-      modalBackdrop.setAttribute("aria-hidden","true");
-    }
-
-    modalOk.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e)=>{
-      if(e.target === modalBackdrop) closeModal();
-    });
-
-    // 初始化玫瑰
-    roseElement.className = "";
-    roseElement.classList.add("rose-unopened");
-
-    // 狀態點互動
-    statusPoints.forEach(point => {
-      const status      = point.dataset.status;
-      const targetAngle = statusAngles[status];
-
-      const hoverIn = () => {
-        if (videoElement.paused) {
-          pointerHand.style.transform = `rotate(${targetAngle}deg)`;
-          setRose(status);
-        }
-      };
-      const hoverOut = () => {
-        if (videoElement.paused) {
-          pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
-          roseElement.className = "";
-          roseElement.classList.add("rose-unopened");
-        }
-      };
-
-      point.addEventListener("mouseover", hoverIn);
-      point.addEventListener("mouseout",  hoverOut);
-      point.addEventListener("focus",     hoverIn);
-      point.addEventListener("blur",      hoverOut);
-
-      point.addEventListener("click", (e) => {
-        if (status !== "learning") {
-          e.preventDefault();
-          if (!videoElement.paused) videoElement.pause();
-          openModal(status);
-        }
-      });
-    });
-
-    // 播放/暫停邏輯
-    const togglePlay = () => {
-      if (videoElement.paused) {
-        videoElement.play().catch(err => {
-          console.warn("[Moonlight] play() failed:", err);
-          openModal("emo");
-        });
-      } else {
-        videoElement.pause();
-      }
-    };
-
-    // 點按鈕
-    togglePlayButton.addEventListener("click", (e) => {
-      e.stopPropagation();
-      togglePlay();
-    });
-
-    // 點整個圓盤
-    videoPlayerContainer.addEventListener("click", (e) => {
-      // 上面已經處理按鈕了
-      if (e.target === togglePlayButton) return;
-      togglePlay();
-    });
-
-    // 影片事件
-    videoElement.addEventListener("play", () => {
-      togglePlayButton.textContent = "⏸";
-      videoPlayerContainer.classList.add("playing");
-      mainContainer.classList.add("is-playing");
-      pointerHand.style.transform = `rotate(${statusAngles.emo}deg)`;
-      setRose("emo");
-    });
-
-    videoElement.addEventListener("pause", () => {
-      togglePlayButton.textContent = "▶";
-      videoPlayerContainer.classList.remove("playing");
-      mainContainer.classList.remove("is-playing");
-      pointerHand.style.transform = `rotate(${defaultAngle}deg)`;
-      roseElement.className = "";
-      roseElement.classList.add("rose-unopened");
-    });
-
-    console.log("[Moonlight] init done");
-  })();
-  </script>
-<script>
-  // 捲軸：展開/收起 + 桌機軌道繞圈
-  document.addEventListener("DOMContentLoaded", () => {
-    const cards = Array.from(document.querySelectorAll(".bookmark-card"));
-    if (!cards.length) return;
-
-    // 1. 捲軸展開 / 收起（同時間只打開一卷）
-    cards.forEach(card => {
-      const setOpenState = (targetCard, isOpen) => {
-        targetCard.classList.toggle("is-open", isOpen);
-        targetCard.setAttribute("aria-expanded", isOpen ? "true" : "false");
-        const hint = targetCard.querySelector(".bookmark-hint");
-        if (hint) {
-          hint.textContent = isOpen ? "點擊收起歌詞" : "點擊展開歌詞";
-        }
-      };
-
-      card.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const willOpen = !card.classList.contains("is-open");
-
-        // 先把其他捲軸關掉
-        cards.forEach(c => {
-          if (c !== card) setOpenState(c, false);
-        });
-        // 再切換這一卷
-        setOpenState(card, willOpen);
-      });
-
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          card.click();
-        }
-      });
-    });
-
-    // 2. 桌機版：捲軸繞著表盤轉一圈
-    const clock = document.getElementById("clock-interface");
-    let frameId = null;
-    let orbitActive = false;
-
-    function resetCardsLayout() {
-      // 回到直式版要把 inline style 清掉
-      cards.forEach(card => {
-        card.style.left = "";
-        card.style.top = "";
-        card.style.transform = "";
-        card.style.zIndex = "";
-      });
-    }
-
-    function stopOrbit() {
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-        frameId = null;
-      }
-      orbitActive = false;
-      resetCardsLayout();
-    }
-
-    function startOrbit() {
-      if (!clock || orbitActive) return;
-      orbitActive = true;
-
-      const startTime = performance.now();
-
-      const animate = (now) => {
-        // 視窗變窄就自動停用軌道，回到直式
-        if (window.innerWidth < 900) {
-          stopOrbit();
-          return;
-        }
-
-        const t = (now - startTime) * 0.00006; // 速度（數字越大越快）
-        const rect = clock.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-
-        // 軌道半徑：跟表盤與視窗大小綁在一起，避免太大
-        const baseR = rect.width * 0.78;
-        const maxR  = Math.min(window.innerWidth, window.innerHeight) * 0.60;
-        const radius = Math.min(baseR, maxR);
-
-        const step = (Math.PI * 2) / cards.length;
-
-        cards.forEach((card, i) => {
-          const angle = t + i * step;
-
-          const x = cx + radius * Math.cos(angle);
-          const y = cy + radius * Math.sin(angle);
-
-          // 依照位置調整深度：在「前面」的比較亮、比較大
-          const depth = (Math.sin(angle) + 1) / 2; // 0 ~ 1
-          const scale = 0.85 + depth * 0.2;        // 0.85 ~ 1.05
-          const z     = 10 + Math.round(depth * 10);
-
-          card.style.left = x + "px";
-          card.style.top  = y + "px";
-          card.style.transform = `translate(-50%, -50%) scale(${scale})`;
-          card.style.zIndex = String(z);
-        });
-
-        frameId = requestAnimationFrame(animate);
-      };
-
-      frameId = requestAnimationFrame(animate);
-    }
-
-    function handleLayout() {
-      if (window.innerWidth >= 900) {
-        // 桌機：啟動軌道
-        if (!orbitActive) startOrbit();
-      } else {
-        // 手機 / 平板：停用軌道，回到直式捲軸
-        stopOrbit();
-      }
-    }
-
-    handleLayout();
-    window.addEventListener("resize", () => {
-      // 簡單處理，直接重新判斷一次
-      handleLayout();
-    });
-  });
-</script>
-  <!-- Three.js 粒子背景 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-  (() => {
-    'use strict';
+    // 1. 粒子背景
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);
+    camera.position.z = 400;
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('particle-bg').appendChild(renderer.domElement);
 
-    const NUM_PARTICLES      = 10000;
-    const SPHERE_RADIUS      = 100;
-    const MOUSE_REPEL_RADIUS = 60;
-    const REPEL_STRENGTH     = 1.5;
-    const DAMPING            = 0.94;
+    const geo = new THREE.BufferGeometry();
+    const pArr = new Float32Array(3000 * 3);
+    for(let i=0; i<9000; i++) pArr[i] = (Math.random()-0.5) * 850;
+    geo.setAttribute('position', new THREE.BufferAttribute(pArr, 3));
+    const mat = new THREE.PointsMaterial({ color: 0x9fffe6, size: 1.5, transparent: true, opacity: 0.3 });
+    const particles = new THREE.Points(geo, mat);
+    scene.add(particles);
 
-    let scene, camera, renderer;
-    let particles, positions, velocities;
-    const mousePos = new THREE.Vector2();
-
-    function initParticlesBG() {
-      scene  = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-      camera.position.z = 200;
-
-      renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-      renderer.setSize(innerWidth, innerHeight);
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-      renderer.setClearColor(0x000000, 0);
-
-      document.getElementById("particle-bg").appendChild(renderer.domElement);
-      createParticles();
-
-      addEventListener("mousemove", onMouseMove);
-      addEventListener("resize", onWindowResize);
-    }
-
-    function createParticles() {
-      const geometry = new THREE.BufferGeometry();
-      positions  = new Float32Array(NUM_PARTICLES * 3);
-      velocities = Array(NUM_PARTICLES).fill(0).map(()=>new THREE.Vector3());
-
-      for(let i=0;i<NUM_PARTICLES;i++){
-        const i3  = i*3;
-        const phi = Math.acos(Math.random()*2-1);
-        const theta = Math.random()*Math.PI*2;
-
-        positions[i3]     = SPHERE_RADIUS * Math.sin(phi) * Math.cos(theta);
-        positions[i3 + 1] = SPHERE_RADIUS * Math.sin(phi) * Math.sin(theta);
-        positions[i3 + 2] = SPHERE_RADIUS * Math.cos(phi);
-      }
-
-      geometry.setAttribute("position", new THREE.BufferAttribute(positions,3));
-      const material = new THREE.PointsMaterial({
-        color:0x00ffff, size:0.5, transparent:true, opacity:0.8, depthWrite:false
-      });
-
-      particles = new THREE.Points(geometry, material);
-      scene.add(particles);
-    }
-
-    function onMouseMove(e){
-      mousePos.x = (e.clientX/innerWidth)*2-1;
-      mousePos.y = -(e.clientY/innerHeight)*2+1;
-    }
-
-    function updateParticles(){
-      const arr = particles.geometry.attributes.position.array;
-
-      let vector = new THREE.Vector3(mousePos.x, mousePos.y, 0.5).unproject(camera);
-      const dir  = vector.sub(camera.position).normalize();
-      const distance = -camera.position.z / dir.z;
-      const mouse3D  = camera.position.clone().add(dir.multiplyScalar(distance));
-
-      for(let i=0;i<NUM_PARTICLES;i++){
-        const i3  = i*3;
-        const pos = new THREE.Vector3(arr[i3],arr[i3+1],arr[i3+2]);
-        const vel = velocities[i];
-
-        const dvec = pos.clone().sub(mouse3D);
-        const d    = dvec.length();
-        if(d<MOUSE_REPEL_RADIUS){
-          const strength = REPEL_STRENGTH*(MOUSE_REPEL_RADIUS-d)/MOUSE_REPEL_RADIUS;
-          vel.add(dvec.normalize().multiplyScalar(strength));
-        }
-
-        vel.multiplyScalar(DAMPING);
-        pos.add(vel);
-
-        arr[i3]   = pos.x;
-        arr[i3+1] = pos.y;
-        arr[i3+2] = pos.z;
-      }
-
-      particles.geometry.attributes.position.needsUpdate=true;
-    }
-
-    function animateParticlesBG(){
-      requestAnimationFrame(animateParticlesBG);
-      updateParticles();
-      particles.rotation.y += 0.001;
+    function animate() {
+      requestAnimationFrame(animate);
+      particles.rotation.y += 0.0006;
       renderer.render(scene, camera);
     }
+    animate();
 
-    function onWindowResize(){
-      camera.aspect = innerWidth/innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
+    // 2. 歌詞軌道與展開邏輯
+    const lyricsData = [
+      { t: "Verse 1", c: "Close your eyes, let the tide of night pull you deep\nWhere silver whispers through the willow weep\nEvery worry, every weight you carry, set it free\nOn this silent sea, just breathe" },
+      { t: "Pre-Chorus", c: "Feel the shadows soften, turning into silk\nAs the constellations witness, spilling their light like milk" },
+      { t: "Chorus", c: "Luna, Luna, keeper of the quiet glow\nWashing over every secret that we know\nLuna, Luna, in your phosphorescent tide\nAll our fractured pieces learn to rest inside" },
+      { t: "Verse 2", c: "See the dust of stars on your windowpane\nA reminder that even darkness is not in vain\nIt's a blanket, a cradle, a celestial embrace" },
+      { t: "Bridge", c: "Hush now\nThe moon is listening\nAll is understood\nIn this velvet nothingness" },
+      { t: "Outro", c: "Luna, Luna, keeper of the quiet glow\nWashing over everything we know\nLuna, Luna, in your tender tide\nWe are perfectly alight, inside" }
+    ];
+
+    const container = document.getElementById('lyric-orbit-container');
+    const cards = lyricsData.map((data, i) => {
+      const card = document.createElement('div');
+      card.className = 'lyric-card';
+      card.innerHTML = `<div class="lyric-title"><span>${data.t}</span><span>＋</span></div><div class="lyric-content">${data.c}</div>`;
+      card.onclick = (e) => {
+        const isExp = card.classList.contains('expanded');
+        document.querySelectorAll('.lyric-card').forEach(c => c.classList.remove('expanded'));
+        if(!isExp) card.classList.add('expanded');
+        e.stopPropagation();
+      };
+      container.appendChild(card);
+      return card;
+    });
+
+    function updateOrbit() {
+      const time = Date.now() * 0.00015;
+      const centerX = window.innerWidth * 0.78;
+      const centerY = window.innerHeight * 0.5;
+      cards.forEach((card, i) => {
+        if(card.classList.contains('expanded')) return; // 展開時停止位移
+        const angle = time + (i * (Math.PI * 2 / cards.length));
+        const x = centerX + Math.cos(angle) * 120;
+        const y = centerY + Math.sin(angle) * 280;
+        const z = Math.sin(angle);
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
+        card.style.transform = `translate(-50%, -50%) scale(${0.85 + z * 0.15})`;
+        card.style.opacity = 0.5 + (z + 1) * 0.25;
+        card.style.zIndex = Math.round((z + 1) * 10);
+      });
+      requestAnimationFrame(updateOrbit);
     }
+    updateOrbit();
 
-    initParticlesBG();
-    animateParticlesBG();
-  })();
+    // 3. 基本控制
+    const v = document.getElementById('v');
+    const hand = document.getElementById('hand');
+    function togglePlay() { v.paused ? v.play() : v.pause(); }
+    function setHand(deg) { hand.style.transform = `rotate(${deg}deg)`; }
+    window.onclick = () => document.querySelectorAll('.lyric-card').forEach(c => c.classList.remove('expanded'));
   </script>
 </body>
 </html>
