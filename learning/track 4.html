@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning: Perfect Chapter | 學習中：完滿篇章</title>
+
+  <style>
+:root{
+  /* 完滿篇章主題色彩 - 書卷篇章 */
+  --parchment-dark: #0c0a0a;          /* 羊皮紙深褐 */
+  --chapter-brown: #1a1612;           /* 篇章褐色 */
+  --ink-blue: #2c3e50;                /* 墨跡藍黑 */
+  --page-gold: #8b7355;               /* 書頁金邊 */
+  --feather-gray: #d4c4b4;            /* 羽毛筆灰 */
+  --gold-leaf: #d4af37;               /* 金箔色 */
+  --paper-light: #f5f1e8;             /* 紙張淡黃 */
+  --ink-stain: #5d4037;               /* 墨漬深褐 */
+
+  --text-main:#f5f1e8;               /* 主文字羊皮紙色 */
+  --text-sub:#d4c4b4;                /* 次要文字羽毛筆色 */
+  --text-dark:#1a1612;               /* 卡片內深色文字 */
+
+  --card-border: rgba(139, 115, 85, 0.7);
+  --card-shadow: 0 18px 55px rgba(0,0,0,0.65);
+}
+
+    /* ---------------------------------- */
+    /* 2) 背景：書頁翻動＋墨跡渲染 */
+    /* ---------------------------------- */
+    @keyframes page-turn{
+      0%{background-position:0% 0%;}
+      100%{background-position:100% 100%;}
+    }
+body{
+  font-family: "Georgia", "Times New Roman", serif, "Microsoft JhengHei", sans-serif;
+  margin:0;
+  min-height:100vh;
+  line-height:1.7;
+  color:var(--text-main);
+  padding-top: 0;
+  background:
+    /* 書頁紋理背景 */
+    radial-gradient(1200px circle at 10% -20%, rgba(139, 115, 85, 0.15) 0%, rgba(0,0,0,0) 55%),
+    radial-gradient(900px circle at 85% 0%, rgba(212, 175, 55, 0.1) 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(800px circle at 50% 120%, rgba(93, 64, 55, 0.08) 0%, rgba(0,0,0,0) 65%),
+    /* 紙張紋理 */
+    linear-gradient(160deg, #0c0a0a 0%, #1a1612 35%, #2c3e50 70%, #0c0a0a 100%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%235d4037' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 300px 300px;
+  animation: page-turn 180s linear infinite;
+  position:relative;
+  overflow-x:hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* 減少GPU負載 */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+    /* ---------------------------------- */
+    /* ✅ 2.5) 完滿篇章主題圖 (右下角浮動) - 效能優化 */
+    /* ---------------------------------- */
+    @keyframes book-image-float{
+      0%,100%{transform:translate(0,0) scale(1); opacity:.85;}
+      50%{transform:translate(2px,-3px) scale(1.01); opacity:.9;}
+    }
+    #book-image{
+      position:fixed;
+      bottom: -15px;
+      right: -15px;
+      width: clamp(280px, 28vw, 380px);
+      opacity: .85;
+      z-index: -1;
+      pointer-events: none;
+      filter: drop-shadow(0 0 25px rgba(139, 115, 85, 0.5)) sepia(0.2) brightness(1.05);
+      animation: book-image-float 30s ease-in-out infinite alternate;
+      transform-origin: 50% 100%;
+      /* 效能優化 - 減少動畫複雜度 */
+      will-change: transform;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* 只在非行動裝置顯示圖片 */
+    @media (max-width: 768px) {
+      #book-image {
+        display: none;
+      }
+    }
+
+    /* ---------------------------------- */
+    /* 3) 墨跡點點背景（優化效能版本） */
+    /* ---------------------------------- */
+    @keyframes ink-blot{
+      0%{transform:scale(0.8) rotate(0deg); opacity:0;}
+      10%{opacity:0.4;}
+      90%{opacity:0.2;}
+      100%{transform:scale(1.2) rotate(5deg); opacity:0;}
+    }
+
+    .ink-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      /* 減少墨跡數量以優化效能 */
+      overflow: hidden;
+    }
+
+    .ink-blot {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, rgba(93, 64, 55, 0.3) 0%, rgba(44, 62, 80, 0.1) 70%, transparent 100%);
+      border-radius: 50%;
+      opacity: 0;
+      /* 使用硬體加速 */
+      transform: translateZ(0);
+      will-change: transform, opacity;
+      filter: blur(2px);
+    }
+
+    /* 書頁邊緣裝飾 */
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background: 
+        /* 書頁邊緣裝飾 */
+        linear-gradient(to right, transparent 95%, rgba(212, 175, 55, 0.05) 100%),
+        linear-gradient(to left, transparent 95%, rgba(212, 175, 55, 0.05) 100%),
+        linear-gradient(to bottom, transparent 97%, rgba(139, 115, 85, 0.03) 100%);
+      z-index:-2;
+      /* 效能優化 */
+      transform: translateZ(0);
+    }
+
+    /* ---------------------------------- */
+    /* 4) Header：書卷篇章風格 */
+    /* ---------------------------------- */
+    
+    #info-card-wrapper {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+
+      /* 書卷篇章效果 */
+      background: linear-gradient(
+        180deg,
+        rgba(26, 22, 18, 0.95) 0%,
+        rgba(44, 62, 80, 0.85) 100%
+      );
+
+      /* 減少模糊程度以提升效能 */
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+
+      /* 書卷邊框效果 */
+      border-bottom: 1px solid rgba(139, 115, 85, 0.4);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    #info-card {
+      width: 92%;
+      max-width: 1040px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: transparent; 
+      border: none;
+      padding: 12px 24px 8px 24px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 書頁翻動效果 */
+    #info-card-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(212, 175, 55, 0.08) 50%,
+        transparent 100%
+      );
+      transform: skewX(-15deg);
+      pointer-events: none;
+      animation: page-shine 20s infinite;
+    }
+    
+    @keyframes page-shine {
+      0% { left: -100%; opacity: 0; }
+      10% { opacity: 0.4; }
+      25% { left: 150%; opacity: 0; }
+      100% { left: 150%; opacity: 0; }
+    }
+
+    /* Header 內金箔裝飾 - 減少數量 */
+    @keyframes gold-fleck{
+      0%,100%{transform:translate(0,0) scale(1); opacity:.3;}
+      50%{transform:translate(1px,-1px) scale(1.1); opacity:.6;}
+    }
+    .gold-flecks{position:absolute; inset:0; pointer-events:none;}
+    .gold-flecks span{
+      position:absolute; width:6px; height:6px;
+      background: radial-gradient(circle, var(--gold-leaf) 0%, rgba(212, 175, 55, 0.5) 65%, transparent 72%);
+      box-shadow:0 0 8px 2px rgba(212, 175, 55, 0.5);
+      animation: gold-fleck 4s ease-in-out infinite;
+      will-change: transform, opacity;
+      border-radius: 50%;
+    }
+    .gold-flecks span:nth-child(1){top:15%; left:8%; animation-delay:.1s;}
+    .gold-flecks span:nth-child(2){top:40%; left:25%; animation-delay:1.1s;}
+    .gold-flecks span:nth-child(3){top:20%; left:45%; animation-delay:.6s;}
+    .gold-flecks span:nth-child(4){top:35%; left:65%; animation-delay:1.8s;}
+    .gold-flecks span:nth-child(5){top:25%; left:85%; animation-delay:.9s;}
+
+    /* Title / Author - 書法文字效果 */
+    #info-card h1{
+      text-align:center;
+      font-size:1.8em;
+      margin:0 0 4px 0;
+      color: #f5f1e8;
+      letter-spacing:.4px;
+      font-weight:900;
+      position:relative; z-index:2;
+      text-shadow: 0 3px 15px rgba(0,0,0,0.9), 0 0 8px rgba(139, 115, 85, 0.5);
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+    #info-card h2{
+      text-align:center;
+      font-size:0.95em;
+      margin:0 0 6px 0;
+      color: var(--feather-gray);
+      font-weight:600;
+      position:relative; z-index:2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 0 3px rgba(139, 115, 85, 0.4);
+      font-style: italic;
+    }
+
+    #music-box-container{
+      display:flex; flex-direction:column; align-items:center;
+      padding:4px 0 8px 0; /* 增加底部內距，讓播放器更突出 */
+      position:relative; z-index:2;
+    }
+    #music-box-container p{
+      margin:2px 0 8px 0; /* 增加間距 */
+      color:var(--gold-leaf); /* 使用金箔色更顯眼 */
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:0.95em;
+      text-shadow:0 1px 8px rgba(0,0,0,.85), 0 0 5px rgba(212, 175, 55, 0.4);
+    }
+
+    #music-player{
+      width:min(480px,90%);
+      border-radius:999px;
+      box-shadow:0 8px 18px rgba(0,0,0,.40), 0 0 15px rgba(212, 175, 55, 0.3); /* 添加金箔光暈 */
+      background:rgba(245, 241, 232, .98); /* 羊皮紙色背景 */
+      margin-bottom: 4px;
+    }
+
+    #info-card ul{
+      list-style:none; padding-left:0; margin:8px 0 0;
+      position:relative; z-index:2;
+      font-size: 0.85em;
+    }
+    #info-card li{
+      font-size:0.85em;
+      margin:4px 0;
+      padding-left:20px;
+      position:relative;
+      color: #f5f1e8;
+      text-shadow:0 2px 6px rgba(0,0,0,.95);
+      font-weight:500;
+    }
+    #info-card li::before{
+      content:"📖";
+      position:absolute; left:0; top:-1px;
+      color:var(--gold-leaf);
+      font-weight:900;
+      font-size: 0.9em;
+      text-shadow:0 0 8px rgba(212, 175, 55, 0.7);
+    }
+
+    /* ---------------------------------- */
+    /* 5) 導航列 - 書卷篇章主題 */
+    /* ---------------------------------- */
+   #page-nav{
+      width:100%;
+      background: rgba(12, 10, 10, 0.4); 
+      padding:10px 0;
+      text-align:center;
+      border-top: 1px solid rgba(139, 115, 85, 0.3);
+    }
+
+    #page-nav a{
+      text-decoration:none;
+      color:#f5f1e8;
+      padding:6px 12px;
+      margin:0 3px;
+      border-radius:6px; /* 改為書角圓角 */
+      transition:all .25s ease;
+      font-weight:700;
+      font-size:0.9em;
+      display:inline-block;
+      border:1px solid rgba(139, 115, 85, 0.3);
+      text-shadow:0 1px 4px rgba(0,0,0,.7);
+      background: rgba(139, 115, 85, 0.15);
+      will-change: transform, background-color;
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+    #page-nav a:hover,
+    #page-nav a.active{
+      background: rgba(212, 175, 55, 0.8);
+      color: var(--parchment-dark);
+      box-shadow:0 0 12px rgba(212, 175, 55, 0.5);
+      border-color: rgba(212, 175, 55, 0.7);
+      transform:translateY(-1px);
+      text-shadow:none;
+    }
+
+    /* ---------------------------------- */
+    /* 6) 內容容器：羊皮紙底色 */
+    /* ---------------------------------- */
+    #content-container{
+      width:90%;
+      max-width:1000px;
+      margin:12px auto 50px auto;
+      background: rgba(245, 241, 232, .97); /* 羊皮紙色 */
+      color: var(--text-dark);
+      padding:24px;
+      border-radius:12px; /* 書本圓角 */
+      box-shadow:0 15px 40px rgba(0,0,0,.25), 
+                 0 0 0 1px rgba(139, 115, 85, 0.2), 
+                 0 0 0 3px rgba(44, 62, 80, 0.1); /* 書本邊框效果 */
+      border:1px solid rgba(139, 115, 85, 0.4);
+      position: relative;
+      z-index: 1;
+      /* 紙張紋理 */
+      background-image: 
+        linear-gradient(rgba(139, 115, 85, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 115, 85, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .content-section{display:none;}
+    .section-header{
+      margin-top:0;
+      padding-bottom:8px;
+      border-bottom:3px solid var(--ink-blue);
+      color: #1a1612;
+      font-size:1.7em;
+      font-weight:800;
+      margin-bottom:22px;
+      letter-spacing:.2px;
+      font-family: "Georgia", "Times New Roman", serif;
+      position: relative;
+    }
+    .section-header::before {
+      content: "§";
+      position: absolute;
+      left: -25px;
+      color: var(--gold-leaf);
+      font-size: 1.2em;
+    }
+
+    /* ---------------------------------- */
+    /* 7) 歌詞「對齊雙欄表格」- 書本樣式 */
+    /* ---------------------------------- */
+    .lyric-section{
+      padding:14px;
+      margin-bottom:25px;
+      border:1.5px solid rgba(139, 115, 85, 0.3);
+      border-radius:8px;
+      box-shadow:0 6px 15px rgba(0,0,0,.08), inset 0 0 10px rgba(139, 115, 85, 0.05);
+      background:#fffdf9; /* 稍白的紙張色 */
+      overflow-x: auto;
+      position: relative;
+    }
+    .lyric-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--gold-leaf), var(--page-gold));
+      border-radius: 2px;
+    }
+
+    .lyrics-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      table-layout:fixed;
+      font-size:1em;
+      line-height:1.6;
+      min-width: 500px;
+    }
+    .lyrics-table colgroup col:first-child{width:50%;}
+    .lyrics-table colgroup col:last-child{width:50%;}
+
+    .lyrics-table th{
+      text-align:left;
+      padding:10px 12px;
+      background: linear-gradient(135deg, #f0ebe0, #e8e2d4);
+      color:#1a1612;
+      border-bottom:2px solid rgba(139, 115, 85, 0.3);
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size: 1em;
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+    .lyrics-table td{
+      vertical-align:top;
+      padding:8px 12px;
+      border-bottom:1px dashed rgba(139, 115, 85, 0.2);
+      word-wrap:break-word;
+      font-size: 0.95em;
+    }
+
+    .lyrics-table tr.section-row td{
+      background: rgba(139, 115, 85, 0.1);
+      font-weight:900;
+      color:#1a1612;
+      border-bottom:1px solid rgba(139, 115, 85, 0.25);
+      padding-top:12px;
+      padding-bottom:6px;
+      font-style: italic;
+    }
+
+    /* 最後一行不畫虛線 */
+    .lyrics-table tr:last-child td{border-bottom:none;}
+
+    /* ---------------------------------- */
+    /* 8) 其他卡片保留書卷篇章主題 */
+    /* ---------------------------------- */
+    .word-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+      gap:16px;
+      perspective:800px;
+    }
+    .flip-card{height:140px; position:relative;}
+    .flip-card-inner{
+      position:relative; width:100%; height:100%;
+      transition:transform .5s;
+      transform-style:preserve-3d;
+      box-shadow:0 5px 15px rgba(0,0,0,.12), 0 0 0 1px rgba(139, 115, 85, 0.2);
+      border-radius:8px;
+      will-change: transform;
+      transform: translateZ(0); /* 硬體加速 */
+    }
+    .flip-card:hover .flip-card-inner{transform:rotateY(180deg);}
+    .flip-card-front,.flip-card-back{
+      position:absolute; width:100%; height:100%;
+      backface-visibility:hidden;
+      border-radius:8px;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      padding:10px; box-sizing:border-box;
+      border:1px solid rgba(139, 115, 85, 0.2);
+      transform: translateZ(0); /* 硬體加速 */
+    }
+    .flip-card-front{
+      background:#fffdf9;
+      background-image: 
+        linear-gradient(rgba(139, 115, 85, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 115, 85, 0.03) 1px, transparent 1px);
+      background-size: 15px 15px;
+    }
+    .flip-card-back{
+      background: linear-gradient(135deg, var(--ink-blue), var(--chapter-brown));
+      color:#f5f1e8;
+      transform:rotateY(180deg);
+      font-size:.85em;
+      text-align:center;
+    }
+    .eng-word-front{
+      font-size:1.8em; font-weight:900; color:var(--ink-blue); margin-top:3px;
+    }
+
+    .rhetoric-device{
+      background:#fffdf9;
+      padding:16px;
+      margin-bottom:18px;
+      border-radius:8px;
+      border:1px solid rgba(139, 115, 85, 0.2);
+      border-left:6px solid var(--gold-leaf);
+      box-shadow:0 4px 12px rgba(0,0,0,.10);
+      transition:box-shadow .3s, transform .3s;
+      will-change: transform, box-shadow;
+      transform: translateZ(0); /* 硬體加速 */
+      background-image: 
+        linear-gradient(rgba(139, 115, 85, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 115, 85, 0.02) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .rhetoric-device:hover{
+      box-shadow:0 6px 15px rgba(0,0,0,.14);
+      transform:translateY(-2px);
+    }
+
+    .grammar-card{
+      background:#fffdf9;
+      padding:16px;
+      border-radius:8px;
+      margin-bottom:18px;
+      box-shadow:0 5px 15px rgba(0,0,0,.10);
+      border:1px solid rgba(139, 115, 85, 0.2);
+      border-left:6px solid;
+      transition:transform .25s;
+      will-change: transform;
+      transform: translateZ(0); /* 硬體加速 */
+      background-image: 
+        linear-gradient(rgba(139, 115, 85, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 115, 85, 0.02) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .grammar-card:hover{transform:translateY(-2px);}
+    .grammar-card h3{
+      margin-top:0; padding-bottom:4px;
+      border-bottom:1px dashed rgba(139, 115, 85, 0.3);
+      font-size:1.4em;
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+    .grammar-card.present-perfect-type{border-left-color:#8b7355;} /* 書頁金邊色 */
+    .grammar-card.past-perfect-type{border-left-color:#5d4037;} /* 墨漬深褐 */
+    .grammar-card.future-perfect-type{border-left-color:#d4af37;} /* 金箔色 */
+    .grammar-card.perfect-continuous-type{border-left-color:#2c3e50;} /* 墨跡藍黑 */
+    .grammar-card.mixed-perfect-type{border-left-color:#8b4513;} /* 深棕 */
+
+    #challenge-section-content textarea{
+      width:98%; min-height:48px; padding:6px; margin-bottom:12px;
+      font-size: 0.95em;
+      border:1px solid rgba(139, 115, 85, 0.3);
+      border-radius:4px;
+      background: rgba(255, 253, 249, 0.9);
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+
+    /* 填空練習樣式 */
+    .fill-in-the-blank input {
+      padding: 4px 8px;
+      margin: 0 4px;
+      border: 1px solid rgba(139, 115, 85, 0.4);
+      border-radius: 4px;
+      background: rgba(255, 253, 249, 0.9);
+      font-family: "Georgia", "Times New Roman", serif;
+      width: 120px;
+    }
+
+    /* 小尺寸時表格改直排避免擠 */
+    @media (max-width: 720px){
+      .lyrics-table, .lyrics-table tbody, .lyrics-table tr, .lyrics-table td, .lyrics-table th{
+        display:block; width:100%;
+      }
+      .lyrics-table th{
+        border-radius:6px 6px 0 0;
+      }
+      .lyrics-table td{
+        border-bottom:1px dashed rgba(139, 115, 85, 0.2);
+      }
+      .lyrics-table tr.section-row td{
+        border-radius:0;
+      }
+      .lyrics-table td:first-child{
+        font-weight:800;
+        color:#1a1612;
+        padding-bottom:4px;
+      }
+      .lyrics-table td:last-child{
+        padding-top:0;
+      }
+      #book-image {
+          display: none;
+      }
+      
+      /* 手機版 header 進一步簡化 */
+      #info-card-wrapper {
+        position: relative;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(26, 22, 18, 0.95);
+      }
+      
+      #info-card {
+        padding: 10px 16px 6px 16px;
+      }
+      
+      #info-card h1{
+        font-size: 1.5em;
+      }
+      
+      #info-card h2{
+        font-size: 0.85em;
+      }
+      
+      #music-player {
+        width: 95%;
+      }
+      
+      .gold-flecks{
+        display:none;
+      }
+      
+      #page-nav {
+        padding: 8px 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      #page-nav a {
+        padding: 5px 10px;
+        font-size: 0.85em;
+        margin: 0 2px;
+      }
+      
+      /* 手機版減少墨跡動畫 */
+      .ink-blot {
+        animation-duration: 2s !important;
+      }
+      
+      .section-header::before {
+        display: none;
+      }
+    }
+
+    /* 效能控制：為低效能裝置減少動畫 */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .ink-blot {
+        animation: none !important;
+        opacity: 0 !important;
+      }
+      
+      .gold-flecks span {
+        animation: none !important;
+      }
+      
+      #book-image {
+        animation: none !important;
+      }
+      
+      #info-card-wrapper::after {
+        animation: none !important;
+      }
+      
+      body {
+        animation: none !important;
+      }
+      
+      .flip-card-inner {
+        transition: none !important;
+      }
+    }
+
+    /* 效能優化：啟用硬體加速的元素 */
+    .performance-optimized {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000;
+    }
+
+    /* 添加效能控制開關的樣式 */
+    #performance-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(26, 22, 18, 0.8);
+      color: var(--gold-leaf);
+      border: none;
+      cursor: pointer;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(139, 115, 85, 0.3);
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+
+  </style>
+</head>
+
+<body>
+  <img id="book-image" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/perfect%20chapter.png" alt="完滿篇章主題插畫" aria-hidden="true" loading="lazy">
+  
+  <!-- 墨跡容器 -->
+  <div class="ink-container" id="ink-container"></div>
+
+  <div id="info-card-wrapper">
+    <div id="info-card">
+      <div class="gold-flecks" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span>
+      </div>
+
+      <h1>Song: Perfect Chapter | 完滿篇章</h1>
+      <h2>Author：Shirley & AI Shirley老師&她的AI工具人</h2>
+
+      <div id="music-box-container">
+        <p>🎵 Perfect Chapter - Audio Player | 完滿篇章 - 音頻播放器</p>
+        
+        <audio controls id="music-player" preload="metadata">
+          <source src="https://ducj-creator.github.io/releases/perfect%20chapter.mp3" type="audio/mpeg" id="music-source">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <ul>
+        <li>Learning Foci：</li>
+        <li>1. Perfect Tenses (完成時態)</li>
+        <li>2. Life Reflections & Closure (生命反思與完滿)</li>
+        <li>3：Literary Rhetoric (文學修辭)</li>
+      </ul>
+    </div>
+
+    <nav id="page-nav">
+      <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="back-link">🏡 Home | 主頁</a>
+      <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section'); return false;">📜 Lyrics | 雙語歌詞</a>
+      <a href="#" data-target="words-section" onclick="showSection('words-section'); return false;">🔠 Vocabulary | 重點單字</a>
+      <a href="#" data-target="grammar-section" onclick="showSection('grammar-section'); return false;">📐 Grammar | 完成時態</a>
+      <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section'); return false;">💡 Rhetoric | 修辭手法</a>
+      <a href="#" data-target="challenge-section" onclick="showSection('challenge-section'); return false;">🎯 Challenge | 練習挑戰</a>
+    </nav>
+  </div>
+
+  <div id="content-container">
+
+    <div id="lyrics-section" class="content-section" style="display:block;">
+      <h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
+
+      <div class="lyric-section">
+        <table class="lyrics-table">
+          <colgroup><col><col></colgroup>
+          <thead>
+            <tr>
+              <th>English Version</th>
+              <th>中文版本</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr class="section-row"><td>Intro</td><td>前奏</td></tr>
+            <tr><td>Pages turn...</td><td>書頁輕翻…</td></tr>
+            <tr><td>Moments burn...</td><td>霎那生光…</td></tr>
+            <tr><td>The story writes itself...</td><td>故事自成章…</td></tr>
+
+            <tr class="section-row"><td>Verse 1 - Present Perfect</td><td>主歌 1 · 現在完成</td></tr>
+            <tr><td>I have walked these winding roads beneath the moon.</td><td>月下行路 已越千岡</td></tr>
+            <tr><td>I have learned to sing a hopeful, different tune.</td><td>心曲轉調 已譜新腔</td></tr>
+            <tr><td>You have shown me how to face what makes me weak.</td><td>你教我直視 怯懦模樣</td></tr>
+            <tr><td>We have found the words our silence failed to speak.</td><td>沉默深處 已生詩行</td></tr>
+            <tr><td>Time has painted wisdom on my weary cheek.</td><td>時光落筆 風霜成妝</td></tr>
+
+            <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
+            <tr><td>Every choice has built the person I'm today.</td><td>歲月築我 今日模樣</td></tr>
+            <tr><td>Every loss has gently worn the sharp away.</td><td>得失磨我 棱角生光</td></tr>
+
+            <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
+            <tr><td>I HAVE LOVED WITH ALL MY HEART!</td><td>此心傾盡 愛如深海！</td></tr>
+            <tr><td>I HAD FALLEN LONG BEFORE I LEARNED TO FLY!</td><td>未學飛翔 早墜塵埃！</td></tr>
+            <tr><td>I WILL HAVE BUILT A HOME BENEATH THE STARS!</td><td>屆時星穹 已築夢台！</td></tr>
+            <tr><td>BY THE TIME I SAY GOODBYE!</td><td>告別之際 萬象盡開！</td></tr>
+            <tr><td>I HAVE BEEN CHANGING!</td><td>一路蛻變！</td></tr>
+            <tr><td>I HAD BEEN BREAKING!</td><td>一路打破！</td></tr>
+            <tr><td>I WILL HAVE BEEN BECOMING!</td><td>終成圓滿！</td></tr>
+            <tr><td>WHEN MY FINAL SUNRISE BREAKS THE SKY!</td><td>當最後晨光 刺破雲靄！</td></tr>
+
+            <tr class="section-row"><td>Verse 2 - Past Perfect</td><td>主歌 2 · 過去完成</td></tr>
+            <tr><td>By the time you found me, I had closed the door.</td><td>你尋我時 心扉早閉</td></tr>
+            <tr><td>I had sworn I couldn't trust or hope anymore.</td><td>早誓封心 不再期冀</td></tr>
+            <tr><td>You had carried scars you never let me see.</td><td>你藏舊傷 未曾示跡</td></tr>
+            <tr><td>We had built our separate walls so carefully.</td><td>各築心垣 各守孤寂</td></tr>
+            <tr><td>Life had kept its beauty as a mystery.</td><td>人間至美 早藏玄機</td></tr>
+
+            <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
+            <tr><td>Then a single glance began to change the plot.</td><td>一瞥之間 命運轉軸</td></tr>
+            <tr><td>Pages started turning in the tale we'd almost forgot.</td><td>遺忘篇章 重新翻讀</td></tr>
+
+            <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
+            <tr><td>I HAVE LOVED WITH ALL MY HEART!</td><td>此心傾盡 愛如深海！</td></tr>
+            <tr><td>I HAD FALLEN LONG BEFORE I LEARNED TO FLY!</td><td>未學飛翔 早墜塵埃！</td></tr>
+            <tr><td>I WILL HAVE BUILT A HOME BENEATH THE STARS!</td><td>屆時星穹 已築夢台！</td></tr>
+            <tr><td>BY THE TIME I SAY GOODBYE!</td><td>告別之際 萬象盡開！</td></tr>
+            <tr><td>I HAVE BEEN CHANGING!</td><td>一路蛻變！</td></tr>
+            <tr><td>I HAD BEEN BREAKING!</td><td>一路打破！</td></tr>
+            <tr><td>I WILL HAVE BEEN BECOMING!</td><td>終成圓滿！</td></tr>
+            <tr><td>WHEN MY FINAL SUNRISE BREAKS THE SKY!</td><td>當最後晨光 刺破雲靄！</td></tr>
+
+            <tr class="section-row"><td>Bridge 1 - Present Perfect Continuous</td><td>橋段 1 · 現在完成進行</td></tr>
+            <tr><td>I have been collecting pieces of the light.</td><td>一路拾光 縫補夜長</td></tr>
+            <tr><td>I have been repairing what was broken in the night.</td><td>長伴修繕 碎夢重光</td></tr>
+            <tr><td>You have been reminding me to set my spirit right.</td><td>你常喚我 歸返心鄉</td></tr>
+            <tr><td>We have been unraveling what was tangled, tight.</td><td>共解千結 纏縛漸敞</td></tr>
+            <tr><td>Hope has been returning to my clearer sight.</td><td>希望歸來 映入眼眶</td></tr>
+
+            <tr class="section-row"><td>Bridge 2 - Future Perfect & Perfect Continuous</td><td>橋段 2 · 未來完成</td></tr>
+            <tr><td>When tomorrow comes, I will have turned the final page.</td><td>明日到時 終章已闔</td></tr>
+            <tr><td>I will have been becoming more with every single age.</td><td>歲歲蛻變 終成模樣</td></tr>
+            <tr><td>And I'll look back and see I had been writing my own stage.</td><td>回望來路 早書舞臺</td></tr>
+            <tr><td>Right from the prologue to the closing of the sage.</td><td>從序至終 自成典章</td></tr>
+
+            <tr class="section-row"><td>Final Chorus - Elevated</td><td>終章副歌 · 升調</td></tr>
+            <tr><td>I HAVE LOVED WITH ALL MY HEART!</td><td>此心傾盡 愛如深海！</td></tr>
+            <tr><td>I HAD FALLEN LONG BEFORE I LEARNED TO FLY!</td><td>未學飛翔 早墜塵埃！</td></tr>
+            <tr><td>I WILL HAVE BUILT A HOME BENEATH THE STARS!</td><td>屆時星穹 已築夢台！</td></tr>
+            <tr><td>BY THE TIME I SAY GOODBYE!</td><td>告別之際 萬象盡開！</td></tr>
+            <tr><td>I HAVE BEEN CHANGING!</td><td>一路蛻變！</td></tr>
+            <tr><td>I HAD BEEN BREAKING!</td><td>一路打破！</td></tr>
+            <tr><td>I WILL HAVE BEEN BECOMING!</td><td>終成圓滿！</td></tr>
+            <tr><td>WHEN MY FINAL SUNRISE BREAKS THE SKY!</td><td>當最後晨光 刺破雲靄！</td></tr>
+            <tr><td>OH, THE SUNRISE BREAKS THE SKY!</td><td>噢 晨光刺破雲靄！</td></tr>
+
+            <tr class="section-row"><td>Outro</td><td>尾聲</td></tr>
+            <tr><td>I have lived...</td><td>此生已活…</td></tr>
+            <tr><td>I had dreamed...</td><td>昔日曾夢…</td></tr>
+            <tr><td>I will have learned...</td><td>終將悟得…</td></tr>
+            <tr><td>My perfect chapter...</td><td>完滿篇章…</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  <div id="words-section" class="content-section">
+  <h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡 (Hover to Flip!)</h2>
+  <div class="word-grid">
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">篇章元素 | Chapter</div>
+          <div class="eng-word-front">winding</div>
+          <div class="chinese-word-front">蜿蜒的 (adj.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">adj. Having many bends</div>
+          <div class="chinese-word-back">I have walked these winding roads. (已越千岡)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">抽象概念 | Abstract</div>
+          <div class="eng-word-front">wisdom</div>
+          <div class="chinese-word-front">智慧 (n.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">n. Knowledge and good judgment</div>
+          <div class="chinese-word-back">Time has painted wisdom on my weary cheek. (風霜成妝)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">情感動作 | Emotion</div>
+          <div class="eng-word-front">sworn</div>
+          <div class="chinese-word-front">發誓 (v.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">v. Past participle of swear</div>
+          <div class="chinese-word-back">I had sworn I couldn't trust or hope anymore. (早誓封心)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">狀態描述 | State</div>
+          <div class="eng-word-front">weary</div>
+          <div class="chinese-word-front">疲倦的 (adj.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">adj. Very tired</div>
+          <div class="chinese-word-back">Time has painted wisdom on my weary cheek. (風霜成妝)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">篇章元素 | Chapter</div>
+          <div class="eng-word-front">prologue</div>
+          <div class="chinese-word-front">序言 (n.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">n. Introductory section</div>
+          <div class="chinese-word-back">Right from the prologue to the closing. (從序至終)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">動作描述 | Action</div>
+          <div class="eng-word-front">unraveling</div>
+          <div class="chinese-word-front">解開 (v.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">v. Present participle of unravel</div>
+          <div class="chinese-word-back">We have been unraveling what was tangled. (共解千結)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">情感描述 | Emotion</div>
+          <div class="eng-word-front">mystery</div>
+          <div class="chinese-word-front">神秘 (n.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">n. Something not understood</div>
+          <div class="chinese-word-back">Life had kept its beauty as a mystery. (早藏玄機)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">狀態描述 | State</div>
+          <div class="eng-word-front">tangled</div>
+          <div class="chinese-word-front">糾纏的 (adj.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">adj. Twisted together</div>
+          <div class="chinese-word-back">We have been unraveling what was tangled, tight. (纏縛漸敞)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">動作描述 | Action</div>
+          <div class="eng-word-front">collecting</div>
+          <div class="chinese-word-front">收集 (v.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">v. Present participle of collect</div>
+          <div class="chinese-word-back">I have been collecting pieces of the light. (一路拾光)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-card flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="word-category">篇章元素 | Chapter</div>
+          <div class="eng-word-front">closing</div>
+          <div class="chinese-word-front">結束 (n.)</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="pos-back">n. The end or conclusion</div>
+          <div class="chinese-word-back">Right from the prologue to the closing of the sage. (從序至終)</div>
+          <div class="example-back">Hover to flip back</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <div id="grammar-section" class="content-section">
+  <h2 class="section-header">📐 Perfect Tenses | 完成時態：現在、過去、未來</h2>
+
+  <div class="grammar-card present-perfect-type">
+    <h3><span style="color:#8b7355;">🟫</span> 1. 現在完成式 (Present Perfect)</h3>
+    <p><strong>結構：</strong> S + have/has + V(過去分詞) + …</p>
+    <ul>
+      <li>I <strong>have walked</strong> these winding roads. (已越千岡)</li>
+      <li>I <strong>have learned</strong> to sing a hopeful tune. (已譜新腔)</li>
+      <li>Time <strong>has painted</strong> wisdom on my cheek. (風霜成妝)</li>
+      <li>Every choice <strong>has built</strong> the person I'm today. (歲月築我)</li>
+    </ul>
+  </div>
+
+  <div class="grammar-card past-perfect-type">
+    <h3><span style="color:#5d4037;">🟤</span> 2. 過去完成式 (Past Perfect)</h3>
+    <p><strong>結構：</strong> S + had + V(過去分詞) + …</p>
+    <ul>
+      <li>I <strong>had fallen</strong> long before I learned to fly. (早墜塵埃)</li>
+      <li>I <strong>had sworn</strong> I couldn't trust anymore. (早誓封心)</li>
+      <li>You <strong>had carried</strong> scars you never let me see. (藏舊傷)</li>
+      <li>We <strong>had built</strong> our separate walls. (各築心垣)</li>
+    </ul>
+  </div>
+
+  <div class="grammar-card future-perfect-type">
+    <h3><span style="color:#d4af37;">🟡</span> 3. 未來完成式 (Future Perfect)</h3>
+    <p><strong>結構：</strong> S + will have + V(過去分詞) + …</p>
+    <ul>
+      <li>I <strong>will have built</strong> a home beneath the stars. (已築夢台)</li>
+      <li>I <strong>will have turned</strong> the final page. (終章已闔)</li>
+      <li>I <strong>will have learned</strong>... (終將悟得)</li>
+      <li>BY THE TIME I SAY GOODBYE! (告別之際)</li>
+    </ul>
+  </div>
+
+  <div class="grammar-card perfect-continuous-type">
+    <h3><span style="color:#2c3e50;">🔵</span> 4. 完成進行式 (Perfect Continuous)</h3>
+    <p><strong>結構：</strong> S + have/has been + V-ing + …</p>
+    <ul>
+      <li>I <strong>have been changing</strong>! (一路蛻變)</li>
+      <li>I <strong>had been breaking</strong>! (一路打破)</li>
+      <li>I <strong>will have been becoming</strong>! (終成圓滿)</li>
+      <li>I <strong>have been collecting</strong> pieces of the light. (一路拾光)</li>
+    </ul>
+  </div>
+
+  <div class="grammar-card mixed-perfect-type">
+    <h3><span style="color:#8b4513;">🟤</span> 5. 完成時態對比與應用</h3>
+    <p><strong>概念：</strong> 透過歌詞理解時間關係</p>
+    <ul>
+      <li><strong>現在完成</strong>：have walked / have learned / has painted</li>
+      <li><strong>過去完成</strong>：had fallen / had sworn / had carried</li>
+      <li><strong>未來完成</strong>：will have built / will have turned</li>
+      <li><strong>時間標記</strong>：by the time / long before / when</li>
+      <li><strong>生活反思</strong>：講述從過去持續到現在的經驗</li>
+    </ul>
+  </div>
+</div>
+
+<div id="rhetoric-section" class="content-section">
+  <h2 class="section-header">💡 Rhetorical Devices | 修辭手法分析</h2>
+
+  <div class="rhetoric-device">
+    <h3>1. Metaphor | 隱喻</h3>
+    <p>定義：隱含地將一事物比作另一事物，不使用 like 或 as。</p>
+    <ul>
+      <li><div class="rhetoric-example">Life is <strong>a mystery</strong>. (人間至美 早藏玄機)</div></li>
+      <li><div class="rhetoric-example">Every loss has gently <strong>worn the sharp away</strong>. (得失磨我 棱角生光)</div></li>
+      <li><div class="rhetoric-example">Time has <strong>painted wisdom</strong> on my weary cheek. (時光落筆 風霜成妝)</div></li>
+      <li><div class="rhetoric-example">We had built our <strong>separate walls</strong>. (各築心垣 各守孤寂)</div></li>
+    </ul>
+  </div>
+
+  <div class="rhetoric-device">
+    <h3>2. Personification | 擬人化</h3>
+    <p>定義：賦予非人事物以人類的動作、情感或特質。</p>
+    <ul>
+      <li><div class="rhetoric-example">Time <strong>has painted</strong> wisdom on my cheek. (時光落筆)</div></li>
+      <li><div class="rhetoric-example">Every loss has <strong>gently worn</strong> the sharp away. (得失磨我)</div></li>
+      <li><div class="rhetoric-example">Pages <strong>started turning</strong> in the tale. (篇章重新翻讀)</div></li>
+      <li><div class="rhetoric-example">Life had <strong>kept its beauty</strong> as a mystery. (早藏玄機)</div></li>
+    </ul>
+  </div>
+
+  <div class="rhetoric-device">
+    <h3>3. Parallelism | 平行結構</h3>
+    <p>定義：使用相同或相似的語法結構，增強節奏與對比。</p>
+    <ul>
+      <li><div class="rhetoric-example">I <strong>have lived</strong>... I <strong>had dreamed</strong>... I <strong>will have learned</strong>...</div></li>
+      <li><div class="rhetoric-example">I <strong>have been changing</strong>! I <strong>had been breaking</strong>! I <strong>will have been becoming</strong>!</div></li>
+      <li><div class="rhetoric-example">Every <strong>choice has built</strong>... Every <strong>loss has gently worn</strong>...</div></li>
+      <li><div class="rhetoric-example">Right from the <strong>prologue</strong> to the <strong>closing</strong> of the sage.</div></li>
+    </ul>
+  </div>
+
+  <div class="rhetoric-device">
+    <h3>4. Repetition | 重複</h3>
+    <p>定義：重複關鍵詞或句子，以加強語氣與節奏感。</p>
+    <ul>
+      <li><div class="rhetoric-example"><strong>I HAVE LOVED WITH ALL MY HEART!</strong> — 副歌重複主題</div></li>
+      <li><div class="rhetoric-example"><strong>Every</strong> choice... <strong>Every</strong> loss... — 強調性重複</div></li>
+      <li><div class="rhetoric-example">Pages turn... Moments burn... — 開頭平行重複</div></li>
+      <li><div class="rhetoric-example">BY THE TIME I SAY GOODBYE! — 結構性重複</div></li>
+    </ul>
+  </div>
+</div>
+<div id="challenge-section" class="content-section">
+  <h2 class="section-header">🎯 Writing Challenge | 練習挑戰</h2>
+
+  <div class="grammar-card" id="challenge-section-content">
+
+    <h3>✍️ Perfect Tense Practice | 完成時態練習：用不同完成時態描寫生命篇章</h3>
+    <p>現在完成式 (描述已完成的經驗)：</p><textarea placeholder="Example: I have visited three countries."></textarea>
+    <p>過去完成式 (描述在過去某時之前已完成的動作)：</p><textarea placeholder="Example: By the time I graduated, I had already found a job."></textarea>
+    <p>未來完成式 (描述在未來某時之前將完成的動作)：</p><textarea placeholder="Example: By next year, I will have finished my degree."></textarea>
+    <p>現在完成進行式 (描述從過去持續到現在的動作)：</p><textarea placeholder="Example: I have been studying English for five years."></textarea>
+    <p>使用隱喻修辭 (將生命比作書本或篇章)：</p><textarea placeholder="Example: My life is an unfinished book with many blank pages."></textarea>
+
+    <h3>🎵 Lyric Gap Fill | 歌詞填空：聽歌或默寫填空</h3>
+    <div class="fill-in-the-blank">
+      "I <input type="text" placeholder="have walked"> these winding roads beneath the moon.<br>
+      I <input type="text" placeholder="have learned"> to sing a hopeful, different tune.<br>
+      You <input type="text" placeholder="have shown"> me how to face what makes me weak.<br>
+      We <input type="text" placeholder="have found"> the words our silence failed to speak.<br>
+      Time <input type="text" placeholder="has painted"> wisdom on my weary cheek."
+    </div>
+
+    <h3>📖 Perfect Tense Transformation | 時態轉換練習</h3>
+    <p>將下列句子改為指定的完成時態：</p>
+    <div style="margin-bottom: 15px;">
+      <p>原句：I study English. (改為現在完成式)</p>
+      <textarea placeholder="I have studied English."></textarea>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <p>原句：She wrote a book. (改為過去完成式)</p>
+      <textarea placeholder="She had written a book before she became famous."></textarea>
+    </div>
+    <div>
+      <p>原句：They will build a house. (改為未來完成式)</p>
+      <textarea placeholder="By next year, they will have built a house."></textarea>
+    </div>
+
+  </div>
+</div>
+    
+  </div>
+
+<button id="performance-toggle" title="Toggle Performance Mode" aria-label="Toggle Performance Mode">⚡</button>
+
+<script>
+// 效能控制變數
+let performanceMode = false;
+let originalAnimations = [];
+let inkInterval;
+
+// 墨跡生成函數 - 控制數量以優化效能
+function createInkBlots() {
+  const inkContainer = document.getElementById('ink-container');
+  if (!inkContainer) return;
+  
+  // 根據效能模式調整墨跡數量
+  const blotCount = performanceMode ? 8 : 15;
+  
+  // 清空現有墨跡
+  inkContainer.innerHTML = '';
+  
+  for (let i = 0; i < blotCount; i++) {
+    const blot = document.createElement('div');
+    blot.className = 'ink-blot';
+    
+    // 隨機位置
+    const left = Math.random() * 100;
+    const top = Math.random() * 100;
+    const delay = Math.random() * 8;
+    const duration = 3 + Math.random() * 4;
+    const size = 20 + Math.random() * 40;
+    
+    blot.style.left = `${left}%`;
+    blot.style.top = `${top}%`;
+    blot.style.animationDelay = `${delay}s`;
+    blot.style.animationDuration = `${duration}s`;
+    blot.style.animationName = 'ink-blot';
+    blot.style.animationIterationCount = 'infinite';
+    blot.style.animationTimingFunction = 'ease-in-out';
+    
+    // 隨機大小
+    blot.style.width = `${size}px`;
+    blot.style.height = `${size}px`;
+    
+    // 隨機透明度
+    const opacity = 0.1 + Math.random() * 0.3;
+    blot.style.opacity = opacity.toString();
+    
+    inkContainer.appendChild(blot);
+  }
+}
+
+function showSection(sectionId) {
+  // 1. 隱藏所有內容區塊
+  document.querySelectorAll('.content-section').forEach(section => {
+    section.style.display = 'none';
+  });
+
+  // 2. 顯示目標區塊
+  const target = document.getElementById(sectionId);
+  if (!target) return;
+  target.style.display = 'block';
+
+  // 3. 更新導航欄 active 狀態
+  document.querySelectorAll('#page-nav a').forEach(link => {
+    link.classList.remove('active');
+  });
+  const activeLink = document.querySelector(`#page-nav a[data-target='${sectionId}']`);
+  if (activeLink) activeLink.classList.add('active');
+
+  // 4. 平滑捲動到內容頂部
+  const container = document.getElementById('content-container');
+  if (container) {
+    const headerWrapper = document.getElementById('info-card-wrapper');
+    const headerHeight = headerWrapper ? headerWrapper.offsetHeight : 0;
+    
+    // 計算捲動位置
+    let top = container.offsetTop - headerHeight - 12;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 預設顯示歌詞區塊
+    showSection('lyrics-section');
+    
+    // 創建初始墨跡
+    createInkBlots();
+    
+    // 定期更新墨跡（減少頻率以優化效能）
+    inkInterval = setInterval(() => {
+      if (!performanceMode) {
+        createInkBlots();
+      }
+    }, 10000);
+
+    // 效能控制功能
+    const performanceToggle = document.getElementById('performance-toggle');
+    
+    // 儲存原始動畫狀態
+    function saveOriginalAnimations() {
+        originalAnimations = [];
+        
+        // 儲存金箔裝飾動畫
+        const goldFlecks = document.querySelectorAll('.gold-flecks span');
+        goldFlecks.forEach(fleck => {
+            originalAnimations.push({
+                element: fleck,
+                animation: fleck.style.animation
+            });
+        });
+        
+        // 儲存背景動畫
+        originalAnimations.push({
+            element: document.body,
+            animation: document.body.style.animation
+        });
+        
+        // 儲存圖片動畫
+        const bookImage = document.getElementById('book-image');
+        if (bookImage) {
+            originalAnimations.push({
+                element: bookImage,
+                animation: bookImage.style.animation
+            });
+        }
+    }
+    
+    // 切換效能模式
+    function togglePerformanceMode() {
+        performanceMode = !performanceMode;
+        
+        if (performanceMode) {
+            // 啟高效能模式：停用動畫
+            console.log('Performance mode enabled');
+            performanceToggle.textContent = '🐢';
+            performanceToggle.title = 'Performance Mode: On (Click to disable)';
+            
+            // 停用所有動畫
+            document.querySelectorAll('*').forEach(element => {
+                element.style.animationPlayState = 'paused';
+            });
+            
+            // 停用墨跡動畫
+            const inkBlots = document.querySelectorAll('.ink-blot');
+            inkBlots.forEach(blot => {
+                blot.style.animation = 'none';
+                blot.style.opacity = '0';
+            });
+            
+            // 停用金箔裝飾
+            const goldFlecks = document.querySelectorAll('.gold-flecks span');
+            goldFlecks.forEach(fleck => {
+                fleck.style.animation = 'none';
+            });
+            
+            // 停用背景動畫
+            document.body.style.animation = 'none';
+            
+            // 停用圖片動畫
+            const bookImage = document.getElementById('book-image');
+            if (bookImage) {
+                bookImage.style.animation = 'none';
+            }
+            
+            // 停用翻轉卡片效果
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.style.pointerEvents = 'none';
+            });
+            
+            // 減少背景模糊
+            document.getElementById('info-card-wrapper').style.backdropFilter = 'none';
+            document.getElementById('info-card-wrapper').style.webkitBackdropFilter = 'none';
+            
+        } else {
+            // 關閉效能模式：恢復動畫
+            console.log('Performance mode disabled');
+            performanceToggle.textContent = '⚡';
+            performanceToggle.title = 'Performance Mode: Off (Click to enable)';
+            
+            // 恢復所有動畫
+            document.querySelectorAll('*').forEach(element => {
+                element.style.animationPlayState = 'running';
+            });
+            
+            // 恢復特定動畫
+            originalAnimations.forEach(item => {
+                if (item.element && item.animation !== undefined) {
+                    item.element.style.animation = item.animation;
+                }
+            });
+            
+            // 恢復墨跡
+            createInkBlots();
+            
+            // 恢復背景模糊
+            document.getElementById('info-card-wrapper').style.backdropFilter = 'blur(8px) saturate(140%)';
+            document.getElementById('info-card-wrapper').style.webkitBackdropFilter = 'blur(8px) saturate(140%)';
+            
+            // 恢復翻轉卡片效果
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.style.pointerEvents = 'auto';
+            });
+        }
+    }
+    
+    // 初始化效能控制
+    saveOriginalAnimations();
+    performanceToggle.addEventListener('click', togglePerformanceMode);
+    
+    // 自動偵測低效能裝置
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isLowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+    
+    if (isMobile || isLowPower) {
+        // 自動啟用效能模式
+        setTimeout(() => {
+            if (!performanceMode) {
+                togglePerformanceMode();
+            }
+        }, 2000);
+    }
+    
+    // 監聽滾動事件，優化效能
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        
+        scrollTimeout = setTimeout(() => {
+            // 滾動停止時執行輕量級操作
+        }, 100);
+    }, { passive: true });
+    
+    // 預先載入圖片
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.loading = 'lazy';
+    });
+    
+    // 監聽頁面可見性變化以優化效能
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // 頁面隱藏時減少動畫
+            if (inkInterval) clearInterval(inkInterval);
+        } else {
+            // 頁面可見時恢復
+            if (!performanceMode) {
+                inkInterval = setInterval(() => {
+                    createInkBlots();
+                }, 10000);
+            }
+        }
+    });
+});
+
+// 清理函數
+window.addEventListener('beforeunload', () => {
+    if (inkInterval) clearInterval(inkInterval);
+});
+</script>
+</body>
+</html>
