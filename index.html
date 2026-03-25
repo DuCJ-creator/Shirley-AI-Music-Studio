@@ -110,8 +110,54 @@
       transition: 0.3s; white-space: nowrap;
     }
     .nav-node:hover { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: translateY(-50%) scale(1.1); }
-    #node-emo { left: -50px; top: 50%; transform: translateY(-50%); }
+    #node-emo { left: -50px; top: 50%; transform: translateY(-50%); cursor: pointer; user-select: none; }
     #node-study { right: -50px; top: 50%; transform: translateY(-50%); }
+
+    /* 擺爛音樂播放器 */
+    #emo-player {
+      position: absolute; left: -270px; top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      background: rgba(5, 4, 10, 0.95);
+      border: 1px solid rgba(159,255,230,0.3);
+      border-radius: 14px;
+      padding: 14px 16px;
+      z-index: 50;
+      display: none;
+      box-shadow: 0 0 25px rgba(159,255,230,0.15);
+    }
+    #emo-player.visible { display: block; animation: fadeSlideIn 0.3s ease; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-50%) translateX(8px); }
+      to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+    }
+    .ep-title {
+      color: var(--accent); letter-spacing: 0.15em; font-size: 0.6rem;
+      margin-bottom: 8px; opacity: 0.75; font-family: "Orbitron", sans-serif;
+    }
+    .ep-track {
+      color: var(--ink); font-family: "Cormorant Garamond", serif;
+      font-size: 0.88rem; margin-bottom: 12px; opacity: 0.85;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ep-controls {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .ep-btn {
+      background: none; border: 1px solid rgba(159,255,230,0.25);
+      color: var(--accent); border-radius: 50%;
+      width: 28px; height: 28px; cursor: pointer; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: 0.2s; flex-shrink: 0;
+    }
+    .ep-btn:hover { background: rgba(159,255,230,0.1); box-shadow: 0 0 8px var(--accent); }
+    .ep-btn.playpause { width: 34px; height: 34px; font-size: 1rem; }
+    .ep-dots { display: flex; gap: 5px; flex-wrap: wrap; }
+    .ep-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(159,255,230,0.2); cursor: pointer; transition: 0.2s;
+    }
+    .ep-dot.active { background: var(--accent); box-shadow: 0 0 5px var(--accent); }
 
     /* 歌詞軌道 - 改進漂浮邏輯 */
     #lyric-orbit-container { position: absolute; inset: 0; pointer-events: none; }
@@ -153,7 +199,21 @@
     
     <!-- 鑽石💎時標會在 JavaScript 中動態生成 -->
     
-    <a href="#" class="nav-node" id="node-emo" onmouseenter="setHand(-90)">EMO 擺爛中</a>
+    <div class="nav-node" id="node-emo" onclick="toggleEmoPlayer(event)" onmouseenter="setHand(-90)">EMO 擺爛中</div>
+
+    <!-- 擺爛音樂播放器面板 -->
+    <div id="emo-player">
+      <div class="ep-title">✦ 擺爛電台 ✦</div>
+      <div class="ep-track" id="ep-track-name">— 隨機選曲中 —</div>
+      <div class="ep-controls">
+        <button class="ep-btn" onclick="prevTrack(event)" title="上一首">&#9664;</button>
+        <button class="ep-btn playpause" id="ep-playpause" onclick="toggleEmoPlay(event)" title="播放/暫停">&#9654;</button>
+        <button class="ep-btn" onclick="nextTrack(event)" title="下一首">&#9654;&#9654;</button>
+      </div>
+      <div class="ep-dots" id="ep-dots"></div>
+    </div>
+
+    <audio id="emo-audio" loop></audio>
     <div id="record" onclick="togglePlay()">
       <video id="v" loop playsinline><source src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/moonlight%20sonata.mp4" type="video/mp4"></video>
     </div>
@@ -336,7 +396,116 @@
       hand.style.transform = `rotate(${deg}deg)`; 
     }
     
-    window.onclick = () => document.querySelectorAll('.lyric-card').forEach(c => c.classList.remove('expanded'));
+    // 擺爛電台音樂播放器
+    const EMO_TRACKS = Array.from({length: 8}, (_, i) =>
+      `https://ducj-creator.github.io/releases/pm${i+1}.mp3`
+    );
+    const TRACK_NAMES = [
+      "pm 01 · 月光下的放空",
+      "pm 02 · 慢速漂移",
+      "pm 03 · 凌晨三點鐘",
+      "pm 04 · 什麼都不想做",
+      "pm 05 · 雨聲迴響",
+      "pm 06 · 懶洋洋星期三",
+      "pm 07 · 關機模式",
+      "pm 08 · 夢境邊境"
+    ];
+
+    let emoCurrentIdx = -1;
+    let emoPlaying = false;
+    const emoAudio = document.getElementById('emo-audio');
+    const emoPlayer = document.getElementById('emo-player');
+
+    // Build track dots
+    const dotsEl = document.getElementById('ep-dots');
+    EMO_TRACKS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'ep-dot';
+      d.title = TRACK_NAMES[i];
+      d.onclick = (e) => { e.stopPropagation(); loadEmoTrack(i); playEmo(); };
+      dotsEl.appendChild(d);
+    });
+
+    function updateDots() {
+      document.querySelectorAll('.ep-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === emoCurrentIdx);
+      });
+    }
+
+    function loadEmoTrack(idx) {
+      emoCurrentIdx = idx;
+      emoAudio.src = EMO_TRACKS[idx];
+      document.getElementById('ep-track-name').textContent = TRACK_NAMES[idx];
+      updateDots();
+    }
+
+    function pickRandom() {
+      let next;
+      do { next = Math.floor(Math.random() * EMO_TRACKS.length); }
+      while (next === emoCurrentIdx && EMO_TRACKS.length > 1);
+      return next;
+    }
+
+    function playEmo() {
+      emoAudio.play().catch(()=>{});
+      emoPlaying = true;
+      document.getElementById('ep-playpause').innerHTML = '&#9646;&#9646;';
+    }
+
+    function pauseEmo() {
+      emoAudio.pause();
+      emoPlaying = false;
+      document.getElementById('ep-playpause').innerHTML = '&#9654;';
+    }
+
+    function toggleEmoPlay(e) {
+      if(e) e.stopPropagation();
+      if(emoPlaying) { pauseEmo(); }
+      else {
+        if(emoCurrentIdx === -1) loadEmoTrack(pickRandom());
+        playEmo();
+      }
+    }
+
+    function nextTrack(e) {
+      if(e) e.stopPropagation();
+      loadEmoTrack(pickRandom());
+      if(emoPlaying) playEmo();
+    }
+
+    function prevTrack(e) {
+      if(e) e.stopPropagation();
+      const prev = (emoCurrentIdx - 1 + EMO_TRACKS.length) % EMO_TRACKS.length;
+      loadEmoTrack(prev);
+      if(emoPlaying) playEmo();
+    }
+
+    // Auto-advance on track end (loop is off to allow random next)
+    emoAudio.loop = false;
+    emoAudio.addEventListener('ended', () => {
+      loadEmoTrack(pickRandom());
+      playEmo();
+    });
+
+    function toggleEmoPlayer(e) {
+      if(e) e.stopPropagation();
+      const isVisible = emoPlayer.classList.toggle('visible');
+      if(isVisible && emoCurrentIdx === -1) {
+        loadEmoTrack(pickRandom());
+        playEmo();
+      }
+      setHand(-90);
+    }
+
+    // Close player when clicking elsewhere
+    window._origClick = window.onclick;
+    window.onclick = (e) => {
+      if(!emoPlayer.contains(e.target) && e.target.id !== 'node-emo') {
+        emoPlayer.classList.remove('visible');
+      }
+      document.querySelectorAll('.lyric-card').forEach(c => c.classList.remove('expanded'));
+    };
+  
     
     // 頁面加載完成後創建鑽石時標
     window.addEventListener('load', function() {
