@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 5: To Be; then Being | 存在，而後綻放</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --header-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --accent-gold: #c29d5f;
+            --nav-bg: #1e293b;
+            --paper-bg: #fdfaf5;
+            --paper-grid: rgba(0, 0, 0, 0.05);
+            --text-main: #2c3e50;
+            --chorus-blue: #0ea5e9;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', 'Noto Serif TC', serif;
+            background-color: var(--bg-dark);
+            color: white;
+        }
+
+        /* --- Header Section --- */
+        header {
+            background: var(--header-gradient);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
+        .author { color: #94a3b8; margin: 15px 0; font-size: 1rem; }
+        
+        .audio-player-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 25px;
+            margin: 25px 0;
+            box-shadow: 0 0 30px rgba(194, 157, 95, 0.4);
+        }
+        .audio-label { color: #1e293b; font-weight: 700; margin-right: 15px; font-size: 0.85rem; }
+
+        .foci-container {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px 40px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent-gold);
+        }
+        .foci-container h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.1rem; }
+        .foci-container ul { list-style: none; padding: 0; margin: 0; }
+        .foci-container li { margin: 10px 0; font-size: 0.95rem; display: flex; align-items: center; }
+        .foci-container li::before { content: "📖"; margin-right: 12px; }
+
+        /* --- Navigation --- */
+        nav {
+            background-color: var(--nav-bg);
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .nav-item.active { background: var(--accent-gold); color: #0f172a; border-color: var(--accent-gold); }
+
+        /* --- Main Content Area --- */
+        .content-section {
+            display: none;
+            background-color: var(--paper-bg);
+            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
+            background-size: 100% 1.8em;
+            color: var(--text-main);
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 60px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            animation: fadeIn 0.4s ease;
+        }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .section-header {
+            font-size: 2rem;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            color: #1a1c2c;
+        }
+
+        /* --- Table Styling --- */
+        .lyrics-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; }
+        .lyrics-table th { background: #e2e8f0; padding: 15px; border: 1px solid #cbd5e1; }
+        .lyrics-table td { padding: 18px 15px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 1.8; }
+        .marker { background: #f1f5f9; font-weight: 700; text-align: center; color: #64748b; letter-spacing: 2px; }
+        
+        .h-to { color: #0284c7; font-weight: 700; border-bottom: 2px solid #0284c7; }
+        .h-gerund { color: #b91c1c; font-weight: 700; border-bottom: 2px solid #b91c1c; }
+
+        /* --- Modules --- */
+        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent-gold); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .grammar-box { background: white; padding: 25px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
+        .example { background: #f8fafc; padding: 10px; border-left: 3px solid #cbd5e1; margin: 10px 0; font-style: italic; }
+
+        footer { text-align: center; padding: 60px; color: #64748b; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:4px;">Song:To Be; then Being </div>
+  
+    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
+    
+    <div class="audio-player-box">
+        <span class="audio-label">🎵 Audio Player</span>
+        <audio controls><source src="https://ducj-creator.github.io/releases/to be then being.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="foci-container">
+        <h3>Learning Foci | 學習重點：</h3>
+        <ul>
+            <li>1. The Visionary "To-Infinitive" (不定詞的理想與目標)</li>
+            <li>2. The Existential "Gerund" (動名詞與當下的存在)</li>
+            <li>3. Metaphor: The Arrow and the Stream (修辭：箭矢與河流的哲學)</li>
+        </ul>
+    </div>
+</header>
+
+<nav>
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home | 主頁</a>
+    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
+    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
+    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
+    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
+    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+</nav>
+
+<div id="lyrics" class="content-section active">
+    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞對照</div>
+    <table class="lyrics-table">
+        <thead><tr><th>English</th><th>中文對照</th></tr></thead>
+        <tbody>
+            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
+            <tr><td>Somewhere deep inside,<br>There's a river running wide.<br>One voice says "go,"<br>Another says "stay and let it flow."</td><td>在心底深處，<br>有條河流，寬廣無盡。<br>一聲說「走」，<br>一聲說「留」。</td></tr>
+            
+            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
+            <tr><td>I want <span class="h-to">to touch</span> the sky.<br>But here I am, writing line by line to get by.</td><td>我想觸碰天際。<br>卻在這裡，一行一行寫著朝夕。</td></tr>
+            <tr><td>I dream of a world that won't die.<br>But I'm building this one, stone by stone, <span class="h-to">to let</span> it lie.</td><td>我夢一方不滅天地。<br>卻一石一石築起，讓它安棲。</td></tr>
+            <tr><td>I promise <span class="h-to">to be</span> someone great.<br>But I'm being who I am, awake.</td><td>我許願成就不凡。<br>卻做著自己，坦然。</td></tr>
+            <tr><td>I attempt <span class="h-to">to open</span> every gate.<br>But I'm staying where I am, as my fate.</td><td>我嘗試推開門扇。<br>卻生根於此，為命運的答案。</td></tr>
+
+            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
+            <tr><td>One is the arrow, one the stream.<br>One is the reaching, one the dream.</td><td>一個如箭矢，一個似水流。<br>一個是追尋，一個是擁有。</td></tr>
+
+            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
+            <tr style="background:#f0f9ff"><td><span class="h-to">TO DREAM</span> IS <span class="h-to">TO BEGIN</span>,<br><span class="h-gerund">DREAMING</span> IS THE LIFE WITHIN.</td><td>去夢，是啟程，<br>而夢，是活著的證明。</td></tr>
+            <tr style="background:#f0f9ff"><td>I CAME <span class="h-to">TO FIND</span> A HIGHER PLACE,<br>I KEEP ON <span class="h-gerund">FINDING</span> GRACE.</td><td>我來，尋更高的山嶺，<br>一路走，總見風景。</td></tr>
+            <tr style="background:#f0f9ff"><td><span class="h-to">TO LOVE</span> IS <span class="h-to">TO REACH</span> OUT,<br><span class="h-gerund">LOVING</span> IS WHAT IT'S ALL ABOUT.</td><td>去愛，是伸出手心，<br>而愛著，是生命的本領。</td></tr>
+            <tr style="background:#f0f9ff"><td>I LEARNED <span class="h-to">TO FALL</span>, THEN <span class="h-to">TO RISE</span> AGAIN,<br>I KEPT ON <span class="h-gerund">SOARING</span>, WITH EYES OPENING.</td><td>我學會墜落，也學會飛翔，<br>持續飛翔，至目光所及。</td></tr>
+
+            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
+            <tr><td>I started <span class="h-to">to run</span> when I was small.<br>Keep <span class="h-gerund">running</span>, never stop at all.</td><td>我開始奔跑，在年少時光。<br>奔跑，極目遠眺。</td></tr>
+            <tr><td>I tried <span class="h-to">to build</span> a stronger wall.<br>Keep <span class="h-gerund">building</span>, never let it fall.</td><td>我試著築起一道高牆。<br>築造，穿刺雲霄。</td></tr>
+            <tr><td>I stopped <span class="h-to">to catch</span> my breath one day.<br>I stopped breathing from the weight I held at bay.</td><td>某天我停下，只為短暫喘息。<br>將重擔暫時禦於門欄。</td></tr>
+            <tr><td>I forgot <span class="h-to">to say</span> the words I'd pray.<br>But never forgot <span class="h-gerund">praying</span> through the grey.</td><td>我忘記說出祈導的字句。<br>卻從未忘記，在灰暗中祈語。</td></tr>
+
+            <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
+            <tr><td>I used <span class="h-to">to think</span> I had <span class="h-to">to choose</span>:<br>The arrow or the stream?<br>To light a fire or let it burn?<br>To chase or to return?</td><td>我曾以為必須抉擇：<br>箭矢，抑或水流？<br>點燃火焰，抑或任其燃燒？<br>奮力追逐，抑或回頭？</td></tr>
+            <tr><td>Now I know: <span class="h-to">to reach</span> is not <span class="h-to">to run</span> away.<br><span class="h-to">To hold</span> is not <span class="h-to">to stay</span>.</td><td>如今，我明瞭：伸出雙手並非逃離。<br>緊握亦非固守原地。</td></tr>
+            <tr><td>I'm not a line between two dots—<br>I'm the river and the arrow both.</td><td>我不是兩點之間的一條線——<br>我是河流，亦是箭矢。</td></tr>
+
+            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
+            <tr style="background:#f0f9ff"><td><span class="h-to">TO DREAM</span> IS <span class="h-to">TO BEGIN</span>,<br><span class="h-gerund">DREAMING</span> IS THE LIFE WITHIN.</td><td>去夢，是啟程，<br>而夢著，是活著的證明。</td></tr>
+
+            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
+            <tr><td><span class="h-to">To reach</span>… <span class="h-to">To hold</span>… <span class="h-to">To be</span>…<br>And <span class="h-gerund">being</span>…</td><td>追尋… 駐足… 存在… <br>而後，綻放著…</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="vocab" class="content-section">
+    <div class="section-header">§ 📚 Vocabulary | 重點單字解析</div>
+    <div class="vocab-grid">
+        <div class="card"><b>1. Attempt [əˈtempt] (v.)</b><br>努力嘗試。強調「付諸行動」的嘗試過程。<br><i>"I attempt to open every gate."</i></div>
+        <div class="card"><b>2. Grace [ɡreɪs] (n.)</b><br>恩典、優雅。在此指在生命流轉中獲得的體悟。<br><i>"I keep on finding grace."</i></div>
+        <div class="card"><b>3. Awake [əˈweɪk] (adj.)</b><br>醒覺的。不僅指生理清醒，更指意識的覺醒。<br><i>"Being who I am, awake."</i></div>
+        <div class="card"><b>4. Fate [feɪt] (n.)</b><br>命運。生命中必然發生的安排。<br><i>"Staying where I am, as my fate."</i></div>
+        <div class="card"><b>5. Stream [striːm] (n.)</b><br>溪流。象徵時間與存在的持續流動。</div>
+        <div class="card"><b>6. Soaring [ˈsɔːrɪŋ] (adj.)</b><br>翱翔的、高漲的。形容心靈獲得極大的自由。</div>
+        <div class="card"><b>7. Within [wɪˈðɪn] (prep.)</b><br>在...之內。常用於描述內心世界。</div>
+        <div class="card"><b>8. Reach [riːtʃ] (v.)</b><br>伸手觸及、達成。象徵對目標的追求。</div>
+    </div>
+</div>
+
+<div id="grammar" class="content-section">
+    <div class="section-header">§ 📐 Grammar | 不定詞 vs 動名詞</div>
+    <div class="grammar-box">
+        <h3>1. 不定詞 (To-Infinitive): 理想的標籤</h3>
+        <p>當我們說 <b>To dream</b> 時，我們是在談論一個「概念」或「目標」。它是指向未來的、理想化的動作。</p>
+        <div class="example">"To dream is to begin." (去夢想，是開啟旅程的第一步。)</div>
+    </div>
+    <div class="grammar-box">
+        <h3>2. 動名詞 (Gerund): 存在的實相</h3>
+        <p>當我們說 <b>Dreaming</b> 時，我們強調的是「夢想著」的這個過程與狀態。它是當下的、具有生命感的。</p>
+        <div class="example">"Dreaming is the life within." (夢想著的這件事，就是內在生命的本質。)</div>
+    </div>
+    <div class="grammar-box">
+        <h3>3. 辨析：Stop 的用法</h3>
+        <p>這首歌精彩地示範了 Stop 的區別：</p>
+        <ul>
+            <li><b>Stopped to catch breath:</b> 停下來「為了」喘口氣（不定詞表目的）。</li>
+            <li><b>Stopped breathing:</b> 停止了「呼吸」這個動作（動名詞表動作終止）。</li>
+        </ul>
+    </div>
+</div>
+
+<div id="rhetoric" class="content-section">
+    <div class="section-header">§ 💡 Rhetoric | 箭矢與河流的二元哲學</div>
+    <div class="card" style="width:auto">
+        <p><b>Metaphor (隱喻):</b></p>
+        <p>箭矢 (The Arrow) 代表的是 <b>Goal-Oriented Life</b>（目標導向），追求終點；<br>
+           河流 (The Stream) 代表的是 <b>Process-Oriented Life</b>（過程導向），享受流動。</p>
+        <p><b>Paradox (似非而是):</b></p>
+        <p>"To reach is not to run away."（追求並非逃離）與 "To hold is not to stay."（緊握並非停滯）。這句修辭揭示了：真正的成長是動態與靜態的結合。</p>
+    </div>
+</div>
+
+<div id="challenge" class="content-section">
+    <div class="section-header">§ 🎯 Challenge | 挑戰練習</div>
+    <div style="background:#1e293b; color:white; padding:40px; border-radius:12px;">
+        <h3>選擇正確的形式 (To be / Being / To do / Doing)</h3>
+        <p>1. I attempt ________ (open) the door to my heart.</p>
+        <p>2. ________ (Dream) is what keeps me alive today.</p>
+        <p>3. I promised ________ (be) honest with myself.</p>
+        <p>4. Keep ________ (run), even when you are tired.</p>
+        <p>5. I stopped ________ (say) goodbye to my past.</p>
+    </div>
+</div>
+
+<footer>&copy; 2026 Shirley AI Music Studio</footer>
+
+<script>
+    function showSection(sectionId, btn) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo({top: 400, behavior: 'smooth'});
+    }
+</script>
+
+</body>
+</html>
