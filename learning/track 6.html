@@ -18,42 +18,45 @@
             --highlight-ed: #0f3460;   /* 過去分詞：被動、狀態、痊癒 */
         }
 
-        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; }
+        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
 
+        /* --- Header --- */
         header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
         h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
         .author { color: #94a3b8; margin: 15px 0; font-size: 1rem; }
-        .track-img { width: 250px; height: 250px; border-radius: 15px; margin: 20px auto; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: cover; }
+        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
         
         .audio-player-box {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 50px;
             display: inline-flex;
             align-items: center;
-            padding: 8px 25px;
+            padding: 10px 30px;
             margin: 25px 0;
             box-shadow: 0 0 30px rgba(233, 69, 96, 0.4);
         }
-        .audio-label { color: #16213e; font-weight: 700; margin-right: 15px; font-size: 0.85rem; }
+        .audio-label { color: #16213e; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
 
         .foci-container {
             text-align: left;
-            max-width: 600px;
-            margin: 20px auto;
+            max-width: 650px;
+            margin: 25px auto;
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px 40px;
-            border-radius: 10px;
-            border-left: 5px solid var(--accent-gold);
+            padding: 25px 45px;
+            border-radius: 12px;
+            border-left: 6px solid var(--accent-gold);
         }
-        .foci-container h3 { margin-top: 0; color: var(--accent-gold); }
-        .foci-container li { margin: 10px 0; font-size: 0.95rem; list-style: none; }
+        .foci-container h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.2rem; }
+        .foci-container li { margin: 12px 0; font-size: 1rem; list-style: none; }
         .foci-container li::before { content: "🔥"; margin-right: 12px; }
 
-        nav { background-color: var(--nav-bg); padding: 12px; display: flex; justify-content: center; gap: 12px; position: sticky; top: 0; z-index: 1000; }
-        .nav-item { background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: 0.3s; text-decoration: none; }
-        .nav-item:hover { border-color: var(--accent-gold); color: white; }
+        /* --- Nav --- */
+        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .nav-item { background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
+        .nav-item:hover { border-color: var(--accent-gold); color: white; background: rgba(233, 69, 96, 0.1); }
         .nav-item.active { background: var(--accent-gold); color: white; border-color: var(--accent-gold); }
 
+        /* --- Content Sections --- */
         .content-section {
             display: none;
             background-color: var(--paper-bg);
@@ -63,44 +66,48 @@
             max-width: 1000px;
             margin: 40px auto;
             padding: 60px;
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            animation: fadeIn 0.4s ease;
+            border-radius: 6px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            animation: fadeIn 0.5s ease;
         }
         .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-header { font-size: 2rem; border-bottom: 3px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; }
+        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 45px; font-weight: 700; color: #1a1a2e; }
 
-        .lyrics-table { width: 100%; border-collapse: collapse; background: white; margin-bottom: 30px; }
-        .lyrics-table td { padding: 18px 15px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 1.8; }
-        .marker { background: #f1f5f9; font-weight: 700; text-align: center; color: #64748b; letter-spacing: 2px; }
+        /* --- Lyrics Table --- */
+        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.05rem; }
+        .marker { background: #f1f5f9; font-weight: 800; text-align: center; color: #475569; letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; }
         
-        /* Grammar Highlights */
-        .h-ing { color: var(--highlight-ing); font-weight: 700; border-bottom: 1.5px dashed var(--highlight-ing); }
-        .h-ed { color: var(--highlight-ed); font-weight: 700; border-bottom: 1.5px solid var(--highlight-ed); }
+        .h-ing { color: var(--highlight-ing); font-weight: 700; border-bottom: 2px dashed var(--highlight-ing); }
+        .h-ed { color: var(--highlight-ed); font-weight: 700; border-bottom: 2px solid var(--highlight-ed); }
 
-        .study-box { background: white; padding: 25px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
-        .study-box h3 { color: var(--accent-gold); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin-top: 0; }
-        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        /* --- Study Content --- */
+        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .study-box h3 { color: var(--accent-gold); border-left: 6px solid var(--accent-gold); padding-left: 20px; margin-top: 0; margin-bottom: 20px; font-size: 1.3rem; }
+        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .grammar-detail { margin-top: 15px; padding-left: 20px; border-left: 2px solid #cbd5e1; font-size: 0.95rem; color: #475569; }
 
-        .quiz-box { background: #16213e; color: white; padding: 40px; border-radius: 12px; }
-        input[type="text"] { background: transparent; border: none; border-bottom: 2px solid var(--accent-gold); color: white; font-size: 1.1rem; width: 160px; text-align: center; outline: none; }
+        /* --- Challenge Quiz --- */
+        .quiz-container { background: #16213e; color: white; padding: 45px; border-radius: 15px; }
+        .quiz-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        input[type="text"] { background: transparent; border: none; border-bottom: 2px solid var(--accent-gold); color: white; font-size: 1.2rem; width: 180px; text-align: center; outline: none; margin: 0 8px; }
 
-        footer { text-align: center; padding: 60px; color: #94a3b8; font-size: 0.8rem; }
+        footer { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:4px;">TRACK 6</div>
+    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 6</div>
     <h1>Falling & Found | 墜入凡塵</h1>
     <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
     
-    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/falling and found.png" alt="Track 6" class="track-img">
+    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/falling and found.png" alt="Track 6 Cover Art" class="track-img">
 
     <div class="audio-player-box">
-        <span class="audio-label">🎵 Falling & Found - Audio Player</span>
+        <span class="audio-label">🎵 Audio Player</span>
         <audio controls><source src="https://ducj-creator.github.io/releases/falling and found.mp3" type="audio/mpeg"></audio>
     </div>
 
@@ -108,13 +115,13 @@
         <h3>Learning Foci | 學習重點：</h3>
         <ul>
             <li>1. Participles: Present (-ing) vs. Past (-ed) (分詞：主動進行 vs. 被動完成)</li>
-            <li>2. Sensory Metaphors: Deafening & Blinding (感官隱喻：震耳欲聾與盲目)</li>
-            <li>3. The Arc of Healing: From Breaking to Sailing (療癒路徑：從破碎到啟航)</li>
+            <li>2. Sensory Metaphors: Deafening Silence (修辭：震耳欲聾的寂靜)</li>
+            <li>3. Verb Dynamics: From Falling to Grounded (動詞演進：從墜落到穩固)</li>
         </ul>
     </div>
 </header>
 
-<nav>
+<nav id="mainNav">
     <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home | 主頁</a>
     <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
     <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
@@ -128,39 +135,64 @@
     <table class="lyrics-table">
         <tbody>
             <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
-            <tr><td><span class="h-ing">Falling</span>… <span class="h-ing">falling</span>…<br>Until <span class="h-ed">found</span>…<br>In a <span class="h-ing">spinning</span> world.</td><td>墜落…墜落…<br>直至被尋獲…<br>在這旋轉不休的凡塵。</td></tr>
+            <tr><td><span class="h-ing">Falling</span>… <span class="h-ing">falling</span>…</td><td>墜落…墜落…</td></tr>
+            <tr><td>Until <span class="h-ed">found</span>…</td><td>直至被尋獲…</td></tr>
+            <tr><td>In a <span class="h-ing">spinning</span> world.</td><td>在這旋轉不休的凡塵。</td></tr>
             
             <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
-            <tr><td>I was <span class="h-ing">falling</span> through the silence of the night.<br>I was <span class="h-ing">drowning</span> in the questions I can't fight.</td><td>我曾墜落，穿越夜的沉默。<br>我曾淹沒，於無解的漩渦。</td></tr>
-            <tr><td>The silence is <span class="h-ing">deafening</span>, the dark is <span class="h-ing">blinding</span>.<br>The weight is <span class="h-ing">crushing</span>, the fear is <span class="h-ing">binding</span>.</td><td>寂靜震耳欲聾，黑暗令人盲惑。<br>不能承受之重，連同恐懼將我緊鎖。</td></tr>
+            <tr><td>I was <span class="h-ing">falling</span> through the silence of the night.</td><td>我曾墜落，穿越夜的沉默。</td></tr>
+            <tr><td>I was <span class="h-ing">drowning</span> in the questions I can't fight.</td><td>我曾淹沒，於無解的漩渦。</td></tr>
+            <tr><td>The silence is <span class="h-ing">deafening</span>, the dark is <span class="h-ing">blinding</span>.</td><td>寂靜震耳欲聾，黑暗令人盲惑。</td></tr>
+            <tr><td>The weight is <span class="h-ing">crushing</span>, the fear is <span class="h-ing">binding</span>.</td><td>不能承受之重，連同恐懼將我緊鎖。</td></tr>
 
             <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>But somewhere in the chaos, I hear a voice so clear:<br>"This pain is not forever, this hurt will disappear."</td><td>但在混沌之中，有個聲音清晰可聞：<br>「疼痛不會持久，創傷終將消逝。」</td></tr>
+            <tr><td>But somewhere in the chaos, I hear a voice so clear:</td><td>但在混沌之中，有個聲音清晰可聞：</td></tr>
+            <tr><td>"This pain is not forever, this hurt will disappear."</td><td>「疼痛不會持久，創傷終將消逝。」</td></tr>
 
             <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
-            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.<br>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.</td><td>我曾破碎，卻已痊癒。<br>我曾迷失，卻被尋覓。</td></tr>
-            <tr style="background:#fff5f5"><td>I was <span class="h-ed">tired</span>, I was <span class="h-ed">worn</span>, but I'm <span class="h-ed">renewed</span>.<br>I was <span class="h-ed">scared</span>, I was <span class="h-ed">shaken</span>, but I'm <span class="h-ed">moved</span>.</td><td>我曾疲憊耗盡，卻得新力。<br>我曾害怕動搖，卻被觸及。</td></tr>
-            <tr><td>Every scar I'm <span class="h-ing">wearing</span> tells the truth out loud:<br>I was <span class="h-ing">falling</span>, but now I'm <span class="h-ed">found</span>, safe and sound.</td><td>每一道疤痕，都在大聲宣示：<br>我曾墜落，而今被尋獲尋，安然如斯。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.</td><td>我曾破碎，卻已痊癒。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.</td><td>我曾迷失，卻被尋覓。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">tired</span>, I was <span class="h-ed">worn</span>, but I'm <span class="h-ed">renewed</span>.</td><td>我曾疲憊耗盡，卻得新力。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">scared</span>, I was <span class="h-ed">shaken</span>, but I'm <span class="h-ed">moved</span>.</td><td>我曾害怕動搖，卻被觸及。</td></tr>
+            <tr><td>Every scar I'm <span class="h-ing">wearing</span> tells the truth out loud:</td><td>每一道疤痕，都在大聲宣示：</td></tr>
+            <tr><td>I was <span class="h-ing">falling</span>, but now I'm <span class="h-ed">found</span>, safe and sound.</td><td>我曾墜落，而今被尋獲尋，安然如斯。</td></tr>
 
             <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
-            <tr><td>I was <span class="h-ing">waiting</span> for a sign, which never came.<br>The days were endless, the nights were <span class="h-ing">frightening</span>.</td><td>我曾等待，一個沒有到來的消息。<br>日子無盡，暗夜無垠。</td></tr>
-            <tr><td>I was <span class="h-ing">running</span> from a plight, without a name.<br>The misery was <span class="h-ing">suffocating</span>, the ache was <span class="h-ing">numbing</span>.</td><td>我曾逃離，一個無以名狀的困境。<br>痛楚徹骨，心如槁木。</td></tr>
+            <tr><td>I was <span class="h-ing">waiting</span> for a sign, which never came.</td><td>我曾等待，一個沒有到來的消息。</td></tr>
+            <tr><td>The days were endless, the nights were <span class="h-ing">frightening</span>.</td><td>日子無盡，暗夜無垠。</td></tr>
+            <tr><td>I was <span class="h-ing">running</span> from a plight, without a name.</td><td>我曾逃離，一個無以名狀的困境。</td></tr>
+            <tr><td>The misery was <span class="h-ing">suffocating</span>, the ache was <span class="h-ing">numbing</span>.</td><td>痛楚徹骨，心如槁木。</td></tr>
 
             <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>And in that moment, something shifted in my soul:<br>"You are not your failures, you are becoming whole."</td><td>那一刻，靈魂深處，心隨念轉：<br>「你沒有成功，但你在成長。」</td></tr>
+            <tr><td>And in that moment, something shifted in my soul:</td><td>那一刻，靈魂深處，心隨念轉：</td></tr>
+            <tr><td>"You are not your failures, you are becoming whole."</td><td>「你沒有成功，但你在成長。」</td></tr>
 
-            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
-            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.<br>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.</td><td>我曾破碎，卻已痊癒。<br>我曾迷失，卻被尋覓。</td></tr>
+            <tr><td colspan="2" class="marker">Chorus / 副歌 (Reprise)</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.</td><td>我曾破碎，卻已痊癒。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.</td><td>我曾迷失，卻被尋覓。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">tired</span>, I was <span class="h-ed">worn</span>, but I'm <span class="h-ed">renewed</span>.</td><td>我曾疲憊耗盡，卻得新力。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">scared</span>, I was <span class="h-ed">shaken</span>, but I'm <span class="h-ed">moved</span>.</td><td>我曾害怕動搖，卻被觸及。</td></tr>
+            <tr><td>Every scar I'm <span class="h-ing">wearing</span> tells the truth out loud:</td><td>每一道疤痕，都在大聲宣示：</td></tr>
+            <tr><td>I was <span class="h-ing">falling</span>, but now I'm <span class="h-ed">found</span>, safe and sound.</td><td>我曾墜落，而今被尋獲尋，安然如斯。</td></tr>
 
             <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
-            <tr><td><span class="h-ing">Falling</span>, <span class="h-ing">bleeding</span>, <span class="h-ing">kneeling</span>, <span class="h-ing">pleading</span>—<br>I was <span class="h-ing">breaking</span>, I was <span class="h-ing">breathing</span>.</td><td>墜落、流血、跪下、祈求——<br>我曾破碎，卻仍呼吸。</td></tr>
-            <tr><td><span class="h-ing">Healing</span>, <span class="h-ing">breathing</span>, <span class="h-ing">standing</span>, <span class="h-ing">leaving</span>—<br>Now I'm <span class="h-ed">grounded</span>, I'm again <span class="h-ing">sailing</span>.</td><td>療癒、呼吸、站起、離去——<br>如今我穩固，再度揚帆。</td></tr>
+            <tr><td><span class="h-ing">Falling</span>, <span class="h-ing">bleeding</span>, <span class="h-ing">kneeling</span>, <span class="h-ing">pleading</span>—</td><td>墜落、流血、跪下、祈求——</td></tr>
+            <tr><td>I was <span class="h-ing">breaking</span>, I was <span class="h-ing">breathing</span>.</td><td>我曾破碎，卻仍呼吸。</td></tr>
+            <tr><td><span class="h-ing">Healing</span>, <span class="h-ing">breathing</span>, <span class="h-ing">standing</span>, <span class="h-ing">leaving</span>—</td><td>療癒、呼吸、站起、離去——</td></tr>
+            <tr><td>Now I'm <span class="h-ed">grounded</span>, I'm again <span class="h-ing">sailing</span>.</td><td>如今我穩固，再度揚帆。</td></tr>
 
             <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
-            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.<br>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.<br>I was <span class="h-ed">scared</span>, I was <span class="h-ed">shaken</span>, but I'm <span class="h-ed">moved</span>.</td><td>我曾破碎，卻已痊癒。<br>我曾迷失，卻被尋覓。<br>我曾害怕動搖，卻被觸及。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">broken</span>, but I'm <span class="h-ed">healed</span> now.</td><td>我曾破碎，卻已痊癒。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">lost</span>, but I'm <span class="h-ed">found</span> somehow.</td><td>我曾迷失，卻被尋覓。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">tired</span>, I was <span class="h-ed">worn</span>, but I'm <span class="h-ed">renewed</span>.</td><td>我曾疲憊耗盡，卻得新力。</td></tr>
+            <tr style="background:#fff5f5"><td>I was <span class="h-ed">scared</span>, I was <span class="h-ed">shaken</span>, but I'm <span class="h-ed">moved</span>.</td><td>我曾害怕動搖，卻被觸及。</td></tr>
+            <tr><td>Every scar I'm <span class="h-ing">wearing</span> tells the truth out loud:</td><td>每一道疤痕，都在大聲宣示：</td></tr>
+            <tr><td>I was <span class="h-ing">falling</span>, but now I'm <span class="h-ed">found</span>, safe and sound.</td><td>我曾墜落，而今被尋獲尋，安然如斯。</td></tr>
 
             <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
-            <tr><td><span class="h-ing">Falling</span>…<br><span class="h-ed">Found</span>…<br>Safe and sound…</td><td>墜落…<br>尋獲…<br>安然如斯…</td></tr>
+            <tr><td><span class="h-ing">Falling</span>…</td><td>墜落…</td></tr>
+            <tr><td><span class="h-ed">Found</span>…</td><td>尋獲…</td></tr>
+            <tr><td>Safe and sound…</td><td>安然如斯…</td></tr>
         </tbody>
     </table>
 </div>
@@ -168,14 +200,14 @@
 <div id="vocab" class="content-section">
     <div class="section-header">§ 📚 Vocabulary | 重點單字解析</div>
     <div class="vocab-grid">
-        <div class="study-box"><b>1. Deafening [ˈdefənɪŋ] (adj.)</b><br>震耳欲聾的。形容聲音極響，或隱喻寂靜帶來的強烈壓迫感。</div>
-        <div class="study-box"><b>2. Renewed [rɪˈnjuːd] (adj./pp)</b><br>更新的。在損耗或痛苦後，重新獲得力量或生命力。</div>
-        <div class="study-box"><b>3. Suffocating [ˈsʌfəkeɪtɪŋ] (adj.)</b><br>令人窒息的。描述環境或情緒極其壓抑。</div>
-        <div class="study-box"><b>4. Grounded [ˈɡraʊndɪd] (adj.)</b><br>腳踏實地的；穩固的。形容靈魂找到了安定的重心。</div>
-        <div class="study-box"><b>5. Plight [plaɪt] (n.)</b><br>境況、苦難。特別指一個困難、危險或尷尬的處境。</div>
-        <div class="study-box"><b>6. Chaos [ˈkeɪɑːs] (n.)</b><br>混亂。指完全沒有條理、令人迷失的狀態。</div>
-        <div class="study-box"><b>7. Shaken [ˈʃeɪkən] (adj./pp)</b><br>受到動搖的。形容信念或情感受到強烈衝擊。</div>
-        <div class="study-box"><b>8. Misery [ˈmɪzəri] (n.)</b><br>痛苦、慘狀。指極度的精神或肉體折磨。</div>
+        <div class="study-box"><b>1. Deafening [ˈdefənɪŋ] (adj.)</b><br>極其響亮的；震耳欲聾的。<br><i>"The silence is deafening."</i></div>
+        <div class="study-box"><b>2. Crushing [ˈkrʌʃɪŋ] (adj.)</b><br>壓倒性的；致命的。<br><i>"The weight is crushing."</i></div>
+        <div class="study-box"><b>3. Plight [plaɪt] (n.)</b><br>困境；苦境。</div>
+        <div class="study-box"><b>4. Suffocating [ˈsʌfəkeɪtɪŋ] (adj.)</b><br>令人窒息的。</div>
+        <div class="study-box"><b>5. Numbing [ˈnʌmɪŋ] (adj.)</b><br>令人麻木的。</div>
+        <div class="study-box"><b>6. Grounded [ˈɡraʊndɪd] (adj.)</b><br>紮實的；穩固的。</div>
+        <div class="study-box"><b>7. Misery [ˈmɪzəri] (n.)</b><br>悲慘；痛苦。</div>
+        <div class="study-box"><b>8. Renewed [rɪˈnjuːd] (adj./p.p.)</b><br>更新的；恢復元氣的。</div>
     </div>
 </div>
 
@@ -183,60 +215,71 @@
     <div class="section-header">§ 📐 Grammar | 現在分詞與過去分詞</div>
     
     <div class="study-box">
-        <h3>1. 現在分詞 (Present Participles - V-ing)</h3>
-        <p>本曲中的 -ing 形式具有兩種主要功能：</p>
+        <h3>1. 現在分詞 (V-ing) 的多重宇宙</h3>
+        <p>現在分詞在歌詞中呈現了動態的流動感：</p>
         <ul>
-            <li><b>動作進行中 (Continuous Action):</b> 如 <i>Falling, drowning, bleeding</i>。強調痛苦與掙扎是「正在發生」且「持續不斷」的。</li>
-            <li><b>主動描述性質 (Active Adjective):</b> 如 <i>Deafening, blinding, crushing</i>。描述事物本身帶給人的主動感受（寂靜「使人」聾、重量「使人」碎）。</li>
+            <li><b>現在進行式 (Progressive):</b> <i>Falling, drowning, waiting, running</i>。描述正在發生的苦難。</li>
+            <li><b>主動分詞形容詞 (Active Adjective):</b> <i>Spinning, deafening, blinding, crushing</i>。描述事物主動給予人的感官衝擊（事情令人...）。</li>
+            <li><b>連續動作 (Sequence):</b> Bridge 區塊中的 <i>Bleeding, kneeling, pleading</i> 透過 V-ing 營造出一連串緊湊的生命轉折。</li>
         </ul>
     </div>
 
     <div class="study-box">
-        <h3>2. 過去分詞 (Past Participles - V-ed)</h3>
-        <p>本曲中的 -ed/p.p. 形式象徵著「被動遭遇」或「完成狀態」：</p>
+        <h3>2. 過去分詞 (V-ed/p.p.) 的穩定狀態</h3>
+        <p>過去分詞通常描述受詞受到的影響或最終的結果：</p>
         <ul>
-            <li><b>受詞狀態 (Passive State):</b> 如 <i>Broken, lost, shaken</i>。描述主角「被」命運摧毀或震驚。</li>
-            <li><b>療癒的結果 (Result of Healing):</b> 如 <i>Healed, renewed, found</i>。當動作完成後，留下的穩定狀態。</li>
+            <li><b>狀態形容詞 (Passive Adjective):</b> <i>Broken, lost, tired, worn, scared, shaken</i>。描述主角當時受傷的狀態（人感到...）。</li>
+            <li><b>被動語態與完成 (Passive/Perfect):</b> <i>Found, healed, renewed, moved, grounded</i>。這類動詞象徵了痛苦結束後，被力量支撐的平穩。</li>
         </ul>
     </div>
 
     <div class="study-box">
-        <h3>3. 辨析：-ing vs. -ed 的情緒對比</h3>
-        <p>這首歌是學習分詞形容詞的最佳教材：<br>
-        - <b>Frightening night</b> (令人害怕的夜晚 - 主動性質)<br>
-        - <b>Scared soul</b> (感到害怕的靈魂 - 被動情緒)</p>
+        <h3>3. 核心辨析：令人 (-ing) 與 感到 (-ed)</h3>
+        <div class="grammar-detail">
+            - <b>Frightening night:</b> 令人恐懼的夜晚 (夜晚主動發出恐怖感)。<br>
+            - <b>Scared person:</b> 感到恐懼的人 (人被夜晚嚇到了)。
+        </div>
     </div>
 </div>
 
 <div id="rhetoric" class="content-section">
-    <div class="section-header">§ 💡 Rhetoric | 修辭意象解析</div>
+    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
     <div class="study-box">
         <h3>1. Oxymoron (矛盾修辭)</h3>
-        <p><b>"Silence is deafening":</b> 這種修辭將兩個相反的詞結合。當寂靜大到一種極限，它就像巨響一樣震動著主角的心靈，強調孤獨的劇烈。</p>
+        <p><b>"Silence is deafening":</b> 寂靜原本是無聲的，但當沈默重到讓人無法忍受時，它在耳邊產生的壓迫感反而像巨響一般。這強化了主角內心的孤獨感。</p>
     </div>
     <div class="study-box">
-        <h3>2. Alliteration (頭韻)</h3>
-        <p><b>"Safe and Sound":</b> 使用重複的字母 s 開頭。這是一個英語慣用語，不僅聽起來協調，更象徵了最終獲得的平靜與和諧。</p>
+        <h3>2. Sensory Synesthesia (移覺/通感)</h3>
+        <p><b>"Dark is blinding":</b> 黑暗原本是看不見，但這裡將黑暗擬人化，形容它強烈到主動「閃瞎」了眼，讓人徹底失去方向。</p>
     </div>
     <div class="study-box">
-        <h3>3. Dynamic Contrast (動態對比)</h3>
-        <p>在 Bridge 區塊，歌詞將「負面進行」的詞 (Bleeding, Pleading) 轉向「積極進行」的詞 (Healing, Sailing)，展示了靈魂從沉沒到重生的完整軌跡。</p>
+        <h3>3. Structural Parallelism (結構平行)</h3>
+        <p>Bridge 區塊使用了 V-ing 的高度平行對稱（Falling/Bleeding/Kneeling/Pleading vs. Healing/Breathing/Standing/Leaving），展現了靈魂從受難到重生的層次感。</p>
     </div>
 </div>
 
 <div id="challenge" class="content-section">
-    <div class="section-header">§ 🎯 Challenge | 挑戰練習</div>
-    <div class="quiz-box">
-        <h3>請填入適當的分詞形式 (-ing 或 -ed)：</h3>
-        <p>1. The dark is ____________ (blind), but I am ____________ (move) by the light.</p>
-        <p>2. I felt ____________ (tire) after ____________ (run) from my plight.</p>
-        <p>3. A ____________ (break) heart is ____________ (heal) by love.</p>
-        <p>4. The weight was ____________ (crush), leaving me ____________ (shake).</p>
-        <p>5. Stop ____________ (fall), start ____________ (sail).</p>
+    <div class="section-header">§ 🎯 Challenge | 分詞挑戰題</div>
+    <div class="quiz-container">
+        <div class="quiz-item">
+            1. The noise is ________ (deafen), and I feel ________ (shake) by the blast.
+        </div>
+        <div class="quiz-item">
+            2. After ________ (fall) for so long, I am finally ________ (find).
+        </div>
+        <div class="quiz-item">
+            3. The ________ (crush) weight of the world made me feel ________ (break).
+        </div>
+        <div class="quiz-item">
+            4. Keep ________ (breathe), you are ________ (renew) by hope.
+        </div>
+        <div class="quiz-item">
+            5. The dark was ________ (blind), and the night was ________ (frighten).
+        </div>
     </div>
 </div>
 
-<footer>&copy; 2026 Shirley AI Music Studio</footer>
+<footer>&copy; 2026 Shirley AI Music Studio | 全歌詞文法教學版</footer>
 
 <script>
     function showSection(sectionId, btn) {
