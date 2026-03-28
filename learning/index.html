@@ -956,6 +956,16 @@
     @media (prefers-reduced-motion: reduce){
       *{ animation:none !important; transition:none !important; }
     }
+
+    /* 強制滑鼠懸停的花瓣置頂 */
+.petal:hover {
+  z-index: 999 !important;
+}
+
+/* 為了確保點擊精準，讓內部的 div 不要阻擋事件 */
+.petal-content {
+  pointer-events: none;
+}
   </style>
 </head>
 
