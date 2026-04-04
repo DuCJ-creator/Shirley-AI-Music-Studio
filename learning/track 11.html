@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 11: If I Were You | 如果我是你 - Learning Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #064e3b;
+            --header-gradient: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+            --accent-gold: #fbbf24;
+            --nav-bg: #065f46;
+            --paper-bg: #fdfaf5;
+            --paper-grid: rgba(0, 0, 0, 0.05);
+            --text-main: #064e3b;
+            --highlight-pre: #2563eb; /* 與現在相反 */
+            --highlight-past: #dc2626; /* 與過去相反 */
+            --highlight-sub: #9333ea; /* 建議/命令 */
+        }
+
+        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
+
+        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
+        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
+        .author { color: #a7f3d0; margin: 15px 0; font-size: 1rem; }
+        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+        
+        .audio-player-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 30px;
+            margin: 25px 0;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+        .audio-label { color: #064e3b; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
+
+        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .nav-item { background: transparent; border: 1px solid #059669; color: #d1fae5; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
+        .nav-item:hover { border-color: var(--accent-gold); color: white; }
+        .nav-item.active { background: var(--accent-gold); color: #064e3b; border-color: var(--accent-gold); }
+
+        .content-section {
+            display: none;
+            background-color: var(--paper-bg);
+            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
+            background-size: 100% 1.8em;
+            color: var(--text-main);
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 60px;
+            border-radius: 6px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            animation: fadeIn 0.5s ease;
+        }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
+
+        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
+        .marker { background: #ecfdf5; font-weight: 800; text-align: center; color: #065f46; letter-spacing: 3px; }
+        
+        /* 結構標註樣式 */
+        .h-pre { color: var(--highlight-pre); font-weight: 700; }
+        .h-past { color: var(--highlight-past); font-weight: 700; }
+        .h-sub { color: var(--highlight-sub); font-weight: 700; border-bottom: 2px dashed var(--highlight-sub); }
+
+        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .study-box h3 { color: #065f46; border-left: 6px solid var(--accent-gold); padding-left: 20px; margin-top: 0; }
+        
+        .grammar-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+        .grammar-card b { color: #1e293b; }
+
+        .quiz-container { background: #064e3b; color: white; padding: 45px; border-radius: 15px; }
+        footer { text-align: center; padding: 80px 20px; color: #a7f3d0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 11</div>
+    <h1>If I Were You | 如果我是你</h1>
+    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
+    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/if i were you.png" class="track-img">
+    <div class="audio-player-box">
+        <span class="audio-label">🎵 Audio Player</span>
+        <audio controls><source src="https://ducj-creator.github.io/releases/if i were you.mp3" type="audio/mpeg"></audio>
+    </div>
+</header>
+
+<nav>
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
+    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
+    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
+    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
+    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
+    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+</nav>
+
+<div id="lyrics" class="content-section active">
+    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
+    <table class="lyrics-table">
+        <tbody>
+            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
+            <tr><td>If I <span class="h-pre">could</span> turn back time…<br>If I <span class="h-pre">could</span> change one thing…</td><td>如果能讓時光回首…<br>如果能改變一件事由…</td></tr>
+            
+            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1 (與現在事實相反)</td></tr>
+            <tr><td>If I <span class="h-pre">were</span> you, I<span class="h-pre">’d</span> (would) hold on tight.</td><td>如果我是你，我會緊緊把握。</td></tr>
+            <tr><td>If I <span class="h-pre">were</span> you, I<span class="h-pre">’d</span> (would) never lose the fight.</td><td>如果我是你，我會放手一搏。</td></tr>
+            <tr><td>I wish I <span class="h-pre">were</span> the one who made you smile.</td><td>我希望，能讓你嘴角上揚。</td></tr>
+            <tr><td>I wish I <span class="h-pre">had</span> the strength to stay a while.</td><td>我希望，能擁有你在身旁。</td></tr>
+
+            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌 (與過去事實相反)</td></tr>
+            <tr><td>If I <span class="h-past">had known</span> the words you needed then,</td><td>如果我當時知道，你需要的話語，</td></tr>
+            <tr><td>I <span class="h-past">would have stayed</span> and never left again.</td><td>我會留下來，不會離你而去。</td></tr>
+
+            <tr><td colspan="2" class="marker">Chorus / 副歌 (虛擬語氣綜合)</td></tr>
+            <tr style="background:#f0f9ff"><td>If I <span class="h-pre">were</span> you, I<span class="h-pre">’d</span> forgive the past.</td><td>如果我是你，我會原諒過去。</td></tr>
+            <tr style="background:#fef2f2"><td>If I <span class="h-past">had tried</span>, I <span class="h-past">could have made</span> it last.</td><td>如果當時嘗試過，我本可以讓它延續。</td></tr>
+            <tr style="background:#f0f9ff"><td>I wish I <span class="h-pre">were</span> standing where you are.</td><td>我希望，我站在你身處的原地。</td></tr>
+            <tr style="background:#fef2f2"><td>I wish I <span class="h-past">had followed</span> my own heart.</td><td>我希望，我曾跟隨自己的心意。</td></tr>
+            <tr style="background:#f0f9ff"><td>If only I <span class="h-pre">could</span> start again today.</td><td>但願我能，從今天重新開始。</td></tr>
+            <tr style="background:#f0f9ff"><td>If only you <span class="h-pre">could</span> hear me when I pray.</td><td>但願你能，聽見我祈禱於斯。</td></tr>
+
+            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2 (建議/要求)</td></tr>
+            <tr><td>I suggest that you <span class="h-sub">be</span> gentle with yourself.</td><td>我建議，你開始溫柔對待自己。</td></tr>
+            <tr><td>It’s time that you <span class="h-pre">forgave</span> the one who fell.</td><td>是時候，原諒那個曾經跌倒的自己。</td></tr>
+            <tr><td>I demand that he <span class="h-sub">be</span> honest from the start.</td><td>我要求，他從開始就誠實面對自己。</td></tr>
+            <tr><td>I ask that she <span class="h-sub">remember</span> her own heart.</td><td>我請求，她記得心底藏有秘密的自己。</td></tr>
+
+            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
+            <tr><td>If only I <span class="h-pre">could</span> take away your pain.</td><td>但願我能，帶走你所有的苦痛。</td></tr>
+            <tr><td>If only I <span class="h-pre">could</span> stand beneath the rain with you again.</td><td>但願我能，再次與你站在雨中。</td></tr>
+
+            <tr><td colspan="2" class="marker">Chorus / 副歌 (重複)</td></tr>
+            <tr style="background:#f0f9ff"><td>If I <span class="h-pre">were</span> you... (節錄)</td><td>如果我是你...</td></tr>
+
+            <tr><td colspan="2" class="marker">Bridge / 橋段 (寧願/早該)</td></tr>
+            <tr><td>I would rather you <span class="h-pre">knew</span> how much you mean to me.</td><td>願你知道，你對我有多重要。</td></tr>
+            <tr><td>I would rather I <span class="h-pre">showed</span> you what I couldn’t see.</td><td>願我明瞭，視而不見該有多可笑。</td></tr>
+            <tr><td>It’s high time I <span class="h-pre">told</span> you all the truth inside.</td><td>早該告訴你，所有的真實與煎熬。</td></tr>
+            <tr><td>It’s high time I <span class="h-pre">let</span> go of all the fear and pride.</td><td>也早該放下，所有的恐懼與傲嬌。</td></tr>
+
+            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
+            <tr style="background:#f0f9ff"><td>If I <span class="h-pre">were</span> you, I’d forgive the past...</td><td>如果我是你，我會原諒過去...</td></tr>
+
+            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
+            <tr><td>If I <span class="h-pre">were</span> you…</td><td>如果我是你…</td></tr>
+            <tr><td>I wish I <span class="h-pre">were</span>…</td><td>我真希望…</td></tr>
+            <tr><td>If only I <span class="h-pre">could</span>…</td><td>但願我能…</td></tr>
+            <tr><td>I <span class="h-past">would have stayed</span>.</td><td>當時留你在身旁。</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="vocab" class="content-section">
+    <div class="section-header">§ 📚 Vocabulary | 情感詞彙</div>
+    <div class="vocab-grid">
+        <div class="study-box"><b>1. Forgive [fərˈɡɪv] (v.)</b><br>原諒、寬恕。這首歌的核心情感動作。</div>
+        <div class="study-box"><b>2. Strength [streŋθ] (n.)</b><br>力量、強度。</div>
+        <div class="study-box"><b>3. Gentle [ˈdʒentl] (adj.)</b><br>溫柔的、和善的。用於對待受傷的靈魂。</div>
+        <div class="study-box"><b>4. Secure [sɪˈkjʊr] (adj.)</b><br>心安的、穩固的。</div>
+        <div class="study-box"><b>5. Pride [praɪd] (n.)</b><br>自尊心、傲慢。</div>
+        <div class="study-box"><b>6. Heart [hɑːrt] (n.)</b><br>心意、本心。</div>
+    </div>
+</div>
+
+<div id="grammar" class="content-section">
+    <div class="section-header">§ 📐 Grammar | 虛擬語氣四大法則</div>
+    
+    <div class="grammar-card">
+        <h3>一、與現在事實相反 (Present Unreal)</h3>
+        <p><b>結構：</b> If + S + 過去式 (be動詞必用 <b>were</b>), S + would/could/might + VR</p>
+        <p><b>例：</b> If I <u>were</u> you, I <u>would</u> forgive. (事實上我不是你)</p>
+    </div>
+
+    <div class="grammar-card">
+        <h3>二、與過去事實相反 (Past Unreal)</h3>
+        <p><b>結構：</b> If + S + <b>had + P.P.</b>, S + would/could/might + <b>have + P.P.</b></p>
+        <p><b>例：</b> If I <u>had tried</u>, I <u>could have made</u> it last. (事實上當時沒嘗試、也沒延續)</p>
+    </div>
+
+    <div class="grammar-card">
+        <h3>三、建議、要求、命令 (Subjunctive)</h3>
+        <p><b>關鍵字：</b> suggest, demand, ask, important...</p>
+        <p><b>結構：</b> S + suggest + that + S + <b>(should) + 原形V</b></p>
+        <p><b>例：</b> I suggest that you <u>be</u> gentle. (原形 be 動詞，不可用 are/was)</p>
+    </div>
+
+    <div class="grammar-card">
+        <h3>四、寧願與早該 (Would rather / High time)</h3>
+        <p><b>結構：</b> would rather / It's time + S + <b>過去式V</b></p>
+        <p><b>例：</b> It's high time I <u>told</u> you. (雖然是指現在，但要用過去式表達「早該做而未做」)</p>
+    </div>
+</div>
+
+<div id="rhetoric" class="content-section">
+    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
+    <div class="study-box">
+        <h3>1. Hypophora (設問法)</h3>
+        <p>全曲透過大量的 "If I were you" 自問自答，展現出一種內在的自我對話與療癒過程。</p>
+    </div>
+    <div class="study-box">
+        <h3>2. Symbolism: The Rain (雨的象徵)</h3>
+        <p><b>"Stand beneath the rain with you"</b>: 雨象徵共同經歷的苦難與洗滌，而非僅是負面的阻礙。</p>
+    </div>
+    <div class="study-box">
+        <h3>3. Parallelism (排比句)</h3>
+        <p>Bridge 中 "I would rather..." 與 "It's high time..." 的交錯使用，將累積的情緒推向最高潮。</p>
+    </div>
+</div>
+
+<div id="challenge" class="content-section">
+    <div class="section-header">§ 🎯 Challenge | 虛擬語氣大補帖</div>
+    <div class="quiz-container">
+        <p>請根據時態與結構，填入正確的動詞形式：</p>
+        <div style="margin-bottom: 20px;">1. If I ________ (be) a bird, I would fly to you.</div>
+        <div style="margin-bottom: 20px;">2. I wish I ________ (follow) my heart yesterday.</div>
+        <div style="margin-bottom: 20px;">3. The doctor suggested that he ________ (take) a rest.</div>
+        <div style="margin-bottom: 20px;">4. It is high time you ________ (go) to bed.</div>
+        <div style="margin-bottom: 20px;">5. If he ________ (know) the truth then, he would have been angry.</div>
+    </div>
+</div>
+
+<footer>&copy; 2026 Shirley AI Music Studio | 虛擬語氣專題版</footer>
+
+<script>
+    function showSection(sectionId, btn) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
