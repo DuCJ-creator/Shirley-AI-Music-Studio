@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track 10: Never Have I Walked Alone | 從未獨行 - Learning Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #2d1b4d;
+            --header-gradient: linear-gradient(135deg, #4c1d95 0%, #2d1b4d 100%);
+            --accent-gold: #fbbf24;
+            --nav-bg: #4c1d95;
+            --paper-bg: #fdfaf5;
+            --paper-grid: rgba(0, 0, 0, 0.05);
+            --text-main: #2d1b4d;
+            --highlight-inv: #be185d; /* 倒裝關鍵字標註色 */
+            --highlight-aux: #2563eb; /* 助動詞標註色 */
+        }
+
+        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
+
+        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
+        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
+        .author { color: #a5b4fc; margin: 15px 0; font-size: 1rem; }
+        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+        
+        .audio-player-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 30px;
+            margin: 25px 0;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+        .audio-label { color: #2d1b4d; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
+
+        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .nav-item { background: transparent; border: 1px solid #7c3aed; color: #ddd6fe; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
+        .nav-item:hover { border-color: var(--accent-gold); color: white; }
+        .nav-item.active { background: var(--accent-gold); color: #2d1b4d; border-color: var(--accent-gold); }
+
+        .content-section {
+            display: none;
+            background-color: var(--paper-bg);
+            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
+            background-size: 100% 1.8em;
+            color: var(--text-main);
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 60px;
+            border-radius: 6px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            animation: fadeIn 0.5s ease;
+        }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
+
+        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
+        .marker { background: #f1f5f9; font-weight: 800; text-align: center; color: #475569; letter-spacing: 3px; }
+        
+        .h-inv { color: var(--highlight-inv); font-weight: 800; }
+        .h-aux { color: var(--highlight-aux); font-weight: 700; border-bottom: 2px solid var(--highlight-aux); }
+
+        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .study-box h3 { color: #4c1d95; border-left: 6px solid var(--highlight-inv); padding-left: 20px; margin-top: 0; }
+        
+        .grammar-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .grammar-table th { background: #f1f5f9; padding: 12px; text-align: left; border: 1px solid #e2e8f0; }
+        .grammar-table td { padding: 12px; border: 1px solid #e2e8f0; font-size: 0.95rem; }
+
+        .quiz-container { background: #2d1b4d; color: white; padding: 45px; border-radius: 15px; }
+        footer { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 10</div>
+    <h1>Never Have I Walked Alone | 從未獨行</h1>
+    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
+    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/never have i walked alone.png" class="track-img">
+    <div class="audio-player-box">
+        <span class="audio-label">🎵 Audio Player</span>
+        <audio controls><source src="https://ducj-creator.github.io/releases/never have i walked alone.mp3" type="audio/mpeg"></audio>
+    </div>
+</header>
+
+<nav>
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
+    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
+    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
+    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
+    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
+    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+</nav>
+
+<div id="lyrics" class="content-section active">
+    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
+    <table class="lyrics-table">
+        <tbody>
+            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I walked alone…<br><span class="h-inv">Only when</span> I fell, I grew…</td><td>我從未獨自走過…<br>卻只在墜落時才成長…</td></tr>
+            
+            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I seen a love so true.</td><td>從未見過，如此真摯的偏愛。</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I known a self I could do.</td><td>從未明白，如何張揚的自在。</td></tr>
+            <tr><td><span class="h-inv">Little</span> <span class="h-aux">did</span> I know the pain would lead me home.</td><td>從不知道，傷痛會引我歸鄉。</td></tr>
+            <tr><td><span class="h-inv">Little</span> <span class="h-aux">did</span> I dream I’d never walk alone.</td><td>從未想過，我將不會再孤單。</td></tr>
+
+            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
+            <tr><td><span class="h-inv">Only when</span> I lost it all, <span class="h-aux">did</span> I learn to hold.</td><td>只有在失去之時，我才學會緊握。</td></tr>
+            <tr><td><span class="h-inv">Only when</span> I broke apart, <span class="h-aux">did</span> I find my soul.</td><td>只有在破碎之時，靈魂方歸真我。</td></tr>
+
+            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I walked alone, not even for a day.</td><td>從未獨自走過，哪怕只是一天。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I faced the dark without you leading the way.</td><td>從未面對黑暗，沒有你在身邊。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Only when</span> I called your name, you pulled me out of the zone.</td><td>每當我呼喚你，你將我拉出那片區域。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Only then</span> <span class="h-aux">did</span> I discover I was never on my own.</td><td>直到那時才懂，我從不曾孤寂無依。</td></tr>
+
+            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
+            <tr><td><span class="h-inv">Not until</span> you held me close, <span class="h-aux">did</span> I feel secure.</td><td>直到你將我擁緊，我才感到心安。</td></tr>
+            <tr><td><span class="h-inv">Not until</span> you wiped my tears, <span class="h-aux">did</span> I find my cure.</td><td>直到你拭去我淚，才是治癒良方。</td></tr>
+            <tr><td><span class="h-inv">Seldom</span> <span class="h-aux">have</span> I said the words you hope to hear.</td><td>我很少說出，你想要聽見的話語。</td></tr>
+            <tr><td><span class="h-inv">Rarely</span> <span class="h-aux">have</span> I shown that I’m grateful you are here.</td><td>我極少表現，感激你一直在身旁。</td></tr>
+
+            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
+            <tr><td><span class="h-inv">No sooner</span> <span class="h-aux">had</span> I fallen, than you caught my hand.</td><td>我一墜落，你就抓起了我的手。</td></tr>
+            <tr><td><span class="h-inv">No sooner</span> <span class="h-aux">had</span> I whispered, than you helped me stand.</td><td>我一低語，你就幫我昂起了首。</td></tr>
+
+            <tr><td colspan="2" class="marker">Chorus / 副歌 (重複)</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I walked alone... (節錄)</td><td>從未獨自走過...</td></tr>
+
+            <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
+            <tr><td><span class="h-inv">So seldom</span> <span class="h-aux">do</span> I say how much you mean to me.</td><td>我很少說出你對我有多重要。</td></tr>
+            <tr><td><span class="h-inv">So deeply</span> <span class="h-aux">do</span> I feel the love that sets me free.</td><td>卻如此深切感受愛讓我自由。</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">will</span> I forget the way you stayed around.</td><td>我永不會忘記，你一直的守候。</td></tr>
+            <tr><td><span class="h-inv">Only with</span> you beside me, <span class="h-aux">have</span> I finally found.</td><td>只有身旁是你，我才終於擁有。</td></tr>
+
+            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I walked alone, not even for a day.</td><td>從未獨自走過，哪怕只是一天。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I faced the dark without you leading the way.</td><td>從未面對黑暗，沒有你在身邊。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Only when</span> I called your name, you pulled me out of the zone.</td><td>每當我呼喚你，你將我拉出那片區域。</td></tr>
+            <tr style="background:#f5f3ff"><td><span class="h-inv">Only then</span> <span class="h-aux">did</span> I discover I was never on my own.</td><td>直到那時才懂，我從不曾孤寂無依。</td></tr>
+
+            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">have</span> I walked alone…</td><td>我從未獨自走過…</td></tr>
+            <tr><td><span class="h-inv">Only now</span> <span class="h-aux">do</span> I know…</td><td>直到此刻我才明白…</td></tr>
+            <tr><td><span class="h-inv">Never</span> <span class="h-aux">was</span> I on my own.</td><td>我從不曾孤單寂寞。</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="vocab" class="content-section">
+    <div class="section-header">§ 📚 Vocabulary | 關鍵詞彙</div>
+    <div class="vocab-grid">
+        <div class="study-box"><b>1. Secure [sɪˈkjʊr] (adj.)</b><br>感到安全的、放心的。</div>
+        <div class="study-box"><b>2. Discover [dɪˈskʌvər] (v.)</b><br>發現、領悟。</div>
+        <div class="study-box"><b>3. Grateful [ˈɡreɪtfʊl] (adj.)</b><br>感激的。</div>
+        <div class="study-box"><b>4. Whispered [ˈwɪspərd] (v.)</b><br>低語、輕聲說。</div>
+        <div class="study-box"><b>5. Soul [soʊl] (n.)</b><br>靈魂、心靈深處。</div>
+        <div class="study-box"><b>6. Cure [sɪˈkjʊr] (n./v.)</b><br>治癒、療癒。</div>
+    </div>
+</div>
+
+<div id="grammar" class="content-section">
+    <div class="section-header">§ 📐 Grammar | 倒裝句型大解析</div>
+    <div class="study-box">
+        <h3>💡 核心公式：否定/限定副詞 + [助動詞/be動詞] + 主詞 + V</h3>
+        <table class="grammar-table">
+            <tr><th>類型</th><th>結構</th><th>歌詞例句</th></tr>
+            <tr><td>否定副詞</td><td>Never + have + I + Vpp</td><td><b>Never have I</b> walked alone.</td></tr>
+            <tr><td>程度否定</td><td>Little + did + I + V</td><td><b>Little did I</b> know the pain.</td></tr>
+            <tr><td>時間限定</td><td>Not until... + did + I + V</td><td><b>Not until</b> you held me <b>did I</b> feel secure.</td></tr>
+            <tr><td>頻率否定</td><td>Seldom/Rarely + have + I + Vpp</td><td><b>Seldom have I</b> said the words.</td></tr>
+            <tr><td>Only 限定</td><td>Only when... + did + I + V</td><td><b>Only when</b> I lost it all <b>did I</b> learn.</td></tr>
+            <tr><td>緊接發生</td><td>No sooner had I... than...</td><td><b>No sooner had I</b> fallen <b>than</b> you caught me.</td></tr>
+            <tr><td>程度強化</td><td>So deeply + do + I + V</td><td><b>So deeply do I</b> feel the love.</td></tr>
+        </table>
+    </div>
+</div>
+
+<div id="rhetoric" class="content-section">
+    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
+    <div class="study-box">
+        <h3>1. Emphasis (強調法)</h3>
+        <p>倒裝句本身就是一種強調修辭。將「Never」放在句首，將否定情緒極大化，表達出那種驚訝與堅定的信念。</p>
+    </div>
+    <div class="study-box">
+        <h3>2. Contrast (對比)</h3>
+        <p><b>"Only when I lost it all... did I learn to hold"</b>: 透過「失去」與「學會擁有」的對比，闡述人生哲理。</p>
+    </div>
+    <div class="study-box">
+        <h3>3. Pathos (情感渲染)</h3>
+        <p>使用「No sooner had I... than...」建立了一種即時性的關懷感，展現守護者隨時都在的高度的情感聯結。</p>
+    </div>
+</div>
+
+<div id="challenge" class="content-section">
+    <div class="section-header">§ 🎯 Challenge | 倒裝句變形挑戰</div>
+    <div class="quiz-container">
+        <p>將下列一般句子改寫為「倒裝句」：</p>
+        <div style="margin-bottom: 20px;">1. I have never seen such a beautiful soul.<br>➔ <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> have I seen such a beautiful soul.</div>
+        <div style="margin-bottom: 20px;">2. I little dreamed that you would be here.<br>➔ <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> did I dream that you would be here.</div>
+        <div style="margin-bottom: 20px;">3. I didn't find my cure until you wiped my tears.<br>➔ <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> did I find my cure.</div>
+    </div>
+</div>
+
+<footer>&copy; 2026 Shirley AI Music Studio | 倒裝句專題教學版</footer>
+
+<script>
+    function showSection(sectionId, btn) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
