@@ -518,6 +518,422 @@ h1 .accent {
     <span class="footer-note">11 songs, 11 lessons — click any row to begin</span>
   </footer>
 
+</div><!-- end .page -->
+
+<!-- ═══════════════════════════════════════ -->
+<!--  MUSIC PLAYER — lily garden edition    -->
+<!-- ═══════════════════════════════════════ -->
+<style>
+/* Player bar fixed to bottom */
+#music-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(253,250,244,0.92);
+  border-top: 1px solid var(--line-warm);
+  backdrop-filter: blur(14px) saturate(1.1);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 -4px 24px rgba(90,122,52,0.08);
+}
+
+/* Tiny lily petal spinner instead of vinyl */
+#petal-spinner {
+  width: 38px; height: 38px;
+  flex-shrink: 0;
+  position: relative;
+}
+#petal-spinner svg {
+  width: 100%; height: 100%;
+}
+#petal-spinner.spinning svg {
+  animation: petalTurn 4s linear infinite;
+}
+@keyframes petalTurn {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Now-playing text */
+#player-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+#player-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 1px;
+}
+#player-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.25s;
+}
+
+/* Controls */
+#player-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pctrl {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-warm);
+  background: transparent;
+  color: var(--ink-mid);
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-family: inherit;
+}
+.pctrl:hover {
+  background: var(--leaf-pale);
+  border-color: var(--leaf-light);
+  color: var(--stem);
+}
+#play-btn {
+  width: 44px; height: 44px;
+  font-size: 1rem;
+  background: var(--petal-blush);
+  border-color: var(--stamen-pale);
+  color: var(--stamen-deep);
+}
+#play-btn:hover {
+  background: var(--stamen-pale);
+  border-color: var(--stamen);
+  color: var(--stamen-deep);
+}
+#play-btn.is-playing {
+  background: var(--stamen-pale);
+  border-color: var(--stamen);
+}
+
+/* Badges */
+#player-badges {
+  display: flex; gap: 5px; flex-shrink: 0;
+}
+.pbadge {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid var(--ink-faint);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.pbadge.active {
+  background: var(--leaf-pale);
+  border-color: var(--leaf-light);
+  color: var(--leaf);
+}
+
+/* Playlist drawer — slides up from behind the bar */
+#playlist-drawer {
+  position: fixed;
+  bottom: 64px; left: 0; right: 0;
+  z-index: 49;
+  background: rgba(253,250,244,0.97);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 -8px 32px rgba(90,122,52,0.08);
+}
+#playlist-drawer.open {
+  max-height: 340px;
+  overflow-y: auto;
+}
+#playlist-inner {
+  padding: 1rem 2rem 0.8rem;
+}
+.pl-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 0.7rem;
+}
+.pl-list { list-style: none; }
+.pl-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background 0.18s;
+  border-radius: 4px;
+  padding-left: 4px;
+}
+.pl-item:last-child { border-bottom: none; }
+.pl-item:hover { background: var(--leaf-pale); }
+.pl-item.is-playing {
+  background: linear-gradient(90deg, rgba(214,232,204,0.5), transparent);
+}
+.pl-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--ink-faint);
+  min-width: 1.6rem;
+  text-align: right;
+}
+.pl-item.is-playing .pl-num { color: var(--leaf); }
+.pl-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--ink-mid);
+  flex: 1;
+}
+.pl-item.is-playing .pl-name { color: var(--ink); font-weight: 500; }
+
+/* EQ bars */
+.pl-eq {
+  display: flex; align-items: flex-end; gap: 2px; height: 12px; opacity: 0;
+  transition: opacity 0.2s;
+}
+.pl-item.is-playing .pl-eq { opacity: 1; }
+.eq-b {
+  width: 2.5px; background: var(--leaf); border-radius: 1px;
+  animation: eqB 0.5s ease-in-out infinite alternate;
+}
+.eq-b:nth-child(1) { height: 5px; animation-duration: 0.38s; }
+.eq-b:nth-child(2) { height: 9px; animation-duration: 0.55s; }
+.eq-b:nth-child(3) { height: 7px; animation-duration: 0.32s; }
+@keyframes eqB { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+
+/* Playlist toggle button */
+#playlist-toggle {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-warm);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.3s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+#playlist-toggle:hover { background: var(--leaf-pale); color: var(--stem); }
+#playlist-toggle.open { transform: rotate(180deg); }
+
+/* Body padding so page content isn't hidden behind bar */
+body { padding-bottom: 72px; }
+
+@media (max-width: 600px) {
+  #music-bar { padding: 0 1rem; gap: 0.7rem; }
+  #player-badges { display: none; }
+  #playlist-inner { padding: 0.8rem 1rem; }
+}
+</style>
+
+<!-- Player bar -->
+<div id="music-bar">
+  <!-- Petal spinner -->
+  <div id="petal-spinner" aria-hidden="true">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(0 20 20)" opacity="0.9"/>
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(60 20 20)" opacity="0.85"/>
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(120 20 20)" opacity="0.85"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(30 20 20)" opacity="0.7"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(90 20 20)" opacity="0.7"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(150 20 20)" opacity="0.7"/>
+      <circle cx="20" cy="20" r="3" fill="#b87333"/>
+      <circle cx="20" cy="20" r="1.2" fill="#fdfaf4"/>
+    </svg>
+  </div>
+
+  <!-- Now playing -->
+  <div id="player-text">
+    <p id="player-label">Now Playing</p>
+    <p id="player-name">— tap ▶ to begin —</p>
+  </div>
+
+  <!-- Controls -->
+  <div id="player-controls">
+    <button class="pctrl" id="prev-btn" aria-label="Previous">⏮</button>
+    <button class="pctrl" id="play-btn" aria-label="Play / Pause">▶</button>
+    <button class="pctrl" id="next-btn" aria-label="Next">⏭</button>
+  </div>
+
+  <!-- Badges -->
+  <div id="player-badges">
+    <span class="pbadge active" id="badge-loop">↺ Loop</span>
+    <span class="pbadge active" id="badge-shuffle">⇄ Shuffle</span>
+  </div>
+
+  <!-- Playlist toggle -->
+  <button id="playlist-toggle" aria-label="Toggle playlist">▲</button>
 </div>
+
+<!-- Playlist drawer -->
+<div id="playlist-drawer" role="region" aria-label="Song playlist">
+  <div id="playlist-inner">
+    <p class="pl-title">🌸 Playlist · 11首學習歌曲</p>
+    <ul class="pl-list" id="pl-list">
+      <li class="pl-item" data-track="0"><span class="pl-num">01</span><span class="pl-name">My Country Creek</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="1"><span class="pl-num">02</span><span class="pl-name">Time Tells</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="2"><span class="pl-num">03</span><span class="pl-name">Right Now</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="3"><span class="pl-num">04</span><span class="pl-name">Perfect Chapter</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="4"><span class="pl-num">05</span><span class="pl-name">To Be Then Being</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="5"><span class="pl-num">06</span><span class="pl-name">Falling and Found</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="6"><span class="pl-num">07</span><span class="pl-name">What I Become</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="7"><span class="pl-num">08</span><span class="pl-name">The Stories We Carry</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="8"><span class="pl-num">09</span><span class="pl-name">When I Was Falling</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="9"><span class="pl-num">10</span><span class="pl-name">Never Have I Walked Alone</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+      <li class="pl-item" data-track="10"><span class="pl-num">11</span><span class="pl-name">If I Were You</span><span class="pl-eq"><span class="eq-b"></span><span class="eq-b"></span><span class="eq-b"></span></span></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  const BASE = "https://ducj-creator.github.io/releases/";
+  const tracks = [
+    { name: "My Country Creek",          src: BASE + "my%20country%20creek.mp3" },
+    { name: "Time Tells",                src: BASE + "time%20tells.mp3" },
+    { name: "Right Now",                 src: BASE + "right%20now.mp3" },
+    { name: "Perfect Chapter",           src: BASE + "perfect%20chapter.mp3" },
+    { name: "To Be Then Being",          src: BASE + "to%20be%20then%20being.mp3" },
+    { name: "Falling and Found",         src: BASE + "falling%20and%20found.mp3" },
+    { name: "What I Become",             src: BASE + "what%20i%20become.mp3" },
+    { name: "The Stories We Carry",      src: BASE + "the%20stories%20we%20carry.mp3" },
+    { name: "When I Was Falling",        src: BASE + "when%20I%20was%20falling.mp3" },
+    { name: "Never Have I Walked Alone", src: BASE + "never%20have%20i%20walked%20alone.mp3" },
+    { name: "If I Were You",             src: BASE + "if%20i%20were%20you.mp3" },
+  ];
+
+  const audio       = new Audio();
+  audio.preload     = "none";
+  let currentIdx    = null;
+  let isPlaying     = false;
+  let loopEnabled   = true;
+  let shuffleEnabled= true;
+
+  const playBtn     = document.getElementById("play-btn");
+  const prevBtn     = document.getElementById("prev-btn");
+  const nextBtn     = document.getElementById("next-btn");
+  const playerName  = document.getElementById("player-name");
+  const spinner     = document.getElementById("petal-spinner");
+  const badgeLoop   = document.getElementById("badge-loop");
+  const badgeShuffle= document.getElementById("badge-shuffle");
+  const plItems     = document.querySelectorAll(".pl-item");
+  const drawer      = document.getElementById("playlist-drawer");
+  const toggle      = document.getElementById("playlist-toggle");
+
+  function pickRandom(exclude) {
+    let idx;
+    do { idx = Math.floor(Math.random() * tracks.length); }
+    while (tracks.length > 1 && idx === exclude);
+    return idx;
+  }
+
+  function setActive(idx) {
+    plItems.forEach((li, i) => li.classList.toggle("is-playing", i === idx));
+    if (plItems[idx]) plItems[idx].scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+
+  function setPlayingUI(playing) {
+    isPlaying = playing;
+    playBtn.innerHTML  = playing ? "⏸" : "▶";
+    playBtn.classList.toggle("is-playing", playing);
+    if (playing) spinner.classList.add("spinning");
+    else         spinner.classList.remove("spinning");
+  }
+
+  function playTrack(idx) {
+    currentIdx  = idx;
+    audio.src   = tracks[idx].src;
+    audio.load();
+    playerName.style.opacity = "0";
+    setTimeout(() => {
+      playerName.textContent   = tracks[idx].name;
+      playerName.style.opacity = "1";
+    }, 200);
+    setActive(idx);
+    setPlayingUI(true);
+    const p = audio.play();
+    if (p) p.catch(e => console.warn("Playback blocked:", e));
+  }
+
+  audio.addEventListener("ended", () => {
+    if (!loopEnabled) { setPlayingUI(false); return; }
+    const next = shuffleEnabled
+      ? pickRandom(currentIdx)
+      : (currentIdx + 1) % tracks.length;
+    playTrack(next);
+  });
+
+  playBtn.addEventListener("click", () => {
+    if (isPlaying) { audio.pause(); setPlayingUI(false); }
+    else if (currentIdx !== null) {
+      setPlayingUI(true);
+      audio.play().catch(e => console.warn(e));
+    } else {
+      playTrack(shuffleEnabled ? pickRandom(-1) : 0);
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    const prev = shuffleEnabled
+      ? pickRandom(currentIdx)
+      : (currentIdx === null ? tracks.length - 1 : (currentIdx - 1 + tracks.length) % tracks.length);
+    playTrack(prev);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const next = shuffleEnabled
+      ? pickRandom(currentIdx)
+      : (currentIdx === null ? 0 : (currentIdx + 1) % tracks.length);
+    playTrack(next);
+  });
+
+  plItems.forEach((li, i) => li.addEventListener("click", () => playTrack(i)));
+
+  badgeLoop.addEventListener("click", () => {
+    loopEnabled = !loopEnabled;
+    badgeLoop.classList.toggle("active", loopEnabled);
+  });
+  badgeShuffle.addEventListener("click", () => {
+    shuffleEnabled = !shuffleEnabled;
+    badgeShuffle.classList.toggle("active", shuffleEnabled);
+  });
+
+  toggle.addEventListener("click", () => {
+    const open = drawer.classList.toggle("open");
+    toggle.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", open);
+  });
+})();
+</script>
+
 </body>
 </html>
