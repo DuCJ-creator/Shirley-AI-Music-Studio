@@ -4,20 +4,25 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AI 學習樂園 · Grammar with Songs</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #0e0c09;
-  --bg2:      #151208;
-  --surface:  #1a1610;
-  --line:     rgba(212,178,100,0.14);
-  --amber:    #d4b264;
-  --amber2:   #f0d080;
-  --amber-dim:#8a6e36;
-  --text:     #e8dcc8;
-  --text-mid: #9e907a;
-  --text-dim: #5a5040;
-  --rust:     #c06040;
+  --petal-white: #fdfaf4;
+  --petal-cream: #f5f0e4;
+  --petal-blush: #eee8d8;
+  --stamen:      #b87333;
+  --stamen-deep: #8a4f1e;
+  --stamen-pale: #e8c89a;
+  --leaf:        #5a7a52;
+  --leaf-light:  #8aab7e;
+  --leaf-pale:   #d6e8cc;
+  --stem:        #3d5c38;
+  --ink:         #2c2416;
+  --ink-mid:     #6b5c42;
+  --ink-soft:    #a89880;
+  --ink-faint:   #cfc0a8;
+  --line:        rgba(90,122,82,0.15);
+  --line-warm:   rgba(184,115,51,0.18);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,174 +30,185 @@ html { scroll-behavior: smooth; }
 
 body {
   min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Syne', sans-serif;
+  background: var(--petal-white);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
   overflow-x: hidden;
   position: relative;
 }
 
-/* Grain texture */
+/* Parchment texture — very subtle */
 body::before {
   content: "";
   position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  opacity: 0.022;
   pointer-events: none;
   z-index: 999;
 }
 
-/* Ambient light */
+/* Soft light from top — like sun through a glasshouse */
 body::after {
   content: "";
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 55% 40% at 80% 15%, rgba(212,178,100,0.07) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 50% at 10% 80%, rgba(192,96,64,0.05) 0%, transparent 60%);
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(214,232,204,0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(232,200,154,0.18) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
-  animation: ambientShift 18s ease-in-out infinite alternate;
-}
-@keyframes ambientShift {
-  from { opacity: 0.6; }
-  to   { opacity: 1; }
 }
 
-/* Page wrapper */
+/* ── Page ── */
 .page {
-  max-width: 1020px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 5vw 5vw 6vw;
   position: relative;
   z-index: 1;
 }
 
-/* Header */
+/* ── Header ── */
 .header {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 2.8rem;
+  padding-bottom: 3rem;
   margin-bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0 3rem;
+  border-bottom: 1px solid var(--line);
   opacity: 0;
-  transform: translateY(16px);
-  animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
+  transform: translateY(14px);
+  animation: riseIn 1s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
 }
 
-.header-meta {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 1.6rem;
-}
+.header-left {}
 
-.label-small {
-  font-family: 'Syne', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.26em;
+.eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 0.64rem;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--amber-dim);
-}
-
-.track-count {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.82rem;
-  font-style: italic;
-  color: var(--text-dim);
+  color: var(--leaf);
+  margin-bottom: 1.2rem;
 }
 
 h1 {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 300;
-  font-size: clamp(3rem, 8vw, 6.5rem);
-  line-height: 0.92;
-  letter-spacing: -0.01em;
-  color: var(--text);
+  font-size: clamp(2.8rem, 7.5vw, 5.8rem);
+  line-height: 0.94;
+  color: var(--ink);
 }
 
 h1 .accent {
   font-style: italic;
-  color: var(--amber);
+  color: var(--stamen);
+}
+
+.subtitle {
+  font-family: 'Jost', sans-serif;
   font-weight: 300;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  margin-top: 1rem;
 }
 
-h1 .zh {
-  display: block;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  color: var(--text-mid);
-  margin-top: 0.7rem;
-  font-family: 'Syne', sans-serif;
+/* Botanical SVG ornament — top right */
+.botanical {
+  width: clamp(80px, 12vw, 140px);
+  flex-shrink: 0;
+  opacity: 0.5;
+  align-self: center;
 }
 
-/* Track list */
+/* ── Track list ── */
 .track-list {
   list-style: none;
+  margin-top: 0;
 }
 
 .track-item {
   border-bottom: 1px solid var(--line);
   opacity: 0;
-  transform: translateY(12px);
-  animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+  transform: translateY(10px);
+  animation: riseIn 0.65s cubic-bezier(0.22,1,0.36,1) forwards;
 }
 
-.track-item:nth-child(1)  { animation-delay: 0.18s; }
-.track-item:nth-child(2)  { animation-delay: 0.24s; }
-.track-item:nth-child(3)  { animation-delay: 0.30s; }
-.track-item:nth-child(4)  { animation-delay: 0.36s; }
-.track-item:nth-child(5)  { animation-delay: 0.42s; }
-.track-item:nth-child(6)  { animation-delay: 0.48s; }
-.track-item:nth-child(7)  { animation-delay: 0.54s; }
-.track-item:nth-child(8)  { animation-delay: 0.60s; }
-.track-item:nth-child(9)  { animation-delay: 0.66s; }
-.track-item:nth-child(10) { animation-delay: 0.72s; }
-.track-item:nth-child(11) { animation-delay: 0.78s; }
+.track-item:nth-child(1)  { animation-delay: 0.20s; }
+.track-item:nth-child(2)  { animation-delay: 0.26s; }
+.track-item:nth-child(3)  { animation-delay: 0.32s; }
+.track-item:nth-child(4)  { animation-delay: 0.38s; }
+.track-item:nth-child(5)  { animation-delay: 0.44s; }
+.track-item:nth-child(6)  { animation-delay: 0.50s; }
+.track-item:nth-child(7)  { animation-delay: 0.56s; }
+.track-item:nth-child(8)  { animation-delay: 0.62s; }
+.track-item:nth-child(9)  { animation-delay: 0.68s; }
+.track-item:nth-child(10) { animation-delay: 0.74s; }
+.track-item:nth-child(11) { animation-delay: 0.80s; }
 
-@keyframes fadeUp {
+@keyframes riseIn {
   to { opacity: 1; transform: translateY(0); }
 }
 
 .track-link {
   display: grid;
-  grid-template-columns: 5.5rem 1fr auto;
+  grid-template-columns: 5rem 1fr auto;
   align-items: center;
-  gap: 0 2rem;
-  padding: 1.8rem 0;
+  gap: 0 1.8rem;
+  padding: 1.6rem 0;
   text-decoration: none;
   color: inherit;
   position: relative;
   cursor: pointer;
 }
 
-/* Left-to-right hover fill */
+/* Botanical wash on hover */
 .track-link::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(212,178,100,0.07) 0%, transparent 70%);
+  background: linear-gradient(90deg,
+    rgba(214,232,204,0.45) 0%,
+    rgba(214,232,204,0.12) 60%,
+    transparent 100%);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.38s cubic-bezier(0.22,1,0.36,1);
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
 }
 .track-link:hover::before { transform: scaleX(1); }
 
-/* Oversized number */
+/* Left leaf accent bar */
+.track-link::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: linear-gradient(180deg, var(--leaf-light), var(--stamen-pale));
+  border-radius: 2px;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1) 0.05s;
+}
+.track-link:hover::after { transform: scaleY(1); }
+
+/* Number */
 .track-num {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 300;
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
   line-height: 1;
-  color: var(--text-dim);
+  color: var(--ink-faint);
   letter-spacing: -0.02em;
-  transition: color 0.25s;
-  padding-left: 0.1em;
+  transition: color 0.28s;
   position: relative;
   z-index: 1;
 }
-.track-link:hover .track-num { color: var(--amber); }
+.track-link:hover .track-num { color: var(--leaf); }
 
 .track-body {
   position: relative;
@@ -200,74 +216,90 @@ h1 .zh {
 }
 
 .track-grammar {
-  font-family: 'Syne', sans-serif;
-  font-weight: 600;
-  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.84rem, 1.4vw, 1rem);
   letter-spacing: 0.04em;
-  color: var(--text);
+  color: var(--ink);
   line-height: 1.3;
-  margin-bottom: 0.32rem;
-  transition: color 0.2s;
+  margin-bottom: 0.28rem;
+  transition: color 0.22s;
 }
-.track-link:hover .track-grammar { color: var(--amber2); }
+.track-link:hover .track-grammar { color: var(--stem); }
 
 .track-song {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 300;
-  font-size: clamp(0.82rem, 1.3vw, 0.96rem);
-  color: var(--text-mid);
-  letter-spacing: 0.02em;
+  font-size: clamp(0.8rem, 1.2vw, 0.94rem);
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
   display: flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 0.4em;
+  transition: color 0.22s;
 }
-.track-song::before {
-  content: "♩";
-  font-style: normal;
-  color: var(--amber-dim);
-  font-size: 0.9em;
-}
+.track-link:hover .track-song { color: var(--stamen); }
 
+/* Petal marker before song title */
+.track-song::before {
+  content: "";
+  display: inline-block;
+  width: 5px; height: 9px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: var(--stamen-pale);
+  flex-shrink: 0;
+  transition: background 0.22s;
+}
+.track-link:hover .track-song::before { background: var(--stamen); }
+
+/* Arrow */
 .track-arrow {
-  font-size: 1.1rem;
-  color: var(--text-dim);
+  font-size: 1rem;
+  color: var(--ink-faint);
   opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.2s, color 0.2s, transform 0.28s cubic-bezier(0.22,1,0.36,1);
+  transform: translate(-5px, 3px);
+  transition: opacity 0.22s, color 0.22s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
   position: relative;
   z-index: 1;
+  font-style: normal;
+  font-family: 'Cormorant Garamond', serif;
 }
 .track-link:hover .track-arrow {
   opacity: 1;
-  color: var(--amber);
-  transform: translateX(0) rotate(-45deg);
+  color: var(--leaf);
+  transform: translate(0, 0);
 }
 
-/* Footer */
+/* ── Footer ── */
 .footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 3rem;
+  padding-top: 2.8rem;
   opacity: 0;
-  animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.92s forwards;
+  animation: riseIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.92s forwards;
 }
 
 .back-link {
-  font-family: 'Syne', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--ink-soft);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   transition: color 0.2s;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
 }
-.back-link:hover { color: var(--amber); }
+.back-link:hover {
+  color: var(--stem);
+  border-bottom-color: var(--leaf-pale);
+}
 
 .back-arrow {
   display: inline-block;
@@ -278,36 +310,34 @@ h1 .zh {
 .footer-note {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
+  font-size: 0.84rem;
+  color: var(--ink-faint);
 }
 
-/* Decorative side rule */
-.side-rule {
+/* Decorative left vine */
+.vine {
   position: fixed;
-  top: 0; bottom: 0; left: 2rem;
-  width: 1px;
-  background: linear-gradient(180deg, transparent 5%, var(--line) 25%, var(--line) 75%, transparent 95%);
+  top: 0; left: 0; bottom: 0;
+  width: 3rem;
   pointer-events: none;
   z-index: 2;
+  opacity: 0.18;
 }
 
 /* Mobile */
 @media (max-width: 600px) {
   .page { padding: 8vw 5vw 10vw; }
-  .track-link { grid-template-columns: 3.8rem 1fr auto; gap: 0 1rem; padding: 1.4rem 0; }
-  .track-num { font-size: 2.2rem; }
-  .side-rule { display: none; }
-  .footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
-  h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+  .header { grid-template-columns: 1fr; }
+  .botanical { display: none; }
+  .track-link { grid-template-columns: 3.5rem 1fr auto; gap: 0 1rem; padding: 1.4rem 0; }
+  .track-num { font-size: 2rem; }
+  .vine { display: none; }
+  .footer { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
 }
-
 @media (max-width: 400px) {
-  .track-link { grid-template-columns: 3rem 1fr 1rem; gap: 0 0.8rem; }
-  .track-num { font-size: 1.9rem; }
+  .track-link { grid-template-columns: 2.8rem 1fr 1rem; }
+  .track-num { font-size: 1.7rem; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .track-item, .header, .footer { opacity: 1; transform: none; }
@@ -316,23 +346,59 @@ h1 .zh {
 </head>
 <body>
 
-<div class="side-rule"></div>
+<!-- Decorative vine SVG left edge -->
+<svg class="vine" viewBox="0 0 48 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <path d="M24 800 C24 780 30 760 22 740 C14 720 28 700 24 680 C20 660 30 640 24 620 C18 600 28 580 24 560 C20 540 30 520 22 500 C14 480 26 460 24 440 C22 420 28 400 24 380 C20 360 30 340 22 320 C14 300 26 280 24 260 C22 240 28 220 24 200 C20 180 30 160 22 140 C14 120 26 100 24 80 C22 60 28 40 24 10"
+    fill="none" stroke="#5a7a52" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Leaf sprigs -->
+  <ellipse cx="31" cy="160" rx="9" ry="5" fill="#8aab7e" transform="rotate(-30 31 160)"/>
+  <ellipse cx="17" cy="280" rx="9" ry="5" fill="#8aab7e" transform="rotate(25 17 280)"/>
+  <ellipse cx="32" cy="400" rx="9" ry="5" fill="#8aab7e" transform="rotate(-20 32 400)"/>
+  <ellipse cx="16" cy="520" rx="9" ry="5" fill="#8aab7e" transform="rotate(30 16 520)"/>
+  <ellipse cx="30" cy="640" rx="9" ry="5" fill="#8aab7e" transform="rotate(-25 30 640)"/>
+  <!-- Small buds -->
+  <ellipse cx="24" cy="110" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
+  <ellipse cx="24" cy="340" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
+  <ellipse cx="24" cy="580" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
+</svg>
 
 <div class="page">
 
   <header class="header">
-    <div class="header-meta">
-      <span class="label-small">AI Music Studio · Shirley</span>
-      <span class="track-count">11 tracks · 11 songs</span>
+    <div class="header-left">
+      <p class="eyebrow">AI Music Studio · Shirley</p>
+      <h1>Grammar<br>with <span class="accent">Songs</span></h1>
+      <p class="subtitle">AI 學習「樂」🎵園 &nbsp;·&nbsp; 點擊任一行即可進入學習</p>
     </div>
-    <h1>
-      Grammar<br>with <span class="accent">Songs</span>
-      <span class="zh">AI 學習「樂」🎵園</span>
-    </h1>
+    <!-- Lily botanical illustration -->
+    <svg class="botanical" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Stem -->
+      <path d="M60 155 C60 130 56 110 60 90" stroke="#3d5c38" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Leaves -->
+      <path d="M60 130 C48 118 36 122 32 112 C40 108 52 116 60 130Z" fill="#8aab7e" opacity="0.7"/>
+      <path d="M60 115 C72 103 84 106 88 96 C80 92 68 100 60 115Z" fill="#5a7a52" opacity="0.6"/>
+      <!-- Petals — 6 lily petals, alternating long/short -->
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(0 60 62)" opacity="0.95"/>
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(60 60 62)" opacity="0.9"/>
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(120 60 62)" opacity="0.9"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(30 60 62)" opacity="0.75"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(90 60 62)" opacity="0.75"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(150 60 62)" opacity="0.75"/>
+      <!-- Stamens -->
+      <line x1="60" y1="62" x2="60" y2="42" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="70" y2="46" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="50" y2="46" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="68" y2="58" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="52" y2="58" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
+      <circle cx="60" cy="42" r="2.2" fill="#8a4f1e"/>
+      <circle cx="70" cy="46" r="2"   fill="#8a4f1e"/>
+      <circle cx="50" cy="46" r="2"   fill="#8a4f1e"/>
+      <circle cx="68" cy="58" r="1.8" fill="#b87333"/>
+      <circle cx="52" cy="58" r="1.8" fill="#b87333"/>
+    </svg>
   </header>
 
   <ul class="track-list">
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%201.html" target="_blank" rel="noopener">
         <span class="track-num">01</span>
@@ -343,7 +409,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%202.html" target="_blank" rel="noopener">
         <span class="track-num">02</span>
@@ -354,7 +419,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%203.html" target="_blank" rel="noopener">
         <span class="track-num">03</span>
@@ -365,7 +429,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%204.html" target="_blank" rel="noopener">
         <span class="track-num">04</span>
@@ -376,7 +439,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%205.html" target="_blank" rel="noopener">
         <span class="track-num">05</span>
@@ -387,7 +449,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%206.html" target="_blank" rel="noopener">
         <span class="track-num">06</span>
@@ -398,7 +459,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%207.html" target="_blank" rel="noopener">
         <span class="track-num">07</span>
@@ -409,7 +469,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%208.html" target="_blank" rel="noopener">
         <span class="track-num">08</span>
@@ -420,7 +479,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%209.html" target="_blank" rel="noopener">
         <span class="track-num">09</span>
@@ -431,7 +489,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2010.html" target="_blank" rel="noopener">
         <span class="track-num">10</span>
@@ -442,7 +499,6 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
     <li class="track-item">
       <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2011.html" target="_blank" rel="noopener">
         <span class="track-num">11</span>
@@ -453,17 +509,15 @@ h1 .zh {
         <span class="track-arrow">↗</span>
       </a>
     </li>
-
   </ul>
 
   <footer class="footer">
     <a class="back-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/">
       <span class="back-arrow">←</span> 返回主頁
     </a>
-    <span class="footer-note">Click any row to begin learning</span>
+    <span class="footer-note">11 songs, 11 lessons — click any row to begin</span>
   </footer>
 
 </div>
-
 </body>
 </html>
