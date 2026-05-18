@@ -1,1997 +1,469 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI 學習「樂」🎵園 | Learn Grammar with AI Songs</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
-
-  <style>
-    /* ... 保持所有現有的 CSS Styles ... */
-    /* ---------------------------------- */
-    /* 1) Tokens — Deep Burgundy + Blue Velvet Sky */
-    /* ---------------------------------- */
-    :root{
-      --burg-0:#f7e9ee;
-      --burg-1:#d8a1ad;
-      --burg-2:#a63b55;
-      --burg-3:#7a1632;
-      --burg-4:#4e0b1f;
-      --burg-5:#24040e;
-
-      --gold-0:#fff3c8;
-      --gold-1:#ffd36b;
-      --gold-2:#ffb400;
-
-      --ivory:#fff7fb;
-      --ink:#120915;
-
-      --bg-0:#050814;
-      --bg-1:#08162d;
-      --bg-2:#0a2342;
-      --bg-3:#0b2e52;
-      --bg-4:#11264a;
-
-      --font-ui:"Orbitron", system-ui, sans-serif;
-      --font-serif:"Cormorant Garamond", serif;
-
-      /* 修改：使用更靈活的容器尺寸計算 */
-      --container-size: min(90vh, min(85vw, 650px));
-      --petal-w: clamp(120px, 14vw, 190px);
-      --petal-h: clamp(160px, 20vw, 260px);
-      --center-size: clamp(85px, 10vw, 130px);
-      --lift: clamp(25px, 5vw, 65px);
-
-      --title-bottom-gap: clamp(6px, 1.2vh, 10px);
-      --nav-bottom-gap: clamp(8px, 1.6vh, 14px);
-      --page-padding: clamp(10px, 2vw, 18px);
-    }
-
-    html, body { height: 100%; }
-    * { box-sizing: border-box; }
-
-   body{
-  margin:0;
-  min-height:100vh;
-  
-  /* ✅ 改成正常直向排版：從上到下 */
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-
-  padding: var(--page-padding);
-  font-family:var(--font-ui);
-  color:var(--ivory);
-  background:
-    radial-gradient(1200px 820px at 50% 28%, var(--bg-4) 0%, var(--bg-3) 26%, var(--bg-2) 55%, var(--bg-1) 78%, var(--bg-0) 100%);
-
-  /* ✅ 只鎖水平，開放垂直捲動 */
-  overflow-x:hidden;
-  overflow-y:auto;
-
-  position:relative;
-  letter-spacing:.02em;
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI 學習樂園 · Grammar with Songs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0e0c09;
+  --bg2:      #151208;
+  --surface:  #1a1610;
+  --line:     rgba(212,178,100,0.14);
+  --amber:    #d4b264;
+  --amber2:   #f0d080;
+  --amber-dim:#8a6e36;
+  --text:     #e8dcc8;
+  --text-mid: #9e907a;
+  --text-dim: #5a5040;
+  --rust:     #c06040;
 }
 
-    /* ---------------------------------- */
-    /* 2) 輕量級粒子背景 - 替換原本的 Three.js 星辰 */
-    /* ---------------------------------- */
-    .particles-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -3;
-      pointer-events: none;
-    }
-    
-    .particle {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    /* 大型緩慢移動的粒子 */
-    .particle-large {
-      width: 2px;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
-      animation: particle-float-large 25s linear infinite;
-    }
-    
-    /* 中型粒子 */
-    .particle-medium {
-      width: 1.5px;
-      height: 1.5px;
-      background: rgba(255, 255, 255, 0.6);
-      box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
-      animation: particle-float-medium 15s linear infinite;
-    }
-    
-    /* 小型快速粒子 */
-    .particle-small {
-      width: 1px;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
-      animation: particle-float-small 8s linear infinite;
-    }
-    
-    /* 彩色粒子 */
-    .particle-color {
-      width: 1.8px;
-      height: 1.8px;
-      background: rgba(100, 200, 255, 0.7);
-      box-shadow: 0 0 5px rgba(100, 200, 255, 0.7);
-      animation: particle-float-color 20s linear infinite;
-    }
-    
-    /* 動畫定義 */
-    @keyframes particle-float-large {
-      0% {
-        transform: translateY(100vh) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.8;
-      }
-      90% {
-        opacity: 0.6;
-      }
-      100% {
-        transform: translateY(-100px) translateX(200px) rotate(180deg);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes particle-float-medium {
-      0% {
-        transform: translateY(100vh) translateX(100px) rotate(0deg);
-        opacity: 0;
-      }
-      15% {
-        opacity: 0.7;
-      }
-      85% {
-        opacity: 0.5;
-      }
-      100% {
-        transform: translateY(-50px) translateX(-150px) rotate(90deg);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes particle-float-small {
-      0% {
-        transform: translateY(100vh) translateX(-50px) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.6;
-      }
-      80% {
-        opacity: 0.4;
-      }
-      100% {
-        transform: translateY(-30px) translateX(100px) rotate(45deg);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes particle-float-color {
-      0% {
-        transform: translateY(100vh) translateX(150px) rotate(0deg);
-        opacity: 0;
-      }
-      12% {
-        opacity: 0.7;
-      }
-      88% {
-        opacity: 0.5;
-      }
-      100% {
-        transform: translateY(-80px) translateX(-100px) rotate(120deg);
-        opacity: 0;
-      }
-    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-    body::after{
-      content:"";
-      position:absolute; inset:-22%;
-      background:
-        radial-gradient(980px 720px at 28% 30%, rgba(62,126,255,.12), transparent 62%),
-        radial-gradient(980px 760px at 72% 20%, rgba(35,98,220,.10), transparent 66%),
-        radial-gradient(1000px 780px at 50% 72%, rgba(255,211,107,.06), transparent 60%);
-      animation: nebulaBreathe 10s ease-in-out infinite;
-      z-index:-4;
-    }
-    @keyframes nebulaBreathe{
-      0%,100%{opacity:.5; transform:scale(1);}
-      50%{opacity:.85; transform:scale(1.03);}
-    }
-
-    .spark-field{
-      position:fixed; inset:0;
-      pointer-events:none;
-      z-index:-2;
-      overflow:hidden;
-    }
-    .spark{
-      position:absolute;
-      width:140px; height:2px;
-      background: linear-gradient(90deg, transparent, rgba(255,211,107,.95), transparent);
-      filter: blur(0.4px);
-      opacity:.55;
-      transform: rotate(12deg);
-      animation: sparkMove linear infinite;
-    }
-    @keyframes sparkMove{
-      0%{ transform: translateX(-25vw) translateY(0) rotate(12deg); opacity:0; }
-      10%{ opacity:.8; }
-      100%{ transform: translateX(125vw) translateY(-34vh) rotate(12deg); opacity:0; }
-    }
-
-    /* ---------------------------------- */
-    /* 3) Title */
-    /* === 超主題性標題：漸層發光 + 藝術感特效 === */
-#page-title{
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
   position: relative;
-  margin-bottom: 14px;               /* 跟 Knowledge Map 保持一點呼吸空間 */
-  text-align: center;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: clamp(2.6rem, 4.3vw, 3.6rem);  /* 整體放大：桌機更像主視覺標題 */
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-
-  /* 金粉漸層文字 */
-  background: linear-gradient(
-    120deg,
-    #fff7fb 0%,
-    #ffe9b8 28%,
-    #ffd36b 50%,
-    #ffb400 65%,
-    #f7e9ee 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-
-  /* 外圈柔光 */
-  text-shadow:
-    0 0 24px rgba(255,243,200,0.9),
-    0 0 60px rgba(166,59,85,0.55);
-
-  /* 慢速呼吸光效 */
-  animation: titleGlow 7s ease-in-out infinite;
 }
 
-/* 標題底下加一道發光的細線，拉出主視覺感 */
-#page-title::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:-10px;
-  width: clamp(140px, 32vw, 260px);
-  height: 2px;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(circle at 0% 50%, rgba(255,243,200,0) 0, rgba(255,243,200,0.9) 40%, transparent 70%),
-    linear-gradient(90deg, rgba(255,243,200,0) 0%, rgba(255,211,107,0.9) 50%, rgba(255,243,200,0) 100%);
-  box-shadow:
-    0 0 12px rgba(255,243,200,0.9),
-    0 0 22px rgba(166,59,85,0.6);
-}
-
-/* 副標：放大＋輕微閃爍感 */
-#page-title small{
-  display:block;
-  margin-top: 8px;
-  font-family: var(--font-ui);
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-  letter-spacing: 0.18em;
-  color: rgba(255,247,251,0.96);
-  text-shadow:
-    0 0 12px rgba(255,243,200,0.8),
-    0 0 30px rgba(60,120,250,0.6);
-  animation: subtitleShimmer 5.5s ease-in-out infinite;
-}
-
-/* 主標光效：慢慢亮起又暗下去 */
-@keyframes titleGlow{
-  0%, 100%{
-    text-shadow:
-      0 0 18px rgba(255,243,200,0.7),
-      0 0 40px rgba(166,59,85,0.4);
-    transform: translateY(0);
-  }
-  45%{
-    text-shadow:
-      0 0 28px rgba(255,243,200,1),
-      0 0 80px rgba(166,59,85,0.7);
-    transform: translateY(-2px);
-  }
-}
-
-/* 副標細緻一點的閃動 */
-@keyframes subtitleShimmer{
-  0%, 100%{
-    opacity: 0.9;
-    letter-spacing: 0.16em;
-  }
-  40%{
-    opacity: 1;
-    letter-spacing: 0.2em;
-  }
-}
-    /* ---------------------------------- */
-    /* 4) Navigation Panel */
-    /* ---------------------------------- */
-    #nav-panel{
-      width:min(92vw, 720px);
-      margin:0 0 var(--nav-bottom-gap) 0;
-      padding:clamp(10px, 1.8vw, 16px);
-      border-radius:16px;
-      position:relative;
-      z-index:4;
-      background:
-        linear-gradient(180deg, rgba(8,12,24,.7), rgba(5,8,16,.85));
-      border:1px solid rgba(255,243,200,.5);
-      box-shadow:
-        0 8px 26px rgba(0,0,0,.55),
-        0 0 22px rgba(255,211,107,.3),
-        inset 0 0 18px rgba(166,59,85,.18);
-      backdrop-filter: blur(10px) saturate(1.05);
-    }
-    #nav-panel::before{
-      content:"";
-      position:absolute; inset:-1px;
-      border-radius:16px;
-      background:
-        radial-gradient(120% 140% at 10% 0%, rgba(255,211,107,.16), transparent 55%),
-        radial-gradient(110% 140% at 90% 100%, rgba(60,120,250,.18), transparent 60%);
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-
-    .nav-title{
-      font-family:var(--font-ui);
-      font-weight:700;
-      letter-spacing:.16em;
-      font-size:clamp(.9rem, 1.3vw, 1.05rem);
-      color:var(--gold-0);
-      opacity:.95;
-      text-shadow:0 0 10px rgba(255,211,107,.55);
-      margin:0 0 8px 0;
-      text-align:center;
-      cursor: pointer;
-    }
-
-    .nav-grid{
-      display:grid;
-      gap:8px 12px;
-      grid-template-columns: 1fr 1fr;
-    }
-    .nav-item{
-      padding:8px 10px;
-      border-radius:10px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--ivory);
-      font-size:clamp(.88rem, 1.2vw, .98rem);
-      line-height:1.35;
-      text-shadow:
-        0 1px 3px rgba(0,0,0,.9),
-        0 0 8px rgba(166,59,85,.35);
-      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-      cursor:pointer;
-    }
-    .nav-item strong{
-      color:#fff;
-      font-weight:800;
-      letter-spacing:.04em;
-    }
-    .nav-item.full{
-      grid-column: 1 / -1;
-      text-align:center;
-      background:
-        linear-gradient(180deg, rgba(255,211,107,.08), rgba(166,59,85,.08)),
-        rgba(255,255,255,.05);
-      border-color: rgba(255,211,107,.35);
-      box-shadow:
-        0 0 12px rgba(255,211,107,.3),
-        inset 0 0 14px rgba(166,59,85,.18);
-    }
-    .nav-item:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,211,107,.35);
-      box-shadow: 0 6px 16px rgba(0,0,0,.5), 0 0 10px rgba(255,211,107,.25);
-    }
-/* === 壓縮垂直間距：標題 ↔ 導航 ↔ 花朵 ↔ 返回主頁 === */
-
-/* 標題跟導航靠近一點 */
-#page-title{
-  margin-bottom: 14px;   /* 原本比較大，改成 4px */
-}
-
-/* 導航跟花朵靠近一點 */
-#nav-panel{
-  margin-bottom: 8px;   /* 原本用變數，這裡直接收緊 */
-}
-
-/* 花朵本身上下都縮小 */
-#flower-rotator{
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-
-/* 花朵和「返回主頁」之間也縮小 */
-#back-button{
-  margin-top: 6px;      /* 原本最多會到 24px，改成 6px 就好 */
-}
-
-/* Music section always flows below the flower with clear separation */
-#music-section {
-  margin-top: 24px !important;
-}
-    /* ---------------------------------- */
-    /* 5) Flower motion wrapper */
-    /* ---------------------------------- */
-    #flower-rotator{
-      width:var(--container-size);
-      height:var(--container-size);
-      display:grid;
-      place-items:center;
-      position:relative;
-      z-index:3;
-      /* ✅ 確保花朵在視窗內 */
-      max-width: 95vw;
-      max-height: 70vh;
-      transform-origin:center center;
-      filter: drop-shadow(0 16px 48px rgba(0,0,0,.7));
-      /* Contain hover overflow so petals never bleed into sections below */
-      overflow: visible;
-      margin-bottom: 0;
-    }
-
-    /* 保留 keyframes（以後需要可以再用）
-    @keyframes flowerSpin{
-      from{ transform: rotate(0deg); }
-      to{ transform: rotate(360deg); }
-    }
-    @keyframes flowerFloat{
-      0%,100%{ translate: 0 0; }
-      50%{ translate: 0 -8px; }
-    } */
-
-    /* ---------------------------------- */
-    /* 6) Flower container */
-    /* ---------------------------------- */
-    #petal-container{
-      width:100%;
-      height:100%;
-      position:relative;
-      display:grid;
-      place-items:center;
-
-      /* 原本有脈動動畫，改為靜止 */
-      /* animation: slowPulse 12s ease-in-out infinite; */
-    }
-
-    /*@keyframes slowPulse{
-      0%,100%{transform:scale(1);}
-      50%{transform:scale(1.02);}
-    }*/
-
-    /* ---------------------------------- */
-    /* 7) Center core */
-    /* ---------------------------------- */
-    #learning-center{
-      position:absolute;
-      width:var(--center-size);
-      height:var(--center-size);
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      line-height:1.15;
-
-      background:
-        radial-gradient(circle at 38% 32%,
-          var(--burg-0) 0%,
-          var(--burg-1) 32%,
-          var(--burg-2) 60%,
-          var(--burg-3) 100%);
-      border:1.5px solid rgba(247,233,238,.95);
-      box-shadow:
-        0 0 22px rgba(166,59,85,.9),
-        0 0 16px rgba(255,211,107,.7),
-        inset 0 0 10px rgba(247,233,238,1);
-
-      font-size:clamp(.95rem, 2.1vw, 1.15rem);
-      font-weight:800;
-      letter-spacing:.08em;
-      color:var(--ink);
-      text-shadow:
-        0 1px 0 rgba(247,233,238,1),
-        0 0 8px rgba(255,211,107,.9);
-
-      z-index:30;
-      /* 原本有 centerBreathe，改為靜止 */
-      /* animation: centerBreathe 6s ease-in-out infinite; */
-    }
-
-    /*@keyframes centerBreathe{
-      0%,100%{transform:scale(1);}
-      50%{transform:scale(1.06);}
-    }*/
-
-    /* ---------------------------------- */
-    /* 8) Petals — Deep Burgundy Velvet */
-    /* ---------------------------------- */
-    .petal{
-      --angle:0deg;
-      --tilt:0deg;
-      position:absolute;
-      width:var(--petal-w);
-      height:var(--petal-h);
-      transform-origin:center bottom;
-
-      clip-path: polygon(
-        50% 0%,
-        67% 4%,
-        82% 14%,
-        92% 28%,
-        96% 44%,
-        90% 62%,
-        78% 78%,
-        62% 90%,
-        54% 96%,
-        50% 100%,
-        46% 96%,
-        38% 90%,
-        22% 78%,
-        10% 62%,
-        4% 44%,
-        8% 28%,
-        18% 14%,
-        33% 4%
-      );
-
-      transform:
-        rotate(var(--angle))
-        translateY(calc(var(--lift) * -1))
-        rotate(var(--tilt));
-
-      background:
-        radial-gradient(120% 140% at 50% 0%,
-          var(--burg-0) 0%,
-          var(--burg-1) 15%,
-          var(--burg-2) 36%,
-          var(--burg-3) 65%,
-          var(--burg-4) 100%),
-        linear-gradient(165deg,
-          rgba(247,233,238,1),
-          rgba(122,22,50,.95) 48%,
-          rgba(78,11,31,1) 100%);
-
-      border:1px solid rgba(247,233,238,.85);
-      backdrop-filter: blur(7px) saturate(1.12);
-
-      box-shadow:
-        inset 0 14px 34px rgba(247,233,238,1),
-        inset 0 -34px 62px rgba(36,4,14,.95),
-        0 10px 28px rgba(0,0,0,.6),
-        0 0 14px rgba(255,211,107,.28);
-      filter: drop-shadow(0 0 7px rgba(166,59,85,1));
-
-      display:grid;
-      place-items:center;
-      text-decoration:none;
-      text-align:center;
-      padding:12px;
-      line-height:1.45;
-
-      color:var(--ivory);
-      font-size:clamp(.86rem, 1.1vw, 1rem);
-      font-weight:700;
-      letter-spacing:.03em;
-
-      text-shadow:
-        0 2px 6px rgba(0,0,0,.9),
-        0 0 10px rgba(255,211,107,.22);
-
-      transition:
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        box-shadow .45s ease,
-        filter .45s ease,
-        background .45s ease;
-
-      /* 原本有 petalBreathe + petalSway，這裡改成預設不動 */
-      /* animation:
-        petalBreathe 7.2s ease-in-out infinite,
-        petalSway 5.5s ease-in-out infinite; */
-      z-index:2;
-      cursor:pointer;
-      isolation:isolate;
-    }
-
-    .petal::after{
-      content:"";
-      position:absolute;
-      inset:15% 11%;
-      border-radius:16px;
-      background: rgba(10,3,6,.38);
-      filter: blur(11px);
-      z-index:-1;
-    }
-
-    .petal::before{
-      content:"";
-      position:absolute; inset:0;
-      clip-path: inherit;
-      background:
-        radial-gradient(120% 140% at 50% 0%,
-          rgba(247,233,238,.55),
-          transparent 55%),
-        repeating-radial-gradient(circle at 50% 8%,
-          rgba(247,233,238,.18) 0 8px,
-          rgba(247,233,238,0) 8px 18px);
-      opacity:.24;
-      mix-blend-mode: soft-light;
-      pointer-events:none;
-    }
-/* nav 點擊時用的「sparkling + 持續跳動」效果 */
-/* nav 點擊時用的「乾淨版 sparkling + 彈跳」 */
-.petal.nav-highlight{
-  animation:
-    petalNavBounce 0.9s ease-in-out infinite,
-    petalGlow 1.4s ease-in-out infinite;
-  z-index: 12;
-}
-
-/* 柔和的金色光暈（取代滿版圓點） */
-.petal.nav-highlight::before{
-  opacity: 1;
-  background:
-    radial-gradient(130% 170% at 50% 0%,
-      rgba(255,243,220,0.95) 0%,
-      rgba(255,211,107,0.45) 32%,
-      rgba(166,59,85,0.0) 62%);
-  mix-blend-mode: screen;
-  filter: blur(2px);
-  animation: petalHalo 1.4s ease-in-out infinite;
-}
-
-/* 一道斜向掃過去的亮光，營造 sparkling 感 */
-.petal.nav-highlight::after{
-  content:"";
-  position:absolute;
-  inset:-30%;
-  clip-path: inherit;
-  background:
-    linear-gradient(120deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.95) 45%,
-      rgba(255,255,255,0) 80%);
-  mix-blend-mode: screen;
-  opacity:0;
-  transform: translateX(-120%) rotate(8deg);
-  animation: shimmerSweep 1.8s linear infinite;
-}
-
-/* 花瓣本體彈跳（飛出去又回來） */
-@keyframes petalNavBounce{
-  0%{
-    transform:
-      rotate(var(--angle))
-      translateY(calc(var(--lift) * -1))
-      rotate(var(--tilt))
-      scale(1);
-  }
-  50%{
-    transform:
-      rotate(var(--angle))
-      translateY(calc(var(--lift) * -1 - 50px))
-      rotate(var(--tilt))
-      scale(1.18);
-  }
-  100%{
-    transform:
-      rotate(var(--angle))
-      translateY(calc(var(--lift) * -1 - 10px))
-      rotate(var(--tilt))
-      scale(1.06);
-  }
-}
-
-/* 光暈一明一暗（更有立體感） */
-@keyframes petalGlow{
-  0%{
-    box-shadow:
-      inset 0 16px 38px rgba(247,233,238,0.9),
-      inset 0 -38px 64px rgba(20,2,7,1),
-      0 12px 32px rgba(0,0,0,.7),
-      0 0 18px rgba(255,211,107,.6);
-    filter: drop-shadow(0 0 10px rgba(255,211,107,.8));
-  }
-  50%{
-    box-shadow:
-      inset 0 28px 80px rgba(247,233,238,1),
-      inset 0 -80px 120px rgba(10,0,4,1),
-      0 24px 70px rgba(0,0,0,.95),
-      0 0 34px rgba(255,243,200,1),
-      0 0 60px rgba(255,211,107,1);
-    filter: drop-shadow(0 0 26px rgba(255,243,200,1));
-  }
-  100%{
-    box-shadow:
-      inset 0 20px 48px rgba(247,233,238,1),
-      inset 0 -48px 80px rgba(20,2,7,1),
-      0 18px 45px rgba(0,0,0,.8),
-      0 0 22px rgba(255,211,107,.8);
-    filter: drop-shadow(0 0 16px rgba(255,211,107,.9));
-  }
-}
-
-/* 光暈本身的輕微呼吸感 */
-@keyframes petalHalo{
-  0%  { opacity: .65; transform: scale(0.98); }
-  50% { opacity: 1;   transform: scale(1.05); }
-  100%{ opacity: .7;  transform: scale(1.0); }
-}
-
-/* 斜向亮光掃過去，製造乾淨的 sparkle 感 */
-@keyframes shimmerSweep{
-  0%{
-    transform: translateX(-130%) rotate(8deg);
-    opacity: 0;
-  }
-  25%{
-    opacity: 0.95;
-  }
-  60%{
-    opacity: 0.9;
-  }
-  100%{
-    transform: translateX(130%) rotate(8deg);
-    opacity: 0;
-  }
-}
-
-
-
-
-    .petal:hover,
-    .petal:focus-visible{
-      transform:
-        rotate(var(--angle))
-        translateY(calc(var(--lift) * -1 - 10px))
-        rotate(var(--tilt))
-        scale(1.05);
-
-      box-shadow:
-        inset 0 18px 42px rgba(247,233,238,1),
-        inset 0 -42px 74px rgba(20,2,7,1),
-        0 16px 40px rgba(0,0,0,.7),
-        0 0 22px rgba(255,211,107,.85);
-
-      filter: drop-shadow(0 0 12px rgba(255,211,107,1));
-      outline:none;
-      z-index:8;
-    }
-
-    .petal .petal-content{
-      transform: rotate(calc(var(--angle) * -1)) rotate(calc(var(--tilt) * -1));
-      max-width:82%;
-    }
-
-    .petal.layer-a{ z-index:3; }
-    .petal.layer-b{ z-index:2; }
-
-    /* ---------------------------------- */
-    /* 9) Back Button */
-    /* ---------------------------------- */
-    #back-button{
-      margin-top: clamp(12px, 2.2vh, 24px);
-      background: linear-gradient(180deg, var(--gold-0), var(--gold-1));
-      color:#2a0f1e;
-      border:1px solid rgba(255,241,200,.95);
-      padding: 10px 18px;
-      font-size: clamp(.95rem, 1.8vw, 1.12rem);
-      font-weight:800;
-      font-family:var(--font-ui);
-      letter-spacing:.08em;
-      border-radius: 12px;
-      cursor:pointer;
-      box-shadow:
-        0 8px 24px rgba(0,0,0,.6),
-        0 0 16px rgba(255,211,107,1);
-      transition:.25s ease;
-      z-index:5;
-    }
-    #back-button:hover{
-      transform: translateY(-1px) scale(1.04);
-      box-shadow:
-        0 12px 32px rgba(0,0,0,.7),
-        0 0 22px rgba(255,211,107,1);
-    }
-
-    /* ---------------------------------- */
-    /* 10) Golden trail canvas */
-    /* ---------------------------------- */
-    #trail-canvas{
-      position:fixed; inset:0;
-      pointer-events:none;
-      z-index:999;
-      mix-blend-mode: screen;
-    }
-    
-    /* ---------------------------------- */
-    /* 12) 移除音頻控制按鈕樣式 */
-    /* ---------------------------------- */
-    /* 音頻控制按鈕已移除 */
-    
-    /* ---------------------------------- */
-    /* 13) 效能控制按鈕 */
-    /* ---------------------------------- */
-    #performance-control{
-      position: fixed;
-      bottom: var(--page-padding);
-      right: var(--page-padding);
-      width: clamp(36px, 6vw, 44px);
-      height: clamp(36px, 6vw, 44px);
-      border: 1px solid var(--burg-2);
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.4);
-      color: var(--burg-2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 9;
-      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-      box-shadow: 0 0 8px rgba(166, 59, 85, 0.5);
-    }
-    #performance-control:hover{
-      background: rgba(166, 59, 85, 0.1);
-      box-shadow: 0 0 12px rgba(166, 59, 85, 0.7);
-    }
-
-    /* ---------------------------------- */
-    /* 11) Device breakpoints */
-    /* ---------------------------------- */
-    @media (max-width: 1024px){
-      :root{
-        --container-size:min(90vh, min(90vw, 600px));
-        --petal-w:clamp(110px, 16vw, 180px);
-        --petal-h:clamp(150px, 22vw, 240px);
-        --center-size:clamp(75px, 9vw, 120px);
-        --lift:clamp(20px, 4vw, 60px);
-        --title-bottom-gap: clamp(6px, 1.2vh, 10px);
-        --nav-bottom-gap: clamp(8px, 1.6vh, 12px);
-      }
-    }
-
-    @media (max-width: 768px){
-      :root{
-        --container-size:min(85vh, min(95vw, 550px));
-        --petal-w:clamp(100px, 18vw, 160px);
-        --petal-h:clamp(140px, 25vw, 220px);
-        --center-size:clamp(70px, 10vw, 110px);
-        --lift:clamp(18px, 4vw, 50px);
-      }
-      
-      #page-title {
-        font-size: clamp(2.2rem, 6vw, 3rem);
-      }
-      
-      #flower-rotator {
-        max-height: 65vh;
-      }
-    }
-
-    @media (max-width: 600px){
-      :root{
-        --container-size:min(80vh, min(98vw, 480px));
-        --petal-w:clamp(90px, 22vw, 140px);
-        --petal-h:clamp(120px, 30vw, 200px);
-        --center-size:clamp(60px, 12vw, 100px);
-        --lift:clamp(15px, 4vw, 40px);
-      }
-      
-      #nav-panel{ 
-        width:96vw; 
-        padding:10px; 
-      }
-      
-      .nav-grid{ 
-        grid-template-columns:1fr; 
-        gap:8px; 
-      }
-      
-      .nav-item.full{ 
-        grid-column:auto; 
-      }
-      
-      #flower-rotator {
-        max-height: 60vh;
-      }
-    }
-
-    @media (max-width: 480px){
-      :root{
-        --container-size:min(75vh, min(98vw, 420px));
-        --petal-w:clamp(80px, 26vw, 120px);
-        --petal-h:clamp(110px, 35vw, 180px);
-        --center-size:clamp(55px, 14vw, 90px);
-        --lift:clamp(12px, 4vw, 35px);
-      }
-      
-      #page-title {
-        font-size: clamp(1.8rem, 7vw, 2.5rem);
-        margin-bottom: 10px;
-      }
-      
-      #flower-rotator {
-        max-height: 55vh;
-        margin-top: 2px;
-        margin-bottom: 2px;
-      }
-    }
-
-    @media (max-width: 380px){
-      :root{
-        --container-size:min(70vh, min(98vw, 380px));
-        --petal-w:clamp(70px, 28vw, 110px);
-        --petal-h:clamp(100px, 38vw, 160px);
-        --center-size:clamp(50px, 16vw, 80px);
-        --lift:clamp(10px, 4vw, 30px);
-      }
-      
-      #flower-rotator {
-        max-height: 50vh;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      *{ animation:none !important; transition:none !important; }
-    }
-
-    /* 強制滑鼠懸停的花瓣置頂（但限於花朵容器內） */
-.petal:hover {
-  z-index: 20 !important;
-}
-
-/* 為了確保點擊精準，讓內部的 div 不要阻擋事件 */
-.petal-content {
+/* Grain texture */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.028;
   pointer-events: none;
+  z-index: 999;
 }
 
-/* =========================================== */
-/* 🎵 MUSIC PLAYER + PLAYLIST SECTION         */
-/* =========================================== */
-#music-section {
-  width: min(92vw, 820px);
-  margin: 18px 0 10px 0;
-  display: flex;
-  gap: 18px;
-  align-items: stretch;
-  z-index: 2;
-  position: relative;
-  /* Ensure it sits in normal flow below the flower, never overlapping */
-  isolation: isolate;
-}
-
-/* --- Playlist Panel --- */
-#playlist-panel {
-  flex: 1 1 0;
-  min-width: 0;
-  background: linear-gradient(160deg, rgba(8,14,30,.88) 0%, rgba(5,8,18,.92) 100%);
-  border: 1px solid rgba(255,243,200,.35);
-  border-radius: 18px;
-  padding: 16px 14px 12px;
-  box-shadow:
-    0 8px 28px rgba(0,0,0,.55),
-    0 0 18px rgba(255,211,107,.18),
-    inset 0 0 16px rgba(166,59,85,.12);
-  backdrop-filter: blur(14px);
-  overflow: hidden;
-  position: relative;
-}
-
-#playlist-panel::before {
+/* Ambient light */
+body::after {
   content: "";
-  position: absolute; inset: -1px;
-  border-radius: 18px;
-  background: radial-gradient(110% 140% at 10% 0%, rgba(255,211,107,.1), transparent 55%);
-  pointer-events: none;
-}
-
-.playlist-title {
-  font-family: var(--font-ui);
-  font-size: clamp(.75rem, 1.1vw, .88rem);
-  font-weight: 700;
-  letter-spacing: .16em;
-  color: var(--gold-1);
-  text-shadow: 0 0 10px rgba(255,211,107,.5);
-  margin: 0 0 10px 0;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.playlist-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.playlist-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 9px;
-  border-radius: 9px;
-  border: 1px solid rgba(255,255,255,.06);
-  background: rgba(255,255,255,.03);
-  cursor: pointer;
-  transition: background .22s ease, border-color .22s ease, transform .18s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.playlist-item::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--gold-1), var(--burg-2));
-  border-radius: 3px 0 0 3px;
-  opacity: 0;
-  transition: opacity .22s;
-}
-
-.playlist-item:hover {
-  background: rgba(255,211,107,.07);
-  border-color: rgba(255,211,107,.22);
-  transform: translateX(3px);
-}
-
-.playlist-item:hover::before { opacity: 1; }
-
-.playlist-item.is-playing {
-  background: linear-gradient(90deg, rgba(255,211,107,.14), rgba(166,59,85,.1));
-  border-color: rgba(255,211,107,.45);
-  animation: playingPulse 2.4s ease-in-out infinite;
-}
-
-.playlist-item.is-playing::before { opacity: 1; }
-
-@keyframes playingPulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(255,211,107,.25); }
-  50%       { box-shadow: 0 0 18px rgba(255,211,107,.55); }
-}
-
-.playlist-num {
-  font-family: var(--font-ui);
-  font-size: .72rem;
-  color: rgba(255,211,107,.55);
-  min-width: 18px;
-  text-align: right;
-  font-weight: 600;
-  letter-spacing: .04em;
-}
-
-.playlist-item.is-playing .playlist-num { color: var(--gold-1); }
-
-.playlist-name {
-  font-family: var(--font-ui);
-  font-size: clamp(.72rem, 1vw, .82rem);
-  color: rgba(255,247,251,.82);
-  font-weight: 600;
-  letter-spacing: .03em;
-  line-height: 1.3;
-  flex: 1;
-}
-
-.playlist-item.is-playing .playlist-name { color: var(--ivory); }
-
-.playlist-eq {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 14px;
-  opacity: 0;
-  transition: opacity .25s;
-}
-
-.playlist-item.is-playing .playlist-eq { opacity: 1; }
-
-.eq-bar {
-  width: 3px;
-  background: var(--gold-1);
-  border-radius: 2px;
-  animation: eqBounce 0.5s ease-in-out infinite alternate;
-}
-
-.eq-bar:nth-child(1) { height: 6px; animation-duration: 0.4s; }
-.eq-bar:nth-child(2) { height: 10px; animation-duration: 0.6s; }
-.eq-bar:nth-child(3) { height: 8px; animation-duration: 0.35s; }
-
-@keyframes eqBounce {
-  from { transform: scaleY(0.4); }
-  to   { transform: scaleY(1); }
-}
-
-/* --- Player Panel --- */
-#player-panel {
-  width: clamp(200px, 30vw, 270px);
-  flex-shrink: 0;
-  background: linear-gradient(160deg, rgba(10,8,24,.92) 0%, rgba(5,5,16,.96) 100%);
-  border: 1px solid rgba(255,243,200,.4);
-  border-radius: 18px;
-  padding: 22px 16px 18px;
-  box-shadow:
-    0 8px 32px rgba(0,0,0,.65),
-    0 0 22px rgba(166,59,85,.3),
-    inset 0 0 22px rgba(255,211,107,.08);
-  backdrop-filter: blur(18px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  position: relative;
-  overflow: hidden;
-}
-
-#player-panel::before {
-  content: "";
-  position: absolute; inset: -1px;
-  border-radius: 18px;
+  position: fixed; inset: 0;
   background:
-    radial-gradient(110% 140% at 90% 0%, rgba(255,211,107,.14), transparent 50%),
-    radial-gradient(100% 100% at 10% 100%, rgba(166,59,85,.18), transparent 55%);
+    radial-gradient(ellipse 55% 40% at 80% 15%, rgba(212,178,100,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 10% 80%, rgba(192,96,64,0.05) 0%, transparent 60%);
   pointer-events: none;
+  z-index: 0;
+  animation: ambientShift 18s ease-in-out infinite alternate;
+}
+@keyframes ambientShift {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
 }
 
-/* Vinyl disc */
-#vinyl-disc {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  position: relative;
-  background:
-    radial-gradient(circle at 50% 50%,
-      #1a0810 0%,
-      #0d0510 22%,
-      #1e0a1a 38%,
-      #0a0308 55%,
-      #1c0916 70%,
-      #0d0510 100%);
-  box-shadow:
-    0 0 0 3px rgba(255,211,107,.35),
-    0 0 0 6px rgba(255,211,107,.08),
-    0 8px 24px rgba(0,0,0,.8),
-    0 0 28px rgba(166,59,85,.4);
-  transition: transform .3s ease;
-  flex-shrink: 0;
-}
-
-#vinyl-disc::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,211,107,.12);
-  box-shadow:
-    inset 0 0 0 12px rgba(255,255,255,.02),
-    inset 0 0 0 25px rgba(255,255,255,.015),
-    inset 0 0 0 38px rgba(255,255,255,.01);
-}
-
-#vinyl-disc::after {
-  content: "";
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 20px; height: 20px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffd36b 0%, #ffb400 50%, #a63b55 100%);
-  box-shadow: 0 0 10px rgba(255,211,107,.8);
-  z-index: 2;
-}
-
-#vinyl-disc.spinning {
-  animation: vinylSpin 3s linear infinite;
-}
-
-@keyframes vinylSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* Now playing label */
-#now-playing-label {
-  font-family: var(--font-ui);
-  font-size: .7rem;
-  letter-spacing: .18em;
-  color: rgba(255,211,107,.65);
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: 600;
-}
-
-#now-playing-name {
-  font-family: var(--font-serif);
-  font-size: clamp(.88rem, 1.4vw, 1rem);
-  color: var(--ivory);
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.35;
-  min-height: 2.7em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 0 0 12px rgba(255,243,200,.5);
-  padding: 0 4px;
-  transition: opacity .3s;
-}
-
-/* Controls row */
-#player-controls {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
-.ctrl-btn {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,243,200,.3);
-  background: rgba(255,255,255,.05);
-  color: var(--ivory);
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: background .2s, box-shadow .2s, transform .15s;
+/* Page wrapper */
+.page {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 5vw 5vw 6vw;
   position: relative;
   z-index: 1;
 }
 
-.ctrl-btn:hover {
-  background: rgba(255,211,107,.15);
-  border-color: rgba(255,211,107,.5);
-  box-shadow: 0 0 14px rgba(255,211,107,.45);
-  transform: scale(1.08);
+/* Header */
+.header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2.8rem;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
 }
 
-#play-btn {
-  width: 54px; height: 54px;
-  font-size: 1.3rem;
-  background: linear-gradient(135deg, var(--burg-2), var(--burg-3));
-  border-color: rgba(255,243,200,.5);
-  box-shadow: 0 0 18px rgba(166,59,85,.6), 0 4px 12px rgba(0,0,0,.5);
-}
-
-#play-btn:hover {
-  background: linear-gradient(135deg, #bf4a63, var(--burg-2));
-  box-shadow: 0 0 28px rgba(166,59,85,.9), 0 6px 16px rgba(0,0,0,.5);
-  transform: scale(1.1);
-}
-
-#play-btn.is-playing {
-  background: linear-gradient(135deg, #b34060, #7a1632);
-  animation: playBtnPulse 2s ease-in-out infinite;
-}
-
-@keyframes playBtnPulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(166,59,85,.6); }
-  50%       { box-shadow: 0 0 32px rgba(166,59,85,1), 0 0 50px rgba(255,211,107,.3); }
-}
-
-/* Loop/shuffle badges */
-#player-badges {
+.header-meta {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
 }
 
-.badge {
-  font-family: var(--font-ui);
-  font-size: .62rem;
-  letter-spacing: .1em;
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,247,251,.55);
-  font-weight: 700;
+.label-small {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
+  color: var(--amber-dim);
 }
 
-.badge.active {
-  background: rgba(255,211,107,.12);
-  border-color: rgba(255,211,107,.4);
-  color: var(--gold-1);
-  text-shadow: 0 0 8px rgba(255,211,107,.5);
+.track-count {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-dim);
 }
 
-/* Responsive: stack on small screens */
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1 .accent {
+  font-style: italic;
+  color: var(--amber);
+  font-weight: 300;
+}
+
+h1 .zh {
+  display: block;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--text-mid);
+  margin-top: 0.7rem;
+  font-family: 'Syne', sans-serif;
+}
+
+/* Track list */
+.track-list {
+  list-style: none;
+}
+
+.track-item {
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+.track-item:nth-child(1)  { animation-delay: 0.18s; }
+.track-item:nth-child(2)  { animation-delay: 0.24s; }
+.track-item:nth-child(3)  { animation-delay: 0.30s; }
+.track-item:nth-child(4)  { animation-delay: 0.36s; }
+.track-item:nth-child(5)  { animation-delay: 0.42s; }
+.track-item:nth-child(6)  { animation-delay: 0.48s; }
+.track-item:nth-child(7)  { animation-delay: 0.54s; }
+.track-item:nth-child(8)  { animation-delay: 0.60s; }
+.track-item:nth-child(9)  { animation-delay: 0.66s; }
+.track-item:nth-child(10) { animation-delay: 0.72s; }
+.track-item:nth-child(11) { animation-delay: 0.78s; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.track-link {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  align-items: center;
+  gap: 0 2rem;
+  padding: 1.8rem 0;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Left-to-right hover fill */
+.track-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(212,178,100,0.07) 0%, transparent 70%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.38s cubic-bezier(0.22,1,0.36,1);
+}
+.track-link:hover::before { transform: scaleX(1); }
+
+/* Oversized number */
+.track-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  line-height: 1;
+  color: var(--text-dim);
+  letter-spacing: -0.02em;
+  transition: color 0.25s;
+  padding-left: 0.1em;
+  position: relative;
+  z-index: 1;
+}
+.track-link:hover .track-num { color: var(--amber); }
+
+.track-body {
+  position: relative;
+  z-index: 1;
+}
+
+.track-grammar {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 0.32rem;
+  transition: color 0.2s;
+}
+.track-link:hover .track-grammar { color: var(--amber2); }
+
+.track-song {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+  color: var(--text-mid);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+.track-song::before {
+  content: "♩";
+  font-style: normal;
+  color: var(--amber-dim);
+  font-size: 0.9em;
+}
+
+.track-arrow {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, color 0.2s, transform 0.28s cubic-bezier(0.22,1,0.36,1);
+  position: relative;
+  z-index: 1;
+}
+.track-link:hover .track-arrow {
+  opacity: 1;
+  color: var(--amber);
+  transform: translateX(0) rotate(-45deg);
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.92s forwards;
+}
+
+.back-link {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--amber); }
+
+.back-arrow {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+.back-link:hover .back-arrow { transform: translateX(-3px); }
+
+.footer-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* Decorative side rule */
+.side-rule {
+  position: fixed;
+  top: 0; bottom: 0; left: 2rem;
+  width: 1px;
+  background: linear-gradient(180deg, transparent 5%, var(--line) 25%, var(--line) 75%, transparent 95%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Mobile */
 @media (max-width: 600px) {
-  #music-section {
-    flex-direction: column-reverse;
-    gap: 14px;
-  }
-  #player-panel {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 14px;
-    gap: 10px;
-  }
-  #vinyl-disc { width: 80px; height: 80px; }
-  #now-playing-name { min-height: auto; font-size: .85rem; }
+  .page { padding: 8vw 5vw 10vw; }
+  .track-link { grid-template-columns: 3.8rem 1fr auto; gap: 0 1rem; padding: 1.4rem 0; }
+  .track-num { font-size: 2.2rem; }
+  .side-rule { display: none; }
+  .footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
+  h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
 }
-  </style>
+
+@media (max-width: 400px) {
+  .track-link { grid-template-columns: 3rem 1fr 1rem; gap: 0 0.8rem; }
+  .track-num { font-size: 1.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .track-item, .header, .footer { opacity: 1; transform: none; }
+}
+</style>
 </head>
-
 <body>
-  <!-- 移除音頻元素 -->
-  
-  <!-- 移除音頻控制按鈕 -->
-  
-  <!-- 移除效能控制按鈕（如果需要可以保留） -->
-  <div id="performance-control" aria-label="效能控制">
-    ⚡
-  </div>
 
-  <!-- 輕量級粒子背景 -->
-  <div class="particles-bg" id="particles-bg" aria-hidden="true"></div>
+<div class="side-rule"></div>
 
-  <div class="spark-field" aria-hidden="true">
-    <div class="spark" style="top:12%; left:-10%; animation-duration:14s; animation-delay:-2s;"></div>
-    <div class="spark" style="top:30%; left:-20%; animation-duration:18s; animation-delay:-6s; opacity:.45;"></div>
-    <div class="spark" style="top:56%; left:-15%; animation-duration:16s; animation-delay:-9s;"></div>
-    <div class="spark" style="top:74%; left:-30%; animation-duration:20s; animation-delay:-12s; opacity:.35;"></div>
-  </div>
+<div class="page">
 
-  <canvas id="trail-canvas"></canvas>
-
-  <h1 id="page-title">
-    AI 學習「樂」🎵園 | 
-    <small>Learn Grammar with AI Songs</small>
-  </h1>
-
-  <section id="nav-panel" aria-label="花園導覽（知識地圖）">
-   <h2 class="nav-title">
-  Knowledge Map · 文法花園導覽
-  <small style="display:block;font-size:.75em;opacity:.8;">
-    （點這裡可關閉花瓣閃爍效果）
-  </small>
-</h2>
-    <div class="nav-grid">
-      <div class="nav-item full" data-petal="0">
-        <strong>1) Learn 5 Sentence Structures</strong><br>
-      </div>
-      <div class="nav-item" data-petal="1"><strong>2) Learn Simple Tenses</strong></div>
-      <div class="nav-item" data-petal="2"><strong>3) Learn Progressive Tenses</strong></div>
-      <div class="nav-item" data-petal="3"><strong>4) Learn Perfect Tenses</strong></div>
-      <div class="nav-item" data-petal="4"><strong>5) Learn To do V.S. doing</strong></div>
-      <div class="nav-item" data-petal="5"><strong>6) Learn V-ing V.S. V-ed</strong></div>
-      <div class="nav-item" data-petal="6"><strong>7) Learn Noun Clauses</strong></div>
-      <div class="nav-item" data-petal="7"><strong>8) Learn Adjective Clauses</strong></div>
-      <div class="nav-item" data-petal="8"><strong>9) Learn Adverb Clauses</strong></div>
-      <div class="nav-item" data-petal="9"><strong>10) Learn Inverted Sentences</strong></div>
-      <div class="nav-item" data-petal="10"><strong>11) Learn Subjunctive Mood</strong></div>
+  <header class="header">
+    <div class="header-meta">
+      <span class="label-small">AI Music Studio · Shirley</span>
+      <span class="track-count">11 tracks · 11 songs</span>
     </div>
-  </section>
+    <h1>
+      Grammar<br>with <span class="accent">Songs</span>
+      <span class="zh">AI 學習「樂」🎵園</span>
+    </h1>
+  </header>
 
-  <div style="position:relative; z-index:3; isolation:isolate;">
-  <div id="flower-rotator" aria-hidden="false">
-    <div id="petal-container" role="navigation" aria-label="AI 學習樂🎵園 11個文法學習入口">
+  <ul class="track-list">
 
-      <a class="petal layer-a" style="--angle:-65.45deg; --tilt:-4deg"
-         href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%201.html"
-         target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn 5 Sentence Structures</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%201.html" target="_blank" rel="noopener">
+        <span class="track-num">01</span>
+        <div class="track-body">
+          <p class="track-grammar">5 Sentence Structures</p>
+          <p class="track-song">My Country Creek</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-b" style="--angle:-32.73deg; --tilt:2deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%202.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Simple Tenses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%202.html" target="_blank" rel="noopener">
+        <span class="track-num">02</span>
+        <div class="track-body">
+          <p class="track-grammar">Simple Tenses</p>
+          <p class="track-song">Time Tells</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-a" style="--angle:0deg; --tilt:-3deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%203.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Progressive Tenses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%203.html" target="_blank" rel="noopener">
+        <span class="track-num">03</span>
+        <div class="track-body">
+          <p class="track-grammar">Progressive Tenses</p>
+          <p class="track-song">Right Now</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-b" style="--angle:32.73deg; --tilt:3deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%204.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Perfect Tenses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%204.html" target="_blank" rel="noopener">
+        <span class="track-num">04</span>
+        <div class="track-body">
+          <p class="track-grammar">Perfect Tenses</p>
+          <p class="track-song">Perfect Chapter</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-a" style="--angle:65.45deg; --tilt:-2deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%205.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn To do V.S. doing</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%205.html" target="_blank" rel="noopener">
+        <span class="track-num">05</span>
+        <div class="track-body">
+          <p class="track-grammar">To do vs. Doing</p>
+          <p class="track-song">To Be Then Being</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-b" style="--angle:98.18deg; --tilt:4deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%206.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn V-ing V.S. V-ed</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%206.html" target="_blank" rel="noopener">
+        <span class="track-num">06</span>
+        <div class="track-body">
+          <p class="track-grammar">V-ing vs. V-ed</p>
+          <p class="track-song">Falling and Found</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-a" style="--angle:130.91deg; --tilt:-4deg"  href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%207.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Noun Clauses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%207.html" target="_blank" rel="noopener">
+        <span class="track-num">07</span>
+        <div class="track-body">
+          <p class="track-grammar">Noun Clauses</p>
+          <p class="track-song">What I Become</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-b" style="--angle:163.64deg; --tilt:2deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%208.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Adjective Clauses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%208.html" target="_blank" rel="noopener">
+        <span class="track-num">08</span>
+        <div class="track-body">
+          <p class="track-grammar">Adjective Clauses</p>
+          <p class="track-song">The Stories We Carry</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-a" style="--angle:196.36deg; --tilt:-3deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%209.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Adverb Clauses</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%209.html" target="_blank" rel="noopener">
+        <span class="track-num">09</span>
+        <div class="track-body">
+          <p class="track-grammar">Adverb Clauses</p>
+          <p class="track-song">When I Was Falling</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-b" style="--angle:229.09deg; --tilt:3deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2010.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Inverted Sentences</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2010.html" target="_blank" rel="noopener">
+        <span class="track-num">10</span>
+        <div class="track-body">
+          <p class="track-grammar">Inverted Sentences</p>
+          <p class="track-song">Never Have I Walked Alone</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <a class="petal layer-a" style="--angle:261.82deg; --tilt:-2deg" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2011.html" target="_blank" rel="noopener">
-        <div class="petal-content"><strong>Learn Subjunctive Mood</strong></div>
+    <li class="track-item">
+      <a class="track-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/track%2011.html" target="_blank" rel="noopener">
+        <span class="track-num">11</span>
+        <div class="track-body">
+          <p class="track-grammar">Subjunctive Mood</p>
+          <p class="track-song">If I Were You</p>
+        </div>
+        <span class="track-arrow">↗</span>
       </a>
+    </li>
 
-      <div id="learning-center" aria-hidden="true">
-        AI 唱歌🎵，<br>學文法！
-      </div>
-    </div>
-  </div><!-- end flower-rotator -->
-  </div><!-- end flower stacking isolator -->
+  </ul>
 
-  <button id="back-button" onclick="window.location.href='https://ducj-creator.github.io/Shirley-AI-Music-Studio/'">
-    返回主頁
-  </button>
+  <footer class="footer">
+    <a class="back-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/">
+      <span class="back-arrow">←</span> 返回主頁
+    </a>
+    <span class="footer-note">Click any row to begin learning</span>
+  </footer>
 
-  <!-- ===================== MUSIC PLAYER + PLAYLIST ===================== -->
-  <section id="music-section" aria-label="音樂播放器">
+</div>
 
-    <!-- Playlist -->
-    <div id="playlist-panel">
-      <p class="playlist-title">🎵 Song Playlist · 11首學習歌曲</p>
-      <ul class="playlist-list" id="playlist-list">
-        <li class="playlist-item" data-track="0">
-          <span class="playlist-num">01</span>
-          <span class="playlist-name">My Country Creek</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="1">
-          <span class="playlist-num">02</span>
-          <span class="playlist-name">Time Tells</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="2">
-          <span class="playlist-num">03</span>
-          <span class="playlist-name">Right Now</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="3">
-          <span class="playlist-num">04</span>
-          <span class="playlist-name">Perfect Chapter</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="4">
-          <span class="playlist-num">05</span>
-          <span class="playlist-name">To Be Then Being</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="5">
-          <span class="playlist-num">06</span>
-          <span class="playlist-name">Falling and Found</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="6">
-          <span class="playlist-num">07</span>
-          <span class="playlist-name">What I Become</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="7">
-          <span class="playlist-num">08</span>
-          <span class="playlist-name">The Stories We Carry</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="8">
-          <span class="playlist-num">09</span>
-          <span class="playlist-name">When I Was Falling</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="9">
-          <span class="playlist-num">10</span>
-          <span class="playlist-name">Never Have I Walked Alone</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-        <li class="playlist-item" data-track="10">
-          <span class="playlist-num">11</span>
-          <span class="playlist-name">If I Were You</span>
-          <span class="playlist-eq"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Player -->
-    <div id="player-panel">
-      <div id="vinyl-disc" aria-hidden="true"></div>
-      <p id="now-playing-label">Now Playing</p>
-      <p id="now-playing-name">— 點擊播放按鈕開始 —</p>
-      <div id="player-controls">
-        <button class="ctrl-btn" id="prev-btn" title="上一首" aria-label="上一首">⏮</button>
-        <button class="ctrl-btn" id="play-btn" title="播放 / 暫停" aria-label="播放 / 暫停">▶</button>
-        <button class="ctrl-btn" id="next-btn" title="下一首" aria-label="下一首">⏭</button>
-      </div>
-      <div id="player-badges">
-        <span class="badge active" id="badge-loop">↺ Loop</span>
-        <span class="badge active" id="badge-shuffle">⇄ Shuffle</span>
-      </div>
-    </div>
-
-  </section>
-  <!-- ==================== END MUSIC PLAYER ========================== -->
-
-  <!-- 移除 Three.js 庫 -->
-
-  <script>
-    /* ================================== */
-    /* ✅ 新增：花朵視窗適配功能 */
-    /* ================================== */
-    let resizeTimeout;
-    
-    function calculateFlowerSize() {
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-      
-      // 計算可用空間
-      const header = document.getElementById('page-title');
-      const nav = document.getElementById('nav-panel');
-      const button = document.getElementById('back-button');
-      
-      const headerHeight = header ? header.offsetHeight : 0;
-      const navHeight = nav ? nav.offsetHeight : 0;
-      const buttonHeight = button ? button.offsetHeight : 0;
-      
-      // 計算可用高度
-      const pagePadding = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--page-padding')) || 20;
-      const totalVerticalSpace = headerHeight + navHeight + buttonHeight + (pagePadding * 3) + 60; // 緩衝區
-      const availableHeight = viewportHeight - totalVerticalSpace;
-      
-      // 計算可用寬度
-      const availableWidth = viewportWidth - (pagePadding * 2);
-      
-      // 使用較小值作為限制
-      const maxSize = Math.min(availableHeight, availableWidth, 650);
-      
-      // 確保最小值
-      const minSize = Math.min(viewportHeight * 0.4, viewportWidth * 0.8, 300);
-      const finalSize = Math.max(minSize, maxSize);
-      
-      return {
-        size: finalSize,
-        petalW: Math.max(80, finalSize * 0.24),
-        petalH: Math.max(110, finalSize * 0.34),
-        centerSize: Math.max(60, finalSize * 0.17),
-        lift: Math.max(15, finalSize * 0.1)
-      };
-    }
-    
-    function adjustFlowerForViewport() {
-      const flower = document.getElementById('flower-rotator');
-      if (!flower) return;
-      
-      const sizes = calculateFlowerSize();
-      
-      // 動態設置容器大小
-      flower.style.width = `${sizes.size}px`;
-      flower.style.height = `${sizes.size}px`;
-      
-      // 更新 CSS 變數
-      document.documentElement.style.setProperty('--container-size', `${sizes.size}px`);
-      document.documentElement.style.setProperty('--petal-w', `${sizes.petalW}px`);
-      document.documentElement.style.setProperty('--petal-h', `${sizes.petalH}px`);
-      document.documentElement.style.setProperty('--center-size', `${sizes.centerSize}px`);
-      document.documentElement.style.setProperty('--lift', `${sizes.lift}px`);
-      
-      // 更新中心圓字體大小
-      const center = document.getElementById('learning-center');
-      if (center) {
-        const fontSize = Math.max(12, sizes.centerSize * 0.1);
-        center.style.fontSize = `${fontSize}px`;
-      }
-    }
-    
-    function debounceAdjustFlower() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(adjustFlowerForViewport, 250);
-    }
-    
-    // 初始調整
-    window.addEventListener('load', () => {
-      setTimeout(adjustFlowerForViewport, 100);
-    });
-    
-    // 視窗大小改變時重新調整
-    window.addEventListener('resize', debounceAdjustFlower);
-    
-    // 監聽滾輪事件，在縮放時也調整
-    window.addEventListener('wheel', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(adjustFlowerForViewport, 500);
-    });
-  </script>
-
-  <script>
-    /* ================================== */
-    /* 輕量級粒子背景生成器 */
-    /* ================================== */
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles-bg');
-      if (!particlesContainer) return;
-      
-      // 根據裝置效能調整粒子數量
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      const particleCount = isMobile ? 40 : 60; // 大幅減少粒子數量
-      
-      // 清除現有粒子
-      particlesContainer.innerHTML = '';
-      
-      // 創建粒子
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        
-        // 隨機粒子類型
-        const types = ['particle-large', 'particle-medium', 'particle-small', 'particle-color'];
-        const type = types[Math.floor(Math.random() * types.length)];
-        
-        particle.className = `particle ${type}`;
-        
-        // 隨機位置
-        const left = Math.random() * 100;
-        const top = Math.random() * 100;
-        
-        // 隨機動畫延遲和持續時間
-        const delay = Math.random() * 20;
-        const durationMultiplier = 0.8 + Math.random() * 0.4;
-        
-        // 設置粒子位置和動畫
-        particle.style.left = `${left}%`;
-        particle.style.top = `${top}%`;
-        particle.style.animationDelay = `${-delay}s`;
-        particle.style.animationDuration = `${20 * durationMultiplier}s`;
-        
-        // 隨機透明度
-        const opacity = 0.4 + Math.random() * 0.4;
-        particle.style.opacity = opacity;
-        
-        particlesContainer.appendChild(particle);
-      }
-    }
-    
-    // 初始化粒子
-    window.addEventListener('load', createParticles);
-    window.addEventListener('resize', createParticles);
-  </script>
-
-  <script>
-    /* ---------------------------------- */
-    /* Golden Trail — 優化版 */
-    /* ---------------------------------- */
-    const canvas = document.getElementById('trail-canvas');
-    const ctx = canvas.getContext('2d');
-
-    let w, h, dpr;
-    function resize(){
-      dpr = window.devicePixelRatio || 1;
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const points = [];
-    const MAX_POINTS = 30; // 減少點數
-
-    window.addEventListener('mousemove', (e) => {
-      points.push({ x: e.clientX, y: e.clientY, life: 1 });
-      if(points.length > MAX_POINTS) points.shift();
-    });
-
-    // 軌跡繪製效能優化
-    let lastTrailTime = 0;
-    const TRAIL_INTERVAL = 1000 / 20; // 降低到 20 FPS
-
-    function draw(currentTime) {
-      requestAnimationFrame(draw);
-      
-      if (currentTime - lastTrailTime < TRAIL_INTERVAL) {
-        return;
-      }
-      lastTrailTime = currentTime;
-      
-      ctx.clearRect(0,0,w,h);
-
-      for(let i=0;i<points.length;i++){
-        points[i].life -= 0.015;
-      }
-
-      // 只繪製有生命值的點
-      const validPoints = points.filter(p => p.life > 0);
-      
-      for(let i=1;i<validPoints.length;i++){
-        const p0 = validPoints[i-1];
-        const p1 = validPoints[i];
-        
-        const alpha = Math.max(0, p1.life);
-        const lw = 6 * alpha + 1; // 減少線寬
-
-        const grad = ctx.createLinearGradient(p0.x,p0.y,p1.x,p1.y);
-        grad.addColorStop(0, `rgba(255,180,0,0)`);
-        grad.addColorStop(0.5, `rgba(255,211,107,${0.85*alpha})`);
-        grad.addColorStop(1, `rgba(255,243,200,${0.6*alpha})`);
-
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = lw;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(p0.x,p0.y);
-        ctx.lineTo(p1.x,p1.y);
-        ctx.stroke();
-
-        if(i === validPoints.length-1){
-          ctx.fillStyle = `rgba(255,211,107,${alpha})`;
-          ctx.beginPath();
-          ctx.arc(p1.x,p1.y, 4.5*alpha, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
-
-      while(points.length && points[0].life <= 0) points.shift();
-    }
-    draw();
-
-    /* ---------------------------------- */
-    const navItems = document.querySelectorAll('#nav-panel .nav-item');
-    const petals = document.querySelectorAll('#petal-container .petal');
-
-    navItems.forEach(item => {
-      const index = item.getAttribute('data-petal');
-      if (index === null) return;
-
-      item.addEventListener('click', () => {
-        const i = parseInt(index, 10);
-        if (!petals[i]) return;
-
-        petals.forEach(p => p.classList.remove('nav-highlight'));
-
-        const petal = petals[i];
-        void petal.offsetWidth;
-        petal.classList.add('nav-highlight');
-      });
-    });
-
-    // 點「Knowledge Map · 文法花園導覽」標題時，把所有閃爍關掉
-    const navTitle = document.querySelector('.nav-title');
-    if (navTitle) {
-      navTitle.addEventListener('click', () => {
-        petals.forEach(p => p.classList.remove('nav-highlight'));
-      });
-    }
-  </script>
-
-  <script>
-    /* =========================================== */
-    /* 🎵 MUSIC PLAYER LOGIC                      */
-    /* =========================================== */
-    (function () {
-      const BASE = "https://ducj-creator.github.io/releases/";
-      const tracks = [
-        { name: "My Country Creek",          src: BASE + "my%20country%20creek.mp3" },
-        { name: "Time Tells",                src: BASE + "time%20tells.mp3" },
-        { name: "Right Now",                 src: BASE + "right%20now.mp3" },
-        { name: "Perfect Chapter",           src: BASE + "perfect%20chapter.mp3" },
-        { name: "To Be Then Being",          src: BASE + "to%20be%20then%20being.mp3" },
-        { name: "Falling and Found",         src: BASE + "falling%20and%20found.mp3" },
-        { name: "What I Become",             src: BASE + "what%20i%20become.mp3" },
-        { name: "The Stories We Carry",      src: BASE + "the%20stories%20we%20carry.mp3" },
-        { name: "When I Was Falling",        src: BASE + "when%20I%20was%20falling.mp3" },
-        { name: "Never Have I Walked Alone", src: BASE + "never%20have%20i%20walked%20alone.mp3" },
-        { name: "If I Were You",             src: BASE + "if%20i%20were%20you.mp3" },
-      ];
-
-      /* Single shared audio element — most reliable cross-browser approach */
-      const audio = new Audio();
-      audio.preload = "none";
-
-      let currentIdx = null;
-      let isPlaying = false;
-      let shuffleEnabled = true;
-      let loopEnabled = true;
-
-      const playBtn      = document.getElementById("play-btn");
-      const prevBtn      = document.getElementById("prev-btn");
-      const nextBtn      = document.getElementById("next-btn");
-      const nowName      = document.getElementById("now-playing-name");
-      const vinyl        = document.getElementById("vinyl-disc");
-      const badgeLoop    = document.getElementById("badge-loop");
-      const badgeShuffle = document.getElementById("badge-shuffle");
-      const listItems    = document.querySelectorAll(".playlist-item");
-
-      function pickRandom(exclude) {
-        let idx;
-        do { idx = Math.floor(Math.random() * tracks.length); }
-        while (tracks.length > 1 && idx === exclude);
-        return idx;
-      }
-
-      function setActiveItem(idx) {
-        listItems.forEach((li, i) => {
-          li.classList.toggle("is-playing", i === idx);
-        });
-        if (listItems[idx]) {
-          listItems[idx].scrollIntoView({ block: "nearest", behavior: "smooth" });
-        }
-      }
-
-      function updateNowPlaying(idx) {
-        nowName.style.opacity = "0";
-        setTimeout(() => {
-          nowName.textContent = tracks[idx].name;
-          nowName.style.opacity = "1";
-        }, 200);
-      }
-
-      function setPlayingUI(playing) {
-        if (playing) {
-          vinyl.classList.add("spinning");
-          playBtn.innerHTML = "⏸";
-          playBtn.classList.add("is-playing");
-        } else {
-          vinyl.classList.remove("spinning");
-          playBtn.innerHTML = "▶";
-          playBtn.classList.remove("is-playing");
-        }
-        isPlaying = playing;
-      }
-
-      function playTrack(idx) {
-        currentIdx = idx;
-        audio.src = tracks[idx].src;
-        audio.load();
-        updateNowPlaying(idx);
-        setActiveItem(idx);
-        setPlayingUI(true);
-        const p = audio.play();
-        if (p !== undefined) p.catch(err => console.error("Playback error:", err));
-      }
-
-      audio.addEventListener("ended", () => {
-        if (loopEnabled) {
-          const next = shuffleEnabled ? pickRandom(currentIdx) : (currentIdx + 1) % tracks.length;
-          playTrack(next);
-        } else {
-          setPlayingUI(false);
-        }
-      });
-
-      /* Play / Pause button */
-      playBtn.addEventListener("click", () => {
-        if (!isPlaying) {
-          if (currentIdx !== null) {
-            // Resume paused track
-            setPlayingUI(true);
-            const p = audio.play();
-            if (p !== undefined) p.catch(err => console.error("Playback error:", err));
-          } else {
-            // Start fresh — pick random or first
-            playTrack(shuffleEnabled ? pickRandom(-1) : 0);
-          }
-        } else {
-          audio.pause();
-          setPlayingUI(false);
-        }
-      });
-
-      /* Prev / Next */
-      prevBtn.addEventListener("click", () => {
-        const prev = shuffleEnabled
-          ? pickRandom(currentIdx)
-          : (currentIdx === null ? tracks.length - 1 : (currentIdx - 1 + tracks.length) % tracks.length);
-        playTrack(prev);
-      });
-
-      nextBtn.addEventListener("click", () => {
-        const next = shuffleEnabled
-          ? pickRandom(currentIdx)
-          : (currentIdx === null ? 0 : (currentIdx + 1) % tracks.length);
-        playTrack(next);
-      });
-
-      /* Clicking a playlist item */
-      listItems.forEach((li, i) => {
-        li.addEventListener("click", () => playTrack(i));
-      });
-
-      /* Badge toggles */
-      badgeLoop.addEventListener("click", () => {
-        loopEnabled = !loopEnabled;
-        badgeLoop.classList.toggle("active", loopEnabled);
-      });
-      badgeShuffle.addEventListener("click", () => {
-        shuffleEnabled = !shuffleEnabled;
-        badgeShuffle.classList.toggle("active", shuffleEnabled);
-      });
-    })();
-  </script>
-
-  <script>
-    /* ---------------------------------- */
-    /* 效能控制功能 (簡化版) */
-    /* ---------------------------------- */
-    const performanceControl = document.getElementById('performance-control');
-    let isAnimationsPaused = false;
-
-    function pauseAnimations() {
-      document.querySelectorAll('.particle').forEach(particle => {
-        particle.style.animationPlayState = 'paused';
-      });
-      document.querySelectorAll('.spark').forEach(spark => {
-        spark.style.animationPlayState = 'paused';
-      });
-      document.querySelectorAll('*').forEach(element => {
-        const computedStyle = window.getComputedStyle(element);
-        if (computedStyle.animationName !== 'none') {
-          element.style.animationPlayState = 'paused';
-        }
-      });
-      performanceControl.innerHTML = '▶';
-      performanceControl.setAttribute('data-paused', 'true');
-      isAnimationsPaused = true;
-    }
-
-    function resumeAnimations() {
-      document.querySelectorAll('.particle').forEach(particle => {
-        particle.style.animationPlayState = 'running';
-      });
-      document.querySelectorAll('.spark').forEach(spark => {
-        spark.style.animationPlayState = 'running';
-      });
-      document.querySelectorAll('*').forEach(element => {
-        const computedStyle = window.getComputedStyle(element);
-        if (computedStyle.animationName !== 'none') {
-          element.style.animationPlayState = 'running';
-        }
-      });
-      performanceControl.innerHTML = '⚡';
-      performanceControl.setAttribute('data-paused', 'false');
-      isAnimationsPaused = false;
-    }
-
-    performanceControl.addEventListener('click', () => {
-      if (isAnimationsPaused) {
-        resumeAnimations();
-      } else {
-        pauseAnimations();
-      }
-    });
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const isLowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-    if (isMobile || isLowPower) {
-      setTimeout(() => { pauseAnimations(); }, 3000);
-    }
-  </script>
 </body>
 </html>
