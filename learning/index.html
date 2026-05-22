@@ -520,9 +520,8 @@ h1 .accent {
 
 </div><!-- end .page -->
 
-<!-- ═══════════════════ IFRAME MODAL ═══════════════════ -->
+<!-- ═══════════════════ LESSON MODAL ═══════════════════ -->
 <style>
-/* Overlay backdrop */
 #modal-overlay {
   position: fixed;
   inset: 0;
@@ -542,14 +541,11 @@ h1 .accent {
   pointer-events: all;
 }
 
-/* Modal card */
 #modal-card {
   background: var(--petal-white);
   border: 1px solid var(--line-warm);
   border-radius: 4px;
-  box-shadow:
-    0 24px 80px rgba(44,36,22,0.22),
-    0 4px 16px rgba(90,122,52,0.1);
+  box-shadow: 0 24px 80px rgba(44,36,22,0.22), 0 4px 16px rgba(90,122,52,0.1);
   width: 100%;
   max-width: 1060px;
   height: 88vh;
@@ -563,7 +559,6 @@ h1 .accent {
   transform: translateY(0) scale(1);
 }
 
-/* Modal top bar */
 #modal-topbar {
   display: flex;
   align-items: center;
@@ -591,8 +586,6 @@ h1 .accent {
   color: var(--ink);
   margin-right: 0.4em;
 }
-
-/* Open-in-new-tab link inside topbar */
 #modal-external {
   font-family: 'Jost', sans-serif;
   font-size: 0.63rem;
@@ -613,8 +606,6 @@ h1 .accent {
   border-color: var(--leaf-light);
   background: var(--leaf-pale);
 }
-
-/* Close button */
 #modal-close {
   width: 32px; height: 32px;
   border-radius: 50%;
@@ -622,12 +613,10 @@ h1 .accent {
   background: transparent;
   color: var(--ink-soft);
   font-size: 1.1rem;
-  line-height: 1;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
-  font-family: inherit;
 }
 #modal-close:hover {
   background: var(--stamen-pale);
@@ -635,26 +624,32 @@ h1 .accent {
   color: var(--stamen-deep);
 }
 
-/* Loading indicator inside iframe area */
+/* Frame wrap */
+#modal-frame-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Loading spinner */
 #modal-loading {
   position: absolute;
-  inset: 52px 0 0 0;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   background: var(--petal-white);
-  pointer-events: none;
+  z-index: 2;
   transition: opacity 0.3s;
 }
-#modal-loading.hidden { opacity: 0; }
+#modal-loading.hidden { opacity: 0; pointer-events: none; }
 
 .loading-petal {
   width: 48px; height: 48px;
   animation: petalTurn 3s linear infinite;
 }
-
 #modal-loading p {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -663,34 +658,63 @@ h1 .accent {
   letter-spacing: 0.06em;
 }
 
-/* iframe itself */
-#modal-iframe {
-  flex: 1;
-  width: 100%;
-  border: none;
+/* Error state */
+#modal-error {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
   background: var(--petal-white);
-  display: block;
+  z-index: 2;
+  padding: 2rem;
+  text-align: center;
 }
+#modal-error.visible { display: flex; }
+#modal-error p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+#modal-error a {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stem);
+  border: 1px solid var(--leaf-light);
+  padding: 8px 18px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+#modal-error a:hover { background: var(--leaf-pale); }
 
-/* Relative wrapper so loading overlay positions correctly */
-#modal-frame-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
+/* The srcdoc iframe */
+#modal-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
 }
 
 @media (max-width: 600px) {
-  #modal-card { height: 92vh; border-radius: 2px; }
+  #modal-card { height: 92vh; }
   #modal-topbar { padding: 0.5rem 0.8rem; }
   #modal-external { display: none; }
 }
 </style>
 
-<!-- Modal HTML -->
+<!-- Modal -->
 <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div id="modal-card">
     <div id="modal-topbar">
-      <p id="modal-title"><strong></strong><span id="modal-subtitle"></span></p>
+      <p id="modal-title"><strong></strong></p>
       <a id="modal-external" href="#" target="_blank" rel="noopener">↗ Open in new tab</a>
       <button id="modal-close" aria-label="Close">✕</button>
     </div>
@@ -708,13 +732,16 @@ h1 .accent {
         </svg>
         <p>Loading lesson…</p>
       </div>
-      <iframe id="modal-iframe" title="Lesson content" allowfullscreen></iframe>
+      <div id="modal-error">
+        <p>This lesson couldn't load inline due to browser security restrictions.<br>Please open it directly:</p>
+        <a id="modal-error-link" href="#" target="_blank" rel="noopener">Open lesson →</a>
+      </div>
+      <iframe id="modal-iframe" title="Lesson content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
   </div>
 </div>
 
 <script>
-// ── iframe modal logic ──
 (function () {
   const overlay   = document.getElementById('modal-overlay');
   const iframe    = document.getElementById('modal-iframe');
@@ -722,57 +749,100 @@ h1 .accent {
   const titleEl   = document.getElementById('modal-title');
   const extLink   = document.getElementById('modal-external');
   const loading   = document.getElementById('modal-loading');
+  const errorBox  = document.getElementById('modal-error');
+  const errorLink = document.getElementById('modal-error-link');
 
-  function openModal(src, title) {
-    // Set topbar info
+  // Cache fetched HTML so re-opening is instant
+  const cache = {};
+
+  // Rewrite all relative URLs in fetched HTML to absolute
+  function makeAbsolute(html, baseUrl) {
+    const base = new URL(baseUrl);
+    const baseOrigin = base.origin;
+    const basePath   = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
+
+    // Inject a <base> tag so the browser resolves everything automatically
+    // Place it right after <head> (or at top of <html>)
+    const baseTag = `<base href="${basePath}">`;
+    if (/<head[^>]*>/i.test(html)) {
+      html = html.replace(/(<head[^>]*>)/i, '$1' + baseTag);
+    } else {
+      html = baseTag + html;
+    }
+    return html;
+  }
+
+  async function openModal(src, title) {
+    // Reset state
+    loading.classList.remove('hidden');
+    errorBox.classList.remove('visible');
+    iframe.removeAttribute('srcdoc');
+
     titleEl.innerHTML = '<strong>Learn · </strong>' + title;
     extLink.href = src;
+    errorLink.href = src;
 
-    // Show loading, clear old src first
-    loading.classList.remove('hidden');
-    iframe.src = '';
-    requestAnimationFrame(() => { iframe.src = src; });
-
-    // Show overlay
     overlay.classList.add('visible');
     document.body.style.overflow = 'hidden';
     closeBtn.focus();
+
+    // Use cached version if available
+    if (cache[src]) {
+      iframe.srcdoc = cache[src];
+      loading.classList.add('hidden');
+      return;
+    }
+
+    try {
+      // Use a CORS proxy to fetch the page content
+      // We try direct fetch first (works if CORS allows it), then proxy
+      let html;
+
+      try {
+        const res = await fetch(src, { mode: 'cors' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        html = await res.text();
+      } catch (corsErr) {
+        // Fall back to a public CORS proxy
+        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(src);
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error('Proxy failed');
+        const json = await res.json();
+        html = json.contents;
+      }
+
+      html = makeAbsolute(html, src);
+      cache[src] = html;
+
+      iframe.srcdoc = html;
+      loading.classList.add('hidden');
+
+    } catch (err) {
+      console.error('Failed to load lesson:', err);
+      loading.classList.add('hidden');
+      errorBox.classList.add('visible');
+    }
   }
 
   function closeModal() {
     overlay.classList.remove('visible');
     document.body.style.overflow = '';
-    // Delay clearing src so fade-out looks clean
-    setTimeout(() => { iframe.src = ''; }, 350);
+    setTimeout(() => {
+      iframe.removeAttribute('srcdoc');
+      errorBox.classList.remove('visible');
+    }, 350);
   }
 
-  // Hide loading spinner once iframe loads
-  iframe.addEventListener('load', () => {
-    if (iframe.src) loading.classList.add('hidden');
-  });
-
-  // Wire up all track rows
+  // Wire track rows
   document.querySelectorAll('.track-link[data-src]').forEach(el => {
-    el.addEventListener('click', () => {
-      openModal(el.dataset.src, el.dataset.title);
-    });
+    el.addEventListener('click', () => openModal(el.dataset.src, el.dataset.title));
     el.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openModal(el.dataset.src, el.dataset.title);
-      }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(el.dataset.src, el.dataset.title); }
     });
   });
 
-  // Close on button
   closeBtn.addEventListener('click', closeModal);
-
-  // Close on backdrop click
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) closeModal();
-  });
-
-  // Close on Escape
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && overlay.classList.contains('visible')) closeModal();
   });
