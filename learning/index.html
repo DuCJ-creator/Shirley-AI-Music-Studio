@@ -7,22 +7,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --petal-white: #fdfaf4;
-  --petal-cream: #f5f0e4;
-  --petal-blush: #eee8d8;
-  --stamen:      #b87333;
-  --stamen-deep: #8a4f1e;
-  --stamen-pale: #e8c89a;
-  --leaf:        #5a7a52;
-  --leaf-light:  #8aab7e;
-  --leaf-pale:   #d6e8cc;
-  --stem:        #3d5c38;
-  --ink:         #2c2416;
-  --ink-mid:     #6b5c42;
-  --ink-soft:    #a89880;
-  --ink-faint:   #cfc0a8;
-  --line:        rgba(90,122,82,0.15);
-  --line-warm:   rgba(184,115,51,0.18);
+  --petal-white: #faf8fd;
+  --petal-cream: #f2eef8;
+  --petal-blush: #e8e0f4;
+  --stamen:      #8b5cf6;
+  --stamen-deep: #5b21b6;
+  --stamen-pale: #ddd6fe;
+  --leaf:        #6d4fa0;
+  --leaf-light:  #a78bda;
+  --leaf-pale:   #ede9fa;
+  --stem:        #4c1d95;
+  --ink:         #1e1428;
+  --ink-mid:     #5b4675;
+  --ink-soft:    #9b82bb;
+  --ink-faint:   #c4b5db;
+  --line:        rgba(109,79,160,0.15);
+  --line-warm:   rgba(139,92,246,0.2);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,8 +53,8 @@ body::after {
   content: "";
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(214,232,204,0.45) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(232,200,154,0.18) 0%, transparent 55%);
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(196,181,240,0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(167,139,218,0.15) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
 }
@@ -349,17 +349,17 @@ h1 .accent {
 <!-- Decorative vine SVG left edge -->
 <svg class="vine" viewBox="0 0 48 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <path d="M24 800 C24 780 30 760 22 740 C14 720 28 700 24 680 C20 660 30 640 24 620 C18 600 28 580 24 560 C20 540 30 520 22 500 C14 480 26 460 24 440 C22 420 28 400 24 380 C20 360 30 340 22 320 C14 300 26 280 24 260 C22 240 28 220 24 200 C20 180 30 160 22 140 C14 120 26 100 24 80 C22 60 28 40 24 10"
-    fill="none" stroke="#5a7a52" stroke-width="1.2" stroke-linecap="round"/>
+    fill="none" stroke="#6d4fa0" stroke-width="1.2" stroke-linecap="round"/>
   <!-- Leaf sprigs -->
-  <ellipse cx="31" cy="160" rx="9" ry="5" fill="#8aab7e" transform="rotate(-30 31 160)"/>
-  <ellipse cx="17" cy="280" rx="9" ry="5" fill="#8aab7e" transform="rotate(25 17 280)"/>
-  <ellipse cx="32" cy="400" rx="9" ry="5" fill="#8aab7e" transform="rotate(-20 32 400)"/>
-  <ellipse cx="16" cy="520" rx="9" ry="5" fill="#8aab7e" transform="rotate(30 16 520)"/>
-  <ellipse cx="30" cy="640" rx="9" ry="5" fill="#8aab7e" transform="rotate(-25 30 640)"/>
+  <ellipse cx="31" cy="160" rx="9" ry="5" fill="#a78bda" transform="rotate(-30 31 160)"/>
+  <ellipse cx="17" cy="280" rx="9" ry="5" fill="#a78bda" transform="rotate(25 17 280)"/>
+  <ellipse cx="32" cy="400" rx="9" ry="5" fill="#a78bda" transform="rotate(-20 32 400)"/>
+  <ellipse cx="16" cy="520" rx="9" ry="5" fill="#a78bda" transform="rotate(30 16 520)"/>
+  <ellipse cx="30" cy="640" rx="9" ry="5" fill="#a78bda" transform="rotate(-25 30 640)"/>
   <!-- Small buds -->
-  <ellipse cx="24" cy="110" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
-  <ellipse cx="24" cy="340" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
-  <ellipse cx="24" cy="580" rx="3" ry="5" fill="#b87333" opacity="0.6"/>
+  <ellipse cx="24" cy="110" rx="3" ry="5" fill="#8b5cf6" opacity="0.6"/>
+  <ellipse cx="24" cy="340" rx="3" ry="5" fill="#8b5cf6" opacity="0.6"/>
+  <ellipse cx="24" cy="580" rx="3" ry="5" fill="#8b5cf6" opacity="0.6"/>
 </svg>
 
 <div class="page">
@@ -373,28 +373,28 @@ h1 .accent {
     <!-- Lily botanical illustration -->
     <svg class="botanical" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <!-- Stem -->
-      <path d="M60 155 C60 130 56 110 60 90" stroke="#3d5c38" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M60 155 C60 130 56 110 60 90" stroke="#4c1d95" stroke-width="1.5" fill="none" stroke-linecap="round"/>
       <!-- Leaves -->
-      <path d="M60 130 C48 118 36 122 32 112 C40 108 52 116 60 130Z" fill="#8aab7e" opacity="0.7"/>
-      <path d="M60 115 C72 103 84 106 88 96 C80 92 68 100 60 115Z" fill="#5a7a52" opacity="0.6"/>
-      <!-- Petals — 6 lily petals, alternating long/short -->
-      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(0 60 62)" opacity="0.95"/>
-      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(60 60 62)" opacity="0.9"/>
-      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#fdfaf4" stroke="#e8c89a" stroke-width="0.8" transform="rotate(120 60 62)" opacity="0.9"/>
-      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(30 60 62)" opacity="0.75"/>
-      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(90 60 62)" opacity="0.75"/>
-      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.6" transform="rotate(150 60 62)" opacity="0.75"/>
+      <path d="M60 130 C48 118 36 122 32 112 C40 108 52 116 60 130Z" fill="#a78bda" opacity="0.7"/>
+      <path d="M60 115 C72 103 84 106 88 96 C80 92 68 100 60 115Z" fill="#6d4fa0" opacity="0.6"/>
+      <!-- Petals — 6 lily petals, alternating long/short, purple tones -->
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#e9d5ff" stroke="#c4b5db" stroke-width="0.8" transform="rotate(0 60 62)" opacity="0.95"/>
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#e9d5ff" stroke="#c4b5db" stroke-width="0.8" transform="rotate(60 60 62)" opacity="0.9"/>
+      <ellipse cx="60" cy="62" rx="10" ry="28" fill="#e9d5ff" stroke="#c4b5db" stroke-width="0.8" transform="rotate(120 60 62)" opacity="0.9"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.6" transform="rotate(30 60 62)" opacity="0.78"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.6" transform="rotate(90 60 62)" opacity="0.78"/>
+      <ellipse cx="60" cy="62" rx="7" ry="22" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.6" transform="rotate(150 60 62)" opacity="0.78"/>
       <!-- Stamens -->
-      <line x1="60" y1="62" x2="60" y2="42" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
-      <line x1="60" y1="62" x2="70" y2="46" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
-      <line x1="60" y1="62" x2="50" y2="46" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
-      <line x1="60" y1="62" x2="68" y2="58" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
-      <line x1="60" y1="62" x2="52" y2="58" stroke="#b87333" stroke-width="0.9" opacity="0.8"/>
-      <circle cx="60" cy="42" r="2.2" fill="#8a4f1e"/>
-      <circle cx="70" cy="46" r="2"   fill="#8a4f1e"/>
-      <circle cx="50" cy="46" r="2"   fill="#8a4f1e"/>
-      <circle cx="68" cy="58" r="1.8" fill="#b87333"/>
-      <circle cx="52" cy="58" r="1.8" fill="#b87333"/>
+      <line x1="60" y1="62" x2="60" y2="42" stroke="#8b5cf6" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="70" y2="46" stroke="#8b5cf6" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="50" y2="46" stroke="#8b5cf6" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="68" y2="58" stroke="#8b5cf6" stroke-width="0.9" opacity="0.8"/>
+      <line x1="60" y1="62" x2="52" y2="58" stroke="#8b5cf6" stroke-width="0.9" opacity="0.8"/>
+      <circle cx="60" cy="42" r="2.2" fill="#5b21b6"/>
+      <circle cx="70" cy="46" r="2"   fill="#5b21b6"/>
+      <circle cx="50" cy="46" r="2"   fill="#5b21b6"/>
+      <circle cx="68" cy="58" r="1.8" fill="#8b5cf6"/>
+      <circle cx="52" cy="58" r="1.8" fill="#8b5cf6"/>
     </svg>
   </header>
 
@@ -512,9 +512,6 @@ h1 .accent {
   </ul>
 
   <footer class="footer">
-    <a class="back-link" href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/">
-      <span class="back-arrow">←</span> 返回主頁
-    </a>
     <span class="footer-note">11 songs, 11 lessons — click any row to open</span>
   </footer>
 
@@ -715,20 +712,19 @@ h1 .accent {
   <div id="modal-card">
     <div id="modal-topbar">
       <p id="modal-title"><strong></strong></p>
-      <a id="modal-external" href="#" target="_blank" rel="noopener">↗ Open in new tab</a>
       <button id="modal-close" aria-label="Close">✕</button>
     </div>
     <div id="modal-frame-wrap">
       <div id="modal-loading">
         <svg class="loading-petal" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1.2" transform="rotate(0 20 20)" opacity="0.9"/>
-          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1.2" transform="rotate(60 20 20)" opacity="0.85"/>
-          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1.2" transform="rotate(120 20 20)" opacity="0.85"/>
-          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.9" transform="rotate(30 20 20)" opacity="0.7"/>
-          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.9" transform="rotate(90 20 20)" opacity="0.7"/>
-          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.9" transform="rotate(150 20 20)" opacity="0.7"/>
-          <circle cx="20" cy="20" r="3" fill="#b87333"/>
-          <circle cx="20" cy="20" r="1.2" fill="#fdfaf4"/>
+          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1.2" transform="rotate(0 20 20)" opacity="0.9"/>
+          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1.2" transform="rotate(60 20 20)" opacity="0.85"/>
+          <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1.2" transform="rotate(120 20 20)" opacity="0.85"/>
+          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.9" transform="rotate(30 20 20)" opacity="0.7"/>
+          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.9" transform="rotate(90 20 20)" opacity="0.7"/>
+          <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.9" transform="rotate(150 20 20)" opacity="0.7"/>
+          <circle cx="20" cy="20" r="3" fill="#8b5cf6"/>
+          <circle cx="20" cy="20" r="1.2" fill="#faf8fd"/>
         </svg>
         <p>Loading lesson…</p>
       </div>
@@ -858,7 +854,7 @@ h1 .accent {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 50;
-  background: rgba(253,250,244,0.92);
+  background: rgba(250,248,253,0.93);
   border-top: 1px solid var(--line-warm);
   backdrop-filter: blur(14px) saturate(1.1);
   padding: 0 2rem;
@@ -866,7 +862,7 @@ h1 .accent {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  box-shadow: 0 -4px 24px rgba(90,122,52,0.08);
+  box-shadow: 0 -4px 24px rgba(109,79,160,0.1);
 }
 
 /* Tiny lily petal spinner instead of vinyl */
@@ -983,13 +979,13 @@ h1 .accent {
   position: fixed;
   bottom: 64px; left: 0; right: 0;
   z-index: 49;
-  background: rgba(253,250,244,0.97);
+  background: rgba(250,248,253,0.97);
   border-top: 1px solid var(--line);
   backdrop-filter: blur(16px);
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1);
-  box-shadow: 0 -8px 32px rgba(90,122,52,0.08);
+  box-shadow: 0 -8px 32px rgba(109,79,160,0.1);
 }
 #playlist-drawer.open {
   max-height: 340px;
@@ -1089,14 +1085,14 @@ body { padding-bottom: 72px; }
   <!-- Petal spinner -->
   <div id="petal-spinner" aria-hidden="true">
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(0 20 20)" opacity="0.9"/>
-      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(60 20 20)" opacity="0.85"/>
-      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#fdfaf4" stroke="#e8c89a" stroke-width="1" transform="rotate(120 20 20)" opacity="0.85"/>
-      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(30 20 20)" opacity="0.7"/>
-      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(90 20 20)" opacity="0.7"/>
-      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#f0ebe0" stroke="#d4c090" stroke-width="0.8" transform="rotate(150 20 20)" opacity="0.7"/>
-      <circle cx="20" cy="20" r="3" fill="#b87333"/>
-      <circle cx="20" cy="20" r="1.2" fill="#fdfaf4"/>
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1" transform="rotate(0 20 20)" opacity="0.9"/>
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1" transform="rotate(60 20 20)" opacity="0.85"/>
+      <ellipse cx="20" cy="20" rx="6" ry="14" fill="#e9d5ff" stroke="#c4b5db" stroke-width="1" transform="rotate(120 20 20)" opacity="0.85"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.8" transform="rotate(30 20 20)" opacity="0.7"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.8" transform="rotate(90 20 20)" opacity="0.7"/>
+      <ellipse cx="20" cy="20" rx="4.5" ry="11" fill="#ddd6fe" stroke="#a78bda" stroke-width="0.8" transform="rotate(150 20 20)" opacity="0.7"/>
+      <circle cx="20" cy="20" r="3" fill="#8b5cf6"/>
+      <circle cx="20" cy="20" r="1.2" fill="#faf8fd"/>
     </svg>
   </div>
 
