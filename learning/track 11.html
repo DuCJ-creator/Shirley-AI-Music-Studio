@@ -1,108 +1,150 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track 11: If I Were You | 如果我是你 - Learning Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #064e3b;
-            --header-gradient: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
-            --accent-gold: #fbbf24;
-            --nav-bg: #065f46;
-            --paper-bg: #fdfaf5;
-            --paper-grid: rgba(0, 0, 0, 0.05);
-            --text-main: #064e3b;
-            --highlight-pre: #2563eb; /* 與現在相反 */
-            --highlight-past: #dc2626; /* 與過去相反 */
-            --highlight-sub: #9333ea; /* 建議/命令 */
-        }
-
-        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
-
-        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
-        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
-        .author { color: #a7f3d0; margin: 15px 0; font-size: 1rem; }
-        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
-        
-        .audio-player-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 30px;
-            margin: 25px 0;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        .audio-label { color: #064e3b; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
-
-        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-item { background: transparent; border: 1px solid #059669; color: #d1fae5; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
-        .nav-item:hover { border-color: var(--accent-gold); color: white; }
-        .nav-item.active { background: var(--accent-gold); color: #064e3b; border-color: var(--accent-gold); }
-
-        .content-section {
-            display: none;
-            background-color: var(--paper-bg);
-            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
-            background-size: 100% 1.8em;
-            color: var(--text-main);
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 60px;
-            border-radius: 6px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            animation: fadeIn 0.5s ease;
-        }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
-
-        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
-        .marker { background: #ecfdf5; font-weight: 800; text-align: center; color: #065f46; letter-spacing: 3px; }
-        
-        /* 結構標註樣式 */
-        .h-pre { color: var(--highlight-pre); font-weight: 700; }
-        .h-past { color: var(--highlight-past); font-weight: 700; }
-        .h-sub { color: var(--highlight-sub); font-weight: 700; border-bottom: 2px dashed var(--highlight-sub); }
-
-        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .study-box h3 { color: #065f46; border-left: 6px solid var(--accent-gold); padding-left: 20px; margin-top: 0; }
-        
-        .grammar-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
-        .grammar-card b { color: #1e293b; }
-
-        .quiz-container { background: #064e3b; color: white; padding: 45px; border-radius: 15px; }
-        footer { text-align: center; padding: 80px 20px; color: #a7f3d0; font-size: 0.9rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track 11: If I Were You | 如果我是你 - Learning Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --parchment-dark: #042f2e;
+  --chapter-green: #064e3b;
+  --emerald-deep: #065f46;
+  --ink-green: #064e3b;
+  --page-gold: #8b7355;
+  --gold-leaf: #fbbf24;
+  --text-main: #f5f1e8;
+  --text-sub: #a7f3d0;
+  --text-dark: #064e3b;
+  --highlight-pre: #2563eb;
+  --highlight-past: #dc2626;
+  --highlight-sub: #9333ea;
+  --topbar-h: 84px;
+  --sidebar-w: 170px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@keyframes page-glow { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Montserrat', 'Noto Serif TC', serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(900px circle at 8% -15%, rgba(251,191,36,.18) 0%, transparent 55%),
+    radial-gradient(760px circle at 88% 0%, rgba(16,185,129,.18) 0%, transparent 60%),
+    linear-gradient(155deg, #042f2e 0%, #064e3b 42%, #065f46 72%, #021f1d 100%);
+  background-size: 200% 200%;
+  animation: page-glow 180s linear infinite;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 200;
+  display: flex; align-items: center; gap: 14px; padding: 0 20px;
+  background: linear-gradient(180deg, rgba(4,47,46,.97) 0%, rgba(6,95,70,.9) 100%);
+  backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(251,191,36,.35); box-shadow: 0 4px 25px rgba(0,0,0,.5);
+}
+#topbar-cover { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(251,191,36,.45); box-shadow: 0 4px 14px rgba(0,0,0,.35); flex: 0 0 auto; }
+#topbar-title { flex: 0 0 auto; min-width: 260px; }
+#topbar-title .track-label { color: var(--gold-leaf); font-size: .72em; letter-spacing: 3px; font-weight: 800; margin-bottom: 2px; }
+#topbar-title h1 { font-size: 1.05em; font-weight: 900; color: #f5f1e8; letter-spacing: .2px; line-height: 1.2; text-shadow: 0 0 10px rgba(251,191,36,.28); }
+#topbar-title h2 { font-size: .72em; font-weight: 500; color: var(--text-sub); margin-top: 1px; }
+#topbar-audio { flex: 1 1 auto; display: flex; align-items: center; justify-content: flex-end; min-width: 0; }
+#music-player { flex: 1 1 auto; min-width: 140px; max-width: 460px; height: 36px; border-radius: 999px; background: rgba(245,241,232,.96); box-shadow: 0 4px 14px rgba(0,0,0,.4), 0 0 12px rgba(251,191,36,.2); }
+#layout { position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0; display: flex; }
+#sidebar {
+  flex: 0 0 var(--sidebar-w); width: var(--sidebar-w); height: 100%; overflow-y: auto;
+  background: linear-gradient(180deg, rgba(4,47,46,.97) 0%, rgba(6,78,59,.93) 100%);
+  border-right: 1px solid rgba(251,191,36,.22); padding: 16px 8px; display: flex; flex-direction: column; gap: 5px;
+}
+#sidebar a {
+  display: block; text-decoration: none; color: var(--text-sub); font-size: .82em; font-weight: 700;
+  padding: 9px 10px; border-radius: 7px; border: 1px solid transparent; transition: all .2s; line-height: 1.3; text-align: center;
+}
+#sidebar a:hover { background: rgba(251,191,36,.1); color: #fff; border-color: rgba(251,191,36,.25); }
+#sidebar a.active { background: rgba(251,191,36,.17); color: var(--gold-leaf); border-color: rgba(251,191,36,.38); box-shadow: 0 0 12px rgba(251,191,36,.1); }
+#sidebar a .nav-icon { display: block; font-size: 1.3em; margin-bottom: 2px; }
+#main { flex: 1 1 auto; height: 100%; overflow-y: auto; padding: 20px 24px 40px; -webkit-overflow-scrolling: touch; }
+#content-container {
+  max-width: 860px; margin: 0 auto; background: rgba(253,250,245,.98); color: var(--text-dark); padding: 24px; border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25), 0 0 0 1px rgba(139,115,85,.18); border: 1px solid rgba(139,115,85,.35);
+  background-image: linear-gradient(rgba(139,115,85,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(139,115,85,.04) 1px, transparent 1px); background-size: 20px 20px;
+}
+.content-section { display: none; }
+.section-header {
+  margin-top: 0; padding-bottom: 8px; border-bottom: 3px solid var(--ink-green); color: #064e3b;
+  font-size: 1.5em; font-weight: 800; margin-bottom: 20px; position: relative; padding-left: 20px;
+}
+.section-header::before { content: '§'; position: absolute; left: 0; color: var(--gold-leaf); font-size: 1em; }
+.lyric-section { padding: 12px 12px 12px 16px; margin-bottom: 20px; border: 1.5px solid rgba(6,95,70,.25); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.07), inset 0 0 8px rgba(6,95,70,.04); background: #fffdf9; overflow-x: auto; position: relative; }
+.lyric-section::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--gold-leaf), #059669); border-radius: 2px; }
+.lyrics-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: .95em; line-height: 1.65; min-width: 520px; background: white; }
+.lyrics-table td { vertical-align: top; padding: 8px 12px; border-bottom: 1px dashed rgba(6,95,70,.18); word-wrap: break-word; font-size: .94em; }
+.lyrics-table tr:last-child td { border-bottom: none; }
+.marker { background: rgba(16,185,129,.1); font-weight: 900; text-align: center; color: #065f46; letter-spacing: 2px; border-bottom: 1px solid rgba(6,95,70,.22) !important; padding-top: 10px !important; padding-bottom: 6px !important; font-style: italic; }
+.h-pre { color: var(--highlight-pre); font-weight: 800; }
+.h-past { color: var(--highlight-past); font-weight: 800; }
+.h-sub { color: var(--highlight-sub); font-weight: 800; border-bottom: 2px dashed var(--highlight-sub); }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.study-box, .grammar-card { background: #fffdf9; padding: 16px; border-radius: 8px; border: 1px solid rgba(6,95,70,.16); margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,.08); border-left: 5px solid var(--gold-leaf); background-image: linear-gradient(rgba(139,115,85,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(139,115,85,.02) 1px, transparent 1px); background-size: 20px 20px; }
+.study-box h3, .grammar-card h3 { margin-top: 0; padding-bottom: 5px; border-bottom: 1px dashed rgba(6,95,70,.25); color: #065f46; font-size: 1.12em; }
+.grammar-card b { color: #1e293b; }
+.quiz-container { background: linear-gradient(135deg, #064e3b, #042f2e); color: #f5f1e8; padding: 28px; border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(251,191,36,.18); }
+#mobile-nav { display: none; }
+@media (max-width: 700px) {
+  :root { --sidebar-w: 0px; --topbar-h: 112px; }
+  #topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  #topbar-cover { width: 42px; height: 42px; }
+  #topbar-title { min-width: 0; flex: 1 1 calc(100% - 54px); }
+  #topbar-title h1 { font-size: .9em; } #topbar-title h2 { display: none; }
+  #topbar-audio { flex: 1 1 100%; justify-content: stretch; } #music-player { max-width: 100%; }
+  #sidebar { display: none; }
+  #mobile-nav { display: flex !important; position: fixed; top: var(--topbar-h); left: 0; right: 0; z-index: 190; overflow-x: auto; white-space: nowrap; background: rgba(4,47,46,.98); border-bottom: 1px solid rgba(251,191,36,.24); padding: 6px 8px; gap: 4px; -webkit-overflow-scrolling: touch; }
+  #mobile-nav a { display: inline-block; text-decoration: none; color: var(--text-sub); font-size: .78em; font-weight: 700; padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(251,191,36,.22); white-space: nowrap; }
+  #mobile-nav a.active { background: rgba(251,191,36,.88); color: var(--parchment-dark); border-color: var(--gold-leaf); }
+  #layout { top: calc(var(--topbar-h) + 38px); }
+  #main { padding: 12px; } #content-container { padding: 14px; }
+  .section-header::before { display: none; } .section-header { padding-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
 </head>
 <body>
-
-<header>
-    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 11</div>
+<header id="topbar">
+  <img id="topbar-cover" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/if i were you.png" alt="Track 11 Cover Art">
+  <div id="topbar-title">
+    <div class="track-label">TRACK 11</div>
     <h1>If I Were You | 如果我是你</h1>
-    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
-    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/if i were you.png" class="track-img">
-    <div class="audio-player-box">
-        <span class="audio-label">🎵 Audio Player</span>
-        <audio controls><source src="https://ducj-creator.github.io/releases/if i were you.mp3" type="audio/mpeg"></audio>
-    </div>
+    <h2>Shirley &amp; AI Shirley 老師&amp;她的AI工具人</h2>
+  </div>
+  <div id="topbar-audio">
+    <audio controls id="music-player" preload="metadata">
+      <source src="https://ducj-creator.github.io/releases/if i were you.mp3" type="audio/mpeg">
+    </audio>
+  </div>
 </header>
-
-<nav>
-    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
-    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
-    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
-    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
-    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
-    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+<nav id="mobile-nav">
+  <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">🏡 Home</a>
+  <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;">📜 Lyrics</a>
+  <a href="#" data-target="words-section" onclick="showSection('words-section');return false;">🔠 Vocab</a>
+  <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;">📐 Grammar</a>
+  <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;">💡 Rhetoric</a>
+  <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;">🎯 Challenge</a>
 </nav>
-
-<div id="lyrics" class="content-section active">
-    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
+<div id="layout">
+  <nav id="sidebar">
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html"><span class="nav-icon">🏡</span>Home | 主頁</a>
+    <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;"><span class="nav-icon">📜</span>Lyrics<br>雙語歌詞</a>
+    <a href="#" data-target="words-section" onclick="showSection('words-section');return false;"><span class="nav-icon">🔠</span>Vocabulary<br>情感詞彙</a>
+    <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;"><span class="nav-icon">📐</span>Grammar<br>虛擬語氣</a>
+    <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;"><span class="nav-icon">💡</span>Rhetoric<br>修辭意象</a>
+    <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;"><span class="nav-icon">🎯</span>Challenge<br>練習挑戰</a>
+  </nav>
+  <main id="main">
+    <div id="content-container">
+<div id="lyrics-section" class="content-section" style="display:block;">
+    <h2 class="section-header">📜 Dual Language Lyrics | 完整歌詞</h2>
+    <div class="lyric-section">
     <table class="lyrics-table">
         <tbody>
             <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
@@ -155,10 +197,11 @@
             <tr><td>I <span class="h-past">would have stayed</span>.</td><td>當時留你在身旁。</td></tr>
         </tbody>
     </table>
+    </div>
 </div>
 
-<div id="vocab" class="content-section">
-    <div class="section-header">§ 📚 Vocabulary | 情感詞彙</div>
+<div id="words-section" class="content-section">
+    <h2 class="section-header">📚 Vocabulary | 情感詞彙</div>
     <div class="vocab-grid">
         <div class="study-box"><b>1. Forgive [fərˈɡɪv] (v.)</b><br>原諒、寬恕。這首歌的核心情感動作。</div>
         <div class="study-box"><b>2. Strength [streŋθ] (n.)</b><br>力量、強度。</div>
@@ -169,8 +212,8 @@
     </div>
 </div>
 
-<div id="grammar" class="content-section">
-    <div class="section-header">§ 📐 Grammar | 虛擬語氣四大法則</div>
+<div id="grammar-section" class="content-section">
+    <h2 class="section-header">📐 Grammar | 虛擬語氣四大法則</div>
     
     <div class="grammar-card">
         <h3>一、與現在事實相反 (Present Unreal)</h3>
@@ -198,8 +241,8 @@
     </div>
 </div>
 
-<div id="rhetoric" class="content-section">
-    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
+<div id="rhetoric-section" class="content-section">
+    <h2 class="section-header">💡 Rhetoric | 修辭意象</div>
     <div class="study-box">
         <h3>1. Hypophora (設問法)</h3>
         <p>全曲透過大量的 "If I were you" 自問自答，展現出一種內在的自我對話與療癒過程。</p>
@@ -214,8 +257,8 @@
     </div>
 </div>
 
-<div id="challenge" class="content-section">
-    <div class="section-header">§ 🎯 Challenge | 虛擬語氣大補帖</div>
+<div id="challenge-section" class="content-section">
+    <h2 class="section-header">🎯 Challenge | 虛擬語氣大補帖</div>
     <div class="quiz-container">
         <p>請根據時態與結構，填入正確的動詞形式：</p>
         <div style="margin-bottom: 20px;">1. If I ________ (be) a bird, I would fly to you.</div>
@@ -226,16 +269,20 @@
     </div>
 </div>
 
-<footer>&copy; 2026 Shirley AI Music Studio | 虛擬語氣專題版</footer>
 
+    </div>
+  </main>
+</div>
 <script>
-    function showSection(sectionId, btn) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btn.classList.add('active');
-        window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
+function showSection(sectionId) {
+  document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+  const target = document.getElementById(sectionId);
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('#sidebar a, #mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll(`[data-target="${sectionId}"]`).forEach(a => a.classList.add('active'));
+  const main = document.getElementById('main');
+  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
