@@ -1,245 +1,283 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track 7: What I've Become | 我所成為的樣子 - Learning Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --header-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            --accent-gold: #fbbf24;
-            --nav-bg: #1e293b;
-            --paper-bg: #fdfaf5;
-            --paper-grid: rgba(0, 0, 0, 0.05);
-            --text-main: #1e293b;
-            --highlight-sub: #2563eb; 
-            --highlight-obj: #16a34a;
-            --highlight-comp: #9333ea; 
-        }
-
-        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
-
-        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
-        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
-        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
-        
-        .audio-player-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 30px;
-            margin: 25px 0;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        .audio-label { color: #1e293b; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
-
-        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-item { background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
-        .nav-item:hover { border-color: var(--accent-gold); color: white; }
-        .nav-item.active { background: var(--accent-gold); color: #1e293b; border-color: var(--accent-gold); }
-
-        .content-section {
-            display: none;
-            background-color: var(--paper-bg);
-            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
-            background-size: 100% 1.8em;
-            color: var(--text-main);
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 60px;
-            border-radius: 6px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            animation: fadeIn 0.5s ease;
-        }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
-
-        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
-        .marker { background: #f1f5f9; font-weight: 800; text-align: center; color: #475569; letter-spacing: 3px; }
-        
-        .h-sub { color: var(--highlight-sub); font-weight: 700; border-bottom: 2px solid var(--highlight-sub); }
-        .h-obj { color: var(--highlight-obj); font-weight: 700; border-bottom: 2px dashed var(--highlight-obj); }
-        .h-comp { color: var(--highlight-comp); font-weight: 700; background: rgba(147, 51, 234, 0.1); padding: 2px 4px; border-radius: 4px; }
-
-        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .study-box h3 { color: #1e40af; border-left: 6px solid #1e40af; padding-left: 20px; margin-top: 0; margin-bottom: 20px; }
-        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-
-        .quiz-container { background: #1e293b; color: white; padding: 45px; border-radius: 15px; }
-        footer { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 0.9rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track 7: What I&#x27;ve Become | 我所成為的樣子</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-dark: #0f172a;
+  --slate-deep: #1e293b;
+  --slate-mid: #334155;
+  --accent-gold: #fbbf24;
+  --paper-bg: #fdfaf5;
+  --text-main: #f8fafc;
+  --text-sub: #cbd5e1;
+  --text-dark: #1e293b;
+  --highlight-sub: #2563eb;
+  --highlight-obj: #16a34a;
+  --highlight-comp: #9333ea;
+  --topbar-h: 72px;
+  --sidebar-w: 168px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@keyframes gold-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Montserrat', 'Noto Serif TC', 'Microsoft JhengHei', sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(900px circle at 12% -20%, rgba(251,191,36,.20) 0%, transparent 55%),
+    radial-gradient(760px circle at 86% 0%, rgba(37,99,235,.22) 0%, transparent 62%),
+    linear-gradient(160deg, #0f172a 0%, #1e293b 42%, #334155 76%, #111827 100%);
+  background-size: 200% 200%; animation: gold-drift 180s linear infinite;
+  -webkit-font-smoothing: antialiased;
+}
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 200;
+  display: flex; align-items: center; gap: 16px; padding: 0 20px;
+  background: linear-gradient(180deg, rgba(30,41,59,.98) 0%, rgba(51,65,85,.90) 100%);
+  backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(251,191,36,.48); box-shadow: 0 4px 25px rgba(0,0,0,.48);
+}
+#topbar-title { flex: 0 0 auto; white-space: nowrap; }
+#topbar-title h1 { font-size: 1.05em; font-weight: 900; color: #f8fafc; letter-spacing: .3px; line-height: 1.2; text-shadow: 0 0 12px rgba(251,191,36,.35); }
+#topbar-title h2 { font-size: .72em; font-weight: 500; color: var(--text-sub); margin-top: 2px; }
+#topbar-audio { flex: 1 1 auto; display: flex; align-items: center; min-width: 0; }
+#music-player { flex: 1 1 auto; min-width: 120px; max-width: 460px; height: 36px; border-radius: 999px; background: rgba(255,255,255,.96); box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 0 16px rgba(251,191,36,.25); }
+#layout { position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0; display: flex; }
+#sidebar { flex: 0 0 var(--sidebar-w); width: var(--sidebar-w); height: 100%; overflow-y: auto; background: linear-gradient(180deg, rgba(15,23,42,.98) 0%, rgba(30,41,59,.95) 100%); border-right: 1px solid rgba(251,191,36,.25); padding: 16px 8px; display: flex; flex-direction: column; gap: 4px; }
+#sidebar a { display: block; text-decoration: none; color: var(--text-sub); font-size: .82em; font-weight: 600; padding: 9px 12px; border-radius: 6px; border: 1px solid transparent; transition: all .2s; line-height: 1.3; text-align: center; }
+#sidebar a:hover { background: rgba(251,191,36,.12); color: #fff; border-color: rgba(251,191,36,.32); }
+#sidebar a.active { background: rgba(251,191,36,.20); color: #fde68a; border-color: rgba(251,191,36,.48); box-shadow: 0 0 12px rgba(251,191,36,.16); }
+#sidebar a .nav-icon { display: block; font-size: 1.3em; margin-bottom: 2px; }
+#main { flex: 1 1 auto; height: 100%; overflow-y: auto; padding: 20px 24px 44px; -webkit-overflow-scrolling: touch; }
+#content-container { max-width: 980px; margin: 0 auto; background: rgba(253,250,245,.985); color: var(--text-dark); padding: 24px; border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.30), 0 0 0 1px rgba(251,191,36,.14); border: 1px solid rgba(251,191,36,.32); background-image: linear-gradient(rgba(0,0,0,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.025) 1px, transparent 1px); background-size: 20px 20px; }
+.content-section { display: none; }
+.section-header { margin-top: 0; padding-bottom: 8px; margin-bottom: 20px; border-bottom: 3px solid var(--slate-deep); color: #111827; font-size: 1.5em; font-weight: 800; position: relative; padding-left: 20px; }
+.section-header::before { content: '§'; position: absolute; left: 0; color: var(--accent-gold); }
+.intro-panel { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: stretch; margin: 0 0 20px; }
+.track-cover-small { width: 150px; height: 150px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 22px rgba(0,0,0,.22); border: 1px solid rgba(251,191,36,.36); }
+.foci-container { background: #fffdf9; padding: 16px 18px; border-radius: 8px; border: 1px solid rgba(251,191,36,.22); border-left: 5px solid var(--accent-gold); box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+.foci-container h3 { margin: 0 0 10px; color: #92400e; font-size: 1.05rem; }
+.foci-container ul { list-style: none; padding: 0; margin: 0; }
+.foci-container li { margin: 8px 0; font-size: .95rem; display: flex; gap: 10px; align-items: flex-start; }
+.foci-container li::before { content: '🧭'; flex: 0 0 auto; }
+.lyrics-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: .94em; line-height: 1.65; background: #fffdf9; border: 1.5px solid rgba(251,191,36,.22); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,.07); }
+.lyrics-table th { text-align: left; padding: 10px 12px; background: linear-gradient(135deg,#fef3c7,#e8edf6); color: #111827; border-bottom: 2px solid rgba(251,191,36,.25); font-weight: 900; }
+.lyrics-table td { vertical-align: top; padding: 9px 12px; border-bottom: 1px dashed rgba(148,163,184,.32); word-wrap: break-word; }
+.lyrics-table tr:last-child td { border-bottom: none; }
+.marker { background: rgba(251,191,36,.13) !important; font-weight: 900; text-align: center; color: #334155; letter-spacing: 1.5px; border-bottom: 1px solid rgba(251,191,36,.22) !important; text-transform: uppercase; }
+.h-sub { color: var(--highlight-sub); font-weight: 800; border-bottom: 2px solid var(--highlight-sub); }
+.h-obj { color: var(--highlight-obj); font-weight: 800; border-bottom: 2px dashed var(--highlight-obj); }
+.h-comp { color: var(--highlight-comp); font-weight: 800; background: rgba(147,51,234,.10); padding: 2px 4px; border-radius: 4px; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.study-box, .grammar-card { background: #fffdf9; padding: 16px; border-radius: 8px; border: 1px solid rgba(251,191,36,.18); border-left: 5px solid var(--accent-gold); box-shadow: 0 4px 12px rgba(0,0,0,.08); margin-bottom: 16px; }
+.vocab-grid .study-box { margin-bottom: 0; }
+.study-box:hover, .grammar-card:hover { transform: translateY(-2px); transition: transform .25s; }
+.study-box h3 { margin: 0 0 10px; color: #1e40af; border: none !important; padding-left: 0 !important; font-size: 1.15em; }
+.quiz-container { background: linear-gradient(135deg, #1e293b, #334155); color: white; padding: 26px; border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+ul { padding-left: 22px; }
+p { margin: 8px 0; }
+footer { display: none; }
+#mobile-nav { display: none; }
+@media (max-width: 700px) {
+  :root { --sidebar-w: 0px; --topbar-h: 100px; }
+  #topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  #topbar-title h1 { font-size: .9em; }
+  #topbar-title h2 { display: none; }
+  #topbar-audio { flex: 1 1 100%; }
+  #music-player { max-width: 100%; }
+  #sidebar { display: none; }
+  #mobile-nav { display: flex !important; position: fixed; top: var(--topbar-h); left: 0; right: 0; z-index: 190; overflow-x: auto; white-space: nowrap; background: rgba(15,23,42,.98); border-bottom: 1px solid rgba(251,191,36,.25); padding: 6px 8px; gap: 4px; -webkit-overflow-scrolling: touch; }
+  #mobile-nav a { display: inline-block; text-decoration: none; color: var(--text-sub); font-size: .78em; font-weight: 700; padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(251,191,36,.22); white-space: nowrap; }
+  #mobile-nav a.active { background: rgba(251,191,36,.88); color: #111827; border-color: var(--accent-gold); }
+  #layout { top: calc(var(--topbar-h) + 38px); }
+  #main { padding: 12px; }
+  #content-container { padding: 14px; }
+  .section-header { padding-left: 0; font-size: 1.25em; }
+  .section-header::before { display: none; }
+  .intro-panel { grid-template-columns: 1fr; }
+  .track-cover-small { width: 100%; height: 190px; }
+  .lyrics-table { min-width: 520px; }
+  #lyrics-section { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+</style>
 </head>
 <body>
-
-<header>
-    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 7</div>
-    <h1>What I've Become | 我所成為的樣子</h1>
-    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
-    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/what I become.png" class="track-img">
-    <div class="audio-player-box">
-        <span class="audio-label">🎵 Audio Player</span>
-        <audio controls><source src="https://ducj-creator.github.io/releases/what I become.mp3" type="audio/mpeg"></audio>
-    </div>
+<header id="topbar">
+  <div id="topbar-title">
+    <h1>What I&#x27;ve Become | 我所成為的樣子</h1>
+    <h2>Track 7 · Shirley &amp; AI Shirley 老師&amp;她的AI工具人</h2>
+  </div>
+  <div id="topbar-audio">
+    <audio controls id="music-player" preload="metadata">
+      <source src="https://ducj-creator.github.io/releases/what I become.mp3" type="audio/mpeg">
+    </audio>
+  </div>
 </header>
-
-<nav>
-    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
-    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
-    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
-    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
-    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
-    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+<nav id="mobile-nav">
+  <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">🏡 Home</a>
+  <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;">📜 Lyrics</a>
+  <a href="#" data-target="words-section" onclick="showSection('words-section');return false;">📚 Vocab</a>
+  <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;">📐 Grammar</a>
+  <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;">💡 Rhetoric</a>
+  <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;">🎯 Challenge</a>
 </nav>
-
-<div id="lyrics" class="content-section active">
-    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
-    <table class="lyrics-table">
-        <tbody>
-            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
-            <tr><td><span class="h-sub">Who I am</span>…<br><span class="h-sub">What I believe</span>…<br><span class="h-sub">What I’ve become</span>…</td><td>我思…<br>我信…<br>我的樣子…</td></tr>
-            
-            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
-            <tr><td>I’m learning <span class="h-obj">who I am</span> beneath the masks I wear.</td><td>我學著看懂面具下的自己。</td></tr>
-            <tr><td>I’m searching for <span class="h-obj">what truly heals</span> and <span class="h-obj">what I fear</span>.</td><td>尋找著什麼治癒、什麼致鬱。</td></tr>
-            <tr><td>I’m asking <span class="h-obj">why I hide</span> from the truth I need to hear.</td><td>詢問為何躲開殘酷的真實。</td></tr>
-            <tr><td>I’m finding <span class="h-obj">that the answers grow when I stay here</span>.</td><td>卻發現答案總在停留時才清晰。</td></tr>
-
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>They told me <span class="h-obj">who to be</span>, they drew the lines.</td><td>他們告訴我該成為誰，他們畫好界線。</td></tr>
-            <tr><td>But now I hear <span class="h-obj">what’s true inside my mind</span>.</td><td>但此刻我能聽見，心底的真實浮現。</td></tr>
-
-            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been chasing</span> is not <span class="h-comp">what I need</span>.</td><td>我追尋的一切非我所需。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been hiding</span> is <span class="h-comp">what sets me free</span>.</td><td>我隱藏的一切是我自由的序。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">Who I am becoming</span> is not a mistake.</td><td>我將成為的模樣不是一個過錯。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">That I am worthy</span> is <span class="h-comp">what I finally take</span>.</td><td>我值得被愛是我終於收下的諾。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I believe</span> is stronger than fear.</td><td>我堅信的信念比恐懼更遼闊。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">Why I kept falling</span> is now so clear:</td><td>如今已懂，為何我一次次墜落：</td></tr>
-            <tr><td>I was learning to love <span class="h-obj">what I’ve become</span>.</td><td>是要學會去愛我終將成為的那個我。</td></tr>
-
-            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
-            <tr><td>I’m letting go of <span class="h-obj">what I thought I had to prove</span>.</td><td>我放下我曾以為必須證明的一切。</td></tr>
-            <tr><td>I’m learning <span class="h-obj">that my wounds are not the truth</span>.</td><td>我學著我的傷痕並非真實的邊界。</td></tr>
-            <tr><td>I’m trusting <span class="h-obj">that the healing finds its way to move</span>.</td><td>我相信療癒終會找到前行的路徑。</td></tr>
-            <tr><td>I’m listening to <span class="h-obj">who I am</span> beneath the noise I knew.</td><td>我是誰的吶喊，是喧囂之外的傾聽。</td></tr>
-
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>I used to measure worth by <span class="h-obj">what they’d say</span>.</td><td>我曾用別人的話來衡量自己。</td></tr>
-            <tr><td>But now I know <span class="h-sub">what’s true</span> is not that way.</td><td>但如今我知道真實不在那裡。</td></tr>
-
-            <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
-            <tr><td>I don’t know <span class="h-obj">where I’m going</span>,</td><td>我不知道將往何方，</td></tr>
-            <tr><td>But I know <span class="h-obj">what I’m pursuing</span>.</td><td>但我知道心之所向。</td></tr>
-            <tr><td>I don’t know <span class="h-obj">if I’ll make it</span>,</td><td>我不知道能否抵達，</td></tr>
-            <tr><td>But I know <span class="h-obj">that I’ll keep moving</span>.</td><td>但我知道步履不停。</td></tr>
-            <tr><td><span class="h-sub">Whether I rise or fall</span> is not <span class="h-comp">what defines me</span>.</td><td>我能否成功並非定義我的唯一。</td></tr>
-            <tr><td><span class="h-sub">Who I am inside</span> is <span class="h-comp">what finally guides me</span>.</td><td>內在真實的我正是最終的指引。</td></tr>
-
-            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been chasing</span> is not <span class="h-comp">what I need</span>.</td><td>我追尋的一切非我所需。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been hiding</span> is <span class="h-comp">what sets me free</span>.</td><td>我隱藏的一切是我自由的序。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">Who I am becoming</span> is not a mistake.</td><td>我將成為的模樣不是一個過錯。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">That I am worthy</span> is <span class="h-comp">what I finally take</span>.</td><td>我值得被愛是我終於收下的諾。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">What I believe</span> is stronger than fear.</td><td>我堅信的信念比恐懼更遼闊。</td></tr>
-            <tr style="background:#fdfcf0"><td><span class="h-sub">Why I kept falling</span> is now so clear:</td><td>如今已懂，為何我一次次墜落：</td></tr>
-            <tr><td>I was learning to love <span class="h-obj">what I’ve become</span>.</td><td>是要學會去愛我終將成為的那個我。</td></tr>
-
-            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
-            <tr><td><span class="h-sub">Who I am</span>…</td><td>我思…</td></tr>
-            <tr><td><span class="h-sub">What I believe</span>…</td><td>我信…</td></tr>
-            <tr><td><span class="h-sub">What I’ve become</span>…</td><td>我成為…</td></tr>
-            <tr><td>That’s <span class="h-comp">what I’ve become</span>.</td><td>這，便是我所成為的樣子。</td></tr>
-        </tbody>
-    </table>
+<div id="layout">
+  <nav id="sidebar">
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html"><span class="nav-icon">🏡</span>Home | 主頁</a>
+    <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;"><span class="nav-icon">📜</span>Lyrics<br>雙語歌詞</a>
+    <a href="#" data-target="words-section" onclick="showSection('words-section');return false;"><span class="nav-icon">📚</span>Vocabulary<br>重點單字</a>
+    <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;"><span class="nav-icon">📐</span>Grammar<br>名詞子句</a>
+    <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;"><span class="nav-icon">💡</span>Rhetoric<br>修辭手法</a>
+    <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;"><span class="nav-icon">🎯</span>Challenge<br>練習挑戰</a>
+  </nav>
+  <main id="main">
+    <div id="content-container">
+      <div class="content-section" id="lyrics-section" style="display:block;">
+<div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
+<div class="intro-panel">
+  <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/what I become.png" alt="Track 7 Cover Art" class="track-cover-small">
+  <div class="foci-container">
+<h3>Learning Foci | 學習重點：</h3>
+<ul>
+<li>1. Noun Clauses as Subject, Object, and Complement (名詞子句：主詞、受詞、補語)</li>
+<li>2. Identity Language: Who / What / Why / Whether Clauses (自我探索語言)</li>
+<li>3. Rhetoric: Masks, Paradox, and Parallelism (修辭：面具、矛盾與平行結構)</li>
+</ul>
 </div>
-
-<div id="vocab" class="content-section">
-    <div class="section-header">§ 📚 Vocabulary | 單字與片語</div>
-    <div class="vocab-grid">
-        <div class="study-box"><b>1. Beneath [bɪˈniːθ] (prep.)</b><br>在...下方。用於抽象意象，指隱藏在表面（面具）下的真實。</div>
-        <div class="study-box"><b>2. Worthy [ˈwɜːrði] (adj.)</b><br>值得的、配得上的。表達自我的存在價值。</div>
-        <div class="study-box"><b>3. Pursuing [pərˈsuːɪŋ] (v.)</b><br>追求、追蹤。形容對夢想或目標的持續跟隨。</div>
-        <div class="study-box"><b>4. Measure [ˈmeʒər] (v.)</b><br>測量、衡量。在此指評估自己。</div>
-        <div class="study-box"><b>5. Define [dɪˈfaɪn] (v.)</b><br>定義、解釋。指決定一個人的本質屬性。</div>
-        <div class="study-box"><b>6. Letting go [phr.]</b><br>放下、鬆手。指釋放那些不再需要的負擔。</div>
-        <div class="study-box"><b>7. Mistake [mɪˈsteɪk] (n.)</b><br>錯誤。在此指否定自我的存在意義。</div>
-        <div class="study-box"><b>8. Chaos [ˈkeɪɑːs] (n.)</b><br>混沌。這裡指喧囂與吵雜的環境。</div>
-    </div>
 </div>
-
-<div id="grammar" class="content-section">
-    <div class="section-header">§ 📐 Grammar | 名詞子句的三大功能</div>
-    
-    <div class="study-box" style="border-left: 6px solid var(--highlight-comp);">
-        <h3>⭐ 重點：做主詞補語 (As Subject Complement)</h3>
-        <p>當句子的主要動詞是 <b>Be 動詞 (is, am, was, were)</b> 時，名詞子句用來補充主詞的身分或狀態。</p>
-        <ul>
-            <li>What I've been hiding is <b><span class="h-comp">what sets me free</span></b>.</li>
-            <li>That's <b><span class="h-comp">what I've become</span></b>.</li>
-            <li>Who I am inside is <b><span class="h-comp">what finally guides me</span></b>.</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>1. 做主詞 (As Subject)</h3>
-        <ul>
-            <li><b><span class="h-sub">What I believe</span></b> is stronger than fear.</li>
-            <li><b><span class="h-sub">Whether I rise or fall</span></b> is not what defines me.</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>2. 做受詞 (As Object)</h3>
-        <ul>
-            <li>I’m learning <b><span class="h-obj">who I am</span></b>.</li>
-            <li>I don't know <b><span class="h-obj">if I'll make it</span></b>.</li>
-        </ul>
-    </div>
+<table class="lyrics-table">
+<thead><tr><th>English</th><th>中文對照</th></tr></thead>
+<tbody>
+<tr><td class="marker" colspan="2">Intro / 前奏</td></tr>
+<tr><td><span class="h-sub">Who I am</span>…<br/><span class="h-sub">What I believe</span>…<br/><span class="h-sub">What I’ve become</span>…</td><td>我思…<br/>我信…<br/>我的樣子…</td></tr>
+<tr><td class="marker" colspan="2">Verse 1 / 主歌 1</td></tr>
+<tr><td>I’m learning <span class="h-obj">who I am</span> beneath the masks I wear.</td><td>我學著看懂面具下的自己。</td></tr>
+<tr><td>I’m searching for <span class="h-obj">what truly heals</span> and <span class="h-obj">what I fear</span>.</td><td>尋找著什麼治癒、什麼致鬱。</td></tr>
+<tr><td>I’m asking <span class="h-obj">why I hide</span> from the truth I need to hear.</td><td>詢問為何躲開殘酷的真實。</td></tr>
+<tr><td>I’m finding <span class="h-obj">that the answers grow when I stay here</span>.</td><td>卻發現答案總在停留時才清晰。</td></tr>
+<tr><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td>They told me <span class="h-obj">who to be</span>, they drew the lines.</td><td>他們告訴我該成為誰，他們畫好界線。</td></tr>
+<tr><td>But now I hear <span class="h-obj">what’s true inside my mind</span>.</td><td>但此刻我能聽見，心底的真實浮現。</td></tr>
+<tr><td class="marker" colspan="2">Chorus / 副歌</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been chasing</span> is not <span class="h-comp">what I need</span>.</td><td>我追尋的一切非我所需。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been hiding</span> is <span class="h-comp">what sets me free</span>.</td><td>我隱藏的一切是我自由的序。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">Who I am becoming</span> is not a mistake.</td><td>我將成為的模樣不是一個過錯。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">That I am worthy</span> is <span class="h-comp">what I finally take</span>.</td><td>我值得被愛是我終於收下的諾。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I believe</span> is stronger than fear.</td><td>我堅信的信念比恐懼更遼闊。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">Why I kept falling</span> is now so clear:</td><td>如今已懂，為何我一次次墜落：</td></tr>
+<tr><td>I was learning to love <span class="h-obj">what I’ve become</span>.</td><td>是要學會去愛我終將成為的那個我。</td></tr>
+<tr><td class="marker" colspan="2">Verse 2 / 主歌 2</td></tr>
+<tr><td>I’m letting go of <span class="h-obj">what I thought I had to prove</span>.</td><td>我放下我曾以為必須證明的一切。</td></tr>
+<tr><td>I’m learning <span class="h-obj">that my wounds are not the truth</span>.</td><td>我學著我的傷痕並非真實的邊界。</td></tr>
+<tr><td>I’m trusting <span class="h-obj">that the healing finds its way to move</span>.</td><td>我相信療癒終會找到前行的路徑。</td></tr>
+<tr><td>I’m listening to <span class="h-obj">who I am</span> beneath the noise I knew.</td><td>我是誰的吶喊，是喧囂之外的傾聽。</td></tr>
+<tr><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td>I used to measure worth by <span class="h-obj">what they’d say</span>.</td><td>我曾用別人的話來衡量自己。</td></tr>
+<tr><td>But now I know <span class="h-sub">what’s true</span> is not that way.</td><td>但如今我知道真實不在那裡。</td></tr>
+<tr><td class="marker" colspan="2">Bridge / 橋段</td></tr>
+<tr><td>I don’t know <span class="h-obj">where I’m going</span>,</td><td>我不知道將往何方，</td></tr>
+<tr><td>But I know <span class="h-obj">what I’m pursuing</span>.</td><td>但我知道心之所向。</td></tr>
+<tr><td>I don’t know <span class="h-obj">if I’ll make it</span>,</td><td>我不知道能否抵達，</td></tr>
+<tr><td>But I know <span class="h-obj">that I’ll keep moving</span>.</td><td>但我知道步履不停。</td></tr>
+<tr><td><span class="h-sub">Whether I rise or fall</span> is not <span class="h-comp">what defines me</span>.</td><td>我能否成功並非定義我的唯一。</td></tr>
+<tr><td><span class="h-sub">Who I am inside</span> is <span class="h-comp">what finally guides me</span>.</td><td>內在真實的我正是最終的指引。</td></tr>
+<tr><td class="marker" colspan="2">Final Chorus / 最終副歌</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been chasing</span> is not <span class="h-comp">what I need</span>.</td><td>我追尋的一切非我所需。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I’ve been hiding</span> is <span class="h-comp">what sets me free</span>.</td><td>我隱藏的一切是我自由的序。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">Who I am becoming</span> is not a mistake.</td><td>我將成為的模樣不是一個過錯。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">That I am worthy</span> is <span class="h-comp">what I finally take</span>.</td><td>我值得被愛是我終於收下的諾。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">What I believe</span> is stronger than fear.</td><td>我堅信的信念比恐懼更遼闊。</td></tr>
+<tr style="background:#fdfcf0"><td><span class="h-sub">Why I kept falling</span> is now so clear:</td><td>如今已懂，為何我一次次墜落：</td></tr>
+<tr><td>I was learning to love <span class="h-obj">what I’ve become</span>.</td><td>是要學會去愛我終將成為的那個我。</td></tr>
+<tr><td class="marker" colspan="2">Outro / 尾聲</td></tr>
+<tr><td><span class="h-sub">Who I am</span>…</td><td>我思…</td></tr>
+<tr><td><span class="h-sub">What I believe</span>…</td><td>我信…</td></tr>
+<tr><td><span class="h-sub">What I’ve become</span>…</td><td>我成為…</td></tr>
+<tr><td>That’s <span class="h-comp">what I’ve become</span>.</td><td>這，便是我所成為的樣子。</td></tr>
+</tbody>
+</table>
 </div>
-
-<div id="rhetoric" class="content-section">
-    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
-    <div class="study-box">
-        <h3>1. Metaphor: The Masks (面具隱喻)</h3>
-        <p><b>"Beneath the masks I wear"</b>: 面具象徵社會期待下的偽裝，剝離面具則是尋找本真自我的過程。</p>
-    </div>
-    <div class="study-box">
-        <h3>2. Paradox (矛盾修辭)</h3>
-        <p><b>"What I’ve been hiding is what sets me free"</b>: 揭露最不敢面對的事實，反而獲得了心靈的釋放。這種矛盾強化了勇氣的重要性。</p>
-    </div>
-    <div class="study-box">
-        <h3>3. Structural Parallelism (平行結構)</h3>
-        <p>Chorus 中重複 <b>"What I've been..."</b> 與 <b>"Who I am..."</b>，展現了自我宣告的堅定節奏感。</p>
-    </div>
+      <div class="content-section" id="words-section">
+<div class="section-header">§ 📚 Vocabulary | 單字與片語</div>
+<div class="vocab-grid">
+<div class="study-box"><b>1. Beneath [bɪˈniːθ] (prep.)</b><br/>在...下方。用於抽象意象，指隱藏在表面（面具）下的真實。</div>
+<div class="study-box"><b>2. Worthy [ˈwɜːrði] (adj.)</b><br/>值得的、配得上的。表達自我的存在價值。</div>
+<div class="study-box"><b>3. Pursuing [pərˈsuːɪŋ] (v.)</b><br/>追求、追蹤。形容對夢想或目標的持續跟隨。</div>
+<div class="study-box"><b>4. Measure [ˈmeʒər] (v.)</b><br/>測量、衡量。在此指評估自己。</div>
+<div class="study-box"><b>5. Define [dɪˈfaɪn] (v.)</b><br/>定義、解釋。指決定一個人的本質屬性。</div>
+<div class="study-box"><b>6. Letting go [phr.]</b><br/>放下、鬆手。指釋放那些不再需要的負擔。</div>
+<div class="study-box"><b>7. Mistake [mɪˈsteɪk] (n.)</b><br/>錯誤。在此指否定自我的存在意義。</div>
+<div class="study-box"><b>8. Chaos [ˈkeɪɑːs] (n.)</b><br/>混沌。這裡指喧囂與吵雜的環境。</div>
 </div>
-
-<div id="challenge" class="content-section">
-    <div class="section-header">§ 🎯 Challenge | 功能辨析練習</div>
-    <div class="quiz-container">
-        <p>請標註下列歌詞中名詞子句的功能 (主詞 / 受詞 / 補語)：</p>
-        <p>1. <u>What I believe</u> is stronger than fear. (_________)</p>
-        <p>2. I'm listening to <u>who I am</u>. (_________)</p>
-        <p>3. That is <u>what I finally take</u>. (_________)</p>
-        <p>4. <u>Whether I rise or fall</u> doesn't matter. (_________)</p>
-    </div>
 </div>
-
-<footer>&copy; 2026 Shirley AI Music Studio | 全功能教學模組</footer>
-
+      <div class="content-section" id="grammar-section">
+<div class="section-header">§ 📐 Grammar | 名詞子句的三大功能</div>
+<div class="study-box" style="border-left: 6px solid var(--highlight-comp);">
+<h3>⭐ 重點：做主詞補語 (As Subject Complement)</h3>
+<p>當句子的主要動詞是 <b>Be 動詞 (is, am, was, were)</b> 時，名詞子句用來補充主詞的身分或狀態。</p>
+<ul>
+<li>What I've been hiding is <b><span class="h-comp">what sets me free</span></b>.</li>
+<li>That's <b><span class="h-comp">what I've become</span></b>.</li>
+<li>Who I am inside is <b><span class="h-comp">what finally guides me</span></b>.</li>
+</ul>
+</div>
+<div class="study-box">
+<h3>1. 做主詞 (As Subject)</h3>
+<ul>
+<li><b><span class="h-sub">What I believe</span></b> is stronger than fear.</li>
+<li><b><span class="h-sub">Whether I rise or fall</span></b> is not what defines me.</li>
+</ul>
+</div>
+<div class="study-box">
+<h3>2. 做受詞 (As Object)</h3>
+<ul>
+<li>I’m learning <b><span class="h-obj">who I am</span></b>.</li>
+<li>I don't know <b><span class="h-obj">if I'll make it</span></b>.</li>
+</ul>
+</div>
+</div>
+      <div class="content-section" id="rhetoric-section">
+<div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
+<div class="study-box">
+<h3>1. Metaphor: The Masks (面具隱喻)</h3>
+<p><b>"Beneath the masks I wear"</b>: 面具象徵社會期待下的偽裝，剝離面具則是尋找本真自我的過程。</p>
+</div>
+<div class="study-box">
+<h3>2. Paradox (矛盾修辭)</h3>
+<p><b>"What I’ve been hiding is what sets me free"</b>: 揭露最不敢面對的事實，反而獲得了心靈的釋放。這種矛盾強化了勇氣的重要性。</p>
+</div>
+<div class="study-box">
+<h3>3. Structural Parallelism (平行結構)</h3>
+<p>Chorus 中重複 <b>"What I've been..."</b> 與 <b>"Who I am..."</b>，展現了自我宣告的堅定節奏感。</p>
+</div>
+</div>
+      <div class="content-section" id="challenge-section">
+<div class="section-header">§ 🎯 Challenge | 功能辨析練習</div>
+<div class="quiz-container">
+<p>請標註下列歌詞中名詞子句的功能 (主詞 / 受詞 / 補語)：</p>
+<p>1. <u>What I believe</u> is stronger than fear. (_________)</p>
+<p>2. I'm listening to <u>who I am</u>. (_________)</p>
+<p>3. That is <u>what I finally take</u>. (_________)</p>
+<p>4. <u>Whether I rise or fall</u> doesn't matter. (_________)</p>
+</div>
+</div>
+    </div>
+  </main>
+</div>
 <script>
-    function showSection(sectionId, btn) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btn.classList.add('active');
-        window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
+function showSection(sectionId) {
+  document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+  const target = document.getElementById(sectionId);
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('#sidebar a, #mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll(`[data-target="${sectionId}"]`).forEach(a => a.classList.add('active'));
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
