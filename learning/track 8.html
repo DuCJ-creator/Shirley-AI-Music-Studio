@@ -1,256 +1,262 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track 8: The Stories We Carry | 往事如影 - Learning Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #1e1b4b;
-            --header-gradient: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
-            --accent-gold: #fbbf24;
-            --nav-bg: #312e81;
-            --paper-bg: #fdfaf5;
-            --paper-grid: rgba(0, 0, 0, 0.05);
-            --text-main: #1e1b4b;
-            --highlight-adj: #dc2626; /* 形容詞子句標註色 */
-            --highlight-rel: #2563eb; /* 關係詞標註色 */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track 8: The Stories We Carry | 往事如影 | Redesigned</title>
+  <style>
 
-        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
+:root {
+  --parchment-dark: #0f0b2d;
+  --chapter-brown: #1e1b4b;
+  --ink-blue: #312e81;
+  --page-gold: #8b7355;
+  --gold-leaf: #fbbf24;
+  --text-main: #f5f1e8;
+  --text-sub: #d7d1ff;
+  --text-dark: #1e1b4b;
+  --highlight-adj: #dc2626;
+  --highlight-rel: #2563eb;
+  --topbar-h: 76px;
+  --sidebar-w: 160px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@keyframes page-turn { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: "Georgia", "Times New Roman", serif, "Microsoft JhengHei", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(900px circle at 8% -20%, rgba(251,191,36,.13) 0%, transparent 55%),
+    radial-gradient(700px circle at 88% 0%, rgba(124,58,237,.18) 0%, transparent 60%),
+    linear-gradient(160deg, #0f0b2d 0%, #1e1b4b 42%, #312e81 76%, #0f0b2d 100%);
+  background-size: 200% 200%;
+  animation: page-turn 180s linear infinite;
+  -webkit-font-smoothing: antialiased;
+}
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 200;
+  display: flex; align-items: center; gap: 14px; padding: 0 20px;
+  background: linear-gradient(180deg, rgba(30,27,75,.97) 0%, rgba(49,46,129,.88) 100%);
+  backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(251,191,36,.35); box-shadow: 0 4px 25px rgba(0,0,0,.5);
+}
+#topbar-title { flex: 1 1 auto; min-width: 0; }
+#topbar-title .track-label { color: var(--gold-leaf); font-size: .72em; font-weight: 900; letter-spacing: 3px; margin-bottom: 1px; }
+#topbar-title h1 { font-size: 1.05em; font-weight: 900; color: #f5f1e8; letter-spacing: .3px; line-height: 1.2; text-shadow: 0 0 10px rgba(251,191,36,.25); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#topbar-title h2 { font-size: .72em; font-weight: 500; color: var(--text-sub); margin-top: 1px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#topbar-cover { flex: 0 0 52px; width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(251,191,36,.35); box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+#topbar-audio { flex: 0 1 420px; display: flex; align-items: center; min-width: 160px; }
+#music-player { width: 100%; height: 36px; border-radius: 999px; background: rgba(245,241,232,.95); box-shadow: 0 4px 14px rgba(0,0,0,.4), 0 0 12px rgba(251,191,36,.2); }
+#layout { position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0; display: flex; }
+#sidebar { flex: 0 0 var(--sidebar-w); width: var(--sidebar-w); height: 100%; overflow-y: auto; background: linear-gradient(180deg, rgba(15,11,45,.97) 0%, rgba(30,27,75,.93) 100%); border-right: 1px solid rgba(251,191,36,.18); padding: 16px 8px; display: flex; flex-direction: column; gap: 4px; }
+#sidebar a { display: block; text-decoration: none; color: var(--text-sub); font-size: .82em; font-weight: 600; padding: 9px 12px; border-radius: 6px; border: 1px solid transparent; transition: all .2s; line-height: 1.3; text-align: center; font-family: "Georgia", serif; }
+#sidebar a:hover { background: rgba(251,191,36,.1); color: #f5f1e8; border-color: rgba(251,191,36,.22); }
+#sidebar a.active { background: rgba(251,191,36,.15); color: var(--gold-leaf); border-color: rgba(251,191,36,.35); box-shadow: 0 0 12px rgba(251,191,36,.12); }
+#sidebar a .nav-icon { display: block; font-size: 1.3em; margin-bottom: 2px; }
+#main { flex: 1 1 auto; height: 100%; overflow-y: auto; padding: 20px 24px 40px 24px; -webkit-overflow-scrolling: touch; }
+#content-container { max-width: 900px; margin: 0 auto; background: rgba(245,241,232,.97); color: var(--text-dark); padding: 24px; border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.25), 0 0 0 1px rgba(139,115,85,.2); border: 1px solid rgba(139,115,85,.35); background-image: linear-gradient(rgba(139,115,85,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(139,115,85,.04) 1px, transparent 1px); background-size: 20px 20px; }
+.content-section { display: none; }
+.section-header { margin-top: 0; padding-bottom: 8px; border-bottom: 3px solid var(--ink-blue); color: #1e1b4b; font-size: 1.5em; font-weight: 800; margin-bottom: 20px; font-family: "Georgia", serif; position: relative; padding-left: 20px; }
+.section-header::before { content: "§"; position: absolute; left: 0; color: var(--gold-leaf); font-size: 1em; }
+.lyric-section { padding: 12px 12px 12px 16px; margin-bottom: 20px; border: 1.5px solid rgba(139,115,85,.3); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.07), inset 0 0 8px rgba(139,115,85,.04); background: #fffdf9; overflow-x: auto; position: relative; }
+.lyric-section::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--gold-leaf), var(--ink-blue)); border-radius: 2px; }
+.lyrics-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: .95em; line-height: 1.6; min-width: 520px; background: transparent; }
+.lyrics-table colgroup col { width: 50%; }
+.lyrics-table td { vertical-align: top; padding: 7px 12px; border: 0; border-bottom: 1px dashed rgba(139,115,85,.2); word-wrap: break-word; font-size: .92em; line-height: 1.65; }
+.lyrics-table tr.section-row td, .lyrics-table td.marker { background: rgba(49,46,129,.09); font-weight: 900; color: #1e1b4b; border-bottom: 1px solid rgba(139,115,85,.25); padding-top: 10px; padding-bottom: 5px; font-style: italic; text-align: left; letter-spacing: .5px; }
+.lyrics-table tr:last-child td { border-bottom: none; }
+.h-adj { color: var(--highlight-adj); font-weight: 800; }
+.h-rel { color: var(--highlight-rel); text-decoration: underline; font-style: italic; font-weight: 800; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.study-box { background: #fffdf9; padding: 14px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,.08); border: 1px solid rgba(139,115,85,.18); border-left: 5px solid var(--ink-blue); transition: transform .25s, box-shadow .25s; background-image: linear-gradient(rgba(139,115,85,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(139,115,85,.02) 1px, transparent 1px); background-size: 20px 20px; }
+.study-box:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.13); }
+.study-box h3 { margin-top: 0; padding-bottom: 4px; border-bottom: 1px dashed rgba(139,115,85,.3); color: var(--ink-blue); font-size: 1.18em; font-family: "Georgia", serif; }
+.study-box ul { margin-left: 1.2em; }
+.study-box li { margin: 6px 0; }
+.quiz-container { background: linear-gradient(135deg, #1e1b4b, #312e81); color: #f5f1e8; padding: 24px; border-radius: 12px; border: 1px solid rgba(251,191,36,.18); box-shadow: 0 8px 18px rgba(0,0,0,.16); }
+.quiz-container p, .quiz-container div { line-height: 1.8; }
+#mobile-nav { display: none; }
+footer { text-align: center; padding: 18px 0 4px; color: rgba(30,27,75,.55); font-size: .82em; }
+@media (max-width: 700px) {
+  :root { --sidebar-w: 0px; --topbar-h: 104px; }
+  #topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  #topbar-cover { width: 42px; height: 42px; }
+  #topbar-title h1 { font-size: .9em; white-space: normal; }
+  #topbar-title h2 { display: none; }
+  #topbar-audio { flex: 1 1 100%; }
+  #sidebar { display: none; }
+  #mobile-nav { display: flex !important; position: fixed; top: var(--topbar-h); left: 0; right: 0; z-index: 190; overflow-x: auto; white-space: nowrap; background: rgba(15,11,45,.97); border-bottom: 1px solid rgba(251,191,36,.2); padding: 6px 8px; gap: 4px; -webkit-overflow-scrolling: touch; }
+  #mobile-nav a { display: inline-block; text-decoration: none; color: var(--text-sub); font-size: .78em; font-weight: 700; padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(251,191,36,.2); white-space: nowrap; font-family: "Georgia", serif; }
+  #mobile-nav a.active { background: rgba(251,191,36,.85); color: var(--parchment-dark); border-color: var(--gold-leaf); }
+  #layout { top: calc(var(--topbar-h) + 38px); }
+  #main { padding: 12px; }
+  #content-container { padding: 14px; }
+  .section-header::before { display: none; }
+  .section-header { padding-left: 0; font-size: 1.25em; }
+}
+@media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 
-        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
-        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
-        .author { color: #94a3b8; margin: 15px 0; font-size: 1rem; }
-        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
-        
-        .audio-player-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 30px;
-            margin: 25px 0;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        .audio-label { color: #1e1b4b; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
-
-        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-item { background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
-        .nav-item:hover { border-color: var(--accent-gold); color: white; }
-        .nav-item.active { background: var(--accent-gold); color: #1e1b4b; border-color: var(--accent-gold); }
-
-        .content-section {
-            display: none;
-            background-color: var(--paper-bg);
-            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
-            background-size: 100% 1.8em;
-            color: var(--text-main);
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 60px;
-            border-radius: 6px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            animation: fadeIn 0.5s ease;
-        }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
-
-        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
-        .marker { background: #f1f5f9; font-weight: 800; text-align: center; color: #475569; letter-spacing: 3px; }
-        
-        .h-adj { color: var(--highlight-adj); font-weight: 700; }
-        .h-rel { color: var(--highlight-rel); text-decoration: underline; font-style: italic; }
-
-        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .study-box h3 { color: #312e81; border-left: 6px solid #312e81; padding-left: 20px; margin-top: 0; margin-bottom: 20px; }
-        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-
-        .quiz-container { background: #1e1b4b; color: white; padding: 45px; border-radius: 15px; }
-        footer { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 0.9rem; }
-    </style>
+  </style>
 </head>
 <body>
-
-<header>
-    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 8</div>
+<header id="topbar">
+  <img id="topbar-cover" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/the stories we carry.png" alt="Track 8 Cover Art">
+  <div id="topbar-title">
+    <div class="track-label">TRACK 8</div>
     <h1>The Stories We Carry | 往事如影</h1>
-    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
-    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/the stories we carry.png" class="track-img">
-    <div class="audio-player-box">
-        <span class="audio-label">🎵 Audio Player</span>
-        <audio controls><source src="https://ducj-creator.github.io/releases/the stories we carry.mp3" type="audio/mpeg"></audio>
-    </div>
+    <h2>Author : Shirley &amp; AI Shirley 老師&amp;她的AI工具人</h2>
+  </div>
+  <div id="topbar-audio">
+    <audio controls id="music-player" preload="metadata">
+      <source src="https://ducj-creator.github.io/releases/the stories we carry.mp3" type="audio/mpeg">
+    </audio>
+  </div>
 </header>
-
-<nav>
-    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
-    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
-    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
-    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
-    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
-    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
-</nav>
-
-<div id="lyrics" class="content-section active">
-    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
-    <table class="lyrics-table">
-        <tbody>
-            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
-            <tr><td>The stories (that) <span class="h-adj">we carry</span>…<br>The people (whom) <span class="h-adj">we love</span>…<br>And, The scars <span class="h-rel">that</span> <span class="h-adj">made us</span>…</td><td>如影的往事…<br>深愛的人…<br>以及，那些成就我們的傷痕…</td></tr>
-            
-            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
-            <tr><td>I think about the hands <span class="h-rel">that</span> <span class="h-adj">held me when I fell</span>.</td><td>我想起那雙手，在我墜落時將我緊握。</td></tr>
-            <tr><td>I think about the voice <span class="h-rel">that</span> <span class="h-adj">told me I was well</span>.</td><td>我想起那個聲音，告訴我一切都好過。</td></tr>
-            <tr><td>I think about the place <span class="h-rel">where</span> <span class="h-adj">I learned how to heal</span>.</td><td>我想起那個地方，在那裡我學會癒合。</td></tr>
-            <tr><td>I think about the moment <span class="h-rel">when</span> <span class="h-adj">I chose what’s real</span>.</td><td>我想起那個時刻，選擇真實的自我。</td></tr>
-
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>These are the pieces <span class="h-rel">that</span> <span class="h-adj">made me who I am now</span>.</td><td>正是那些片刻，造就了如今的我。</td></tr>
-            <tr><td>These are the people <span class="h-rel">who</span> <span class="h-adj">held me when I ran about</span>.</td><td>正是這些人們，在我倉惶時將我緊握。</td></tr>
-
-            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
-            <tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
-            <tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
-
-            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
-            <tr><td>I carry the silence <span class="h-rel">that</span> <span class="h-adj">taught me how to speak</span>.</td><td>我帶來的沈默，教會我如何發聲。</td></tr>
-            <tr><td>I carry the failure <span class="h-rel">that</span> <span class="h-adj">made me strong and weak</span>.</td><td>我承受的失敗，讓我既脆弱又堅韌。</td></tr>
-            <tr><td>I carry the moment <span class="h-rel">when</span> <span class="h-adj">I almost gave up</span>.</td><td>在幾近放棄時，我撐過了那陰霾。</td></tr>
-            <tr><td>I carry the friend <span class="h-rel">whose</span> <span class="h-adj">love was like a cup</span>.</td><td>與我同行的摯友，給我滿溢的關愛。</td></tr>
-
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td>These are the scars <span class="h-rel">that</span> <span class="h-adj">showed me I could heal</span>.</td><td>正是這些傷痕，讓我看見我能癒合。</td></tr>
-            <tr><td>These are the ones <span class="h-rel">whose</span> <span class="h-adj">love I know is real</span>.</td><td>正是這些人們，真摯的愛如此深刻。</td></tr>
-
-            <tr><td colspan="2" class="marker">Chorus / 副歌 (重複)</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
-            <tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
-            <tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
-
-            <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
-            <tr><td>To the ones <span class="h-rel">who</span> <span class="h-adj">held me close</span>,</td><td>致那些緊握我雙手的人，</td></tr>
-            <tr><td>To the ones <span class="h-rel">who</span> <span class="h-adj">let me go</span>,</td><td>致那些讓我自由飛翔的人，</td></tr>
-            <tr><td>To the words <span class="h-rel">that</span> <span class="h-adj">broke me down</span>,</td><td>致那些曾經擊垮我的話語，</td></tr>
-            <tr><td>To the words <span class="h-rel">that</span> <span class="h-adj">built me now</span>:</td><td>致那些如今成就我的話語：</td></tr>
-            <tr><td>I am who I am because of the paths (that) <span class="h-adj">I chose</span>.</td><td>我之所以是我，因我選擇的路。</td></tr>
-            <tr><td>I am who I am because of the love <span class="h-rel">that</span> <span class="h-adj">shows</span>.</td><td>我之所以是我，因那愛的炫目。</td></tr>
-
-            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
-            <tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
-            <tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
-            <tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
-
-            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
-            <tr><td>The stories (that) <span class="h-adj">we carry</span>…</td><td>如影的往事…</td></tr>
-            <tr><td>The people (whom) <span class="h-adj">we love</span>…</td><td>深愛的人…</td></tr>
-            <tr><td>And, The scars <span class="h-rel">that</span> <span class="h-adj">made us</span>…</td><td>以及，那些成就我們的傷痕…</td></tr>
-            <tr><td>Made us who we are.</td><td>成就了，如今最好的我們。</td></tr>
-        </tbody>
-    </table>
+<nav id="mobile-nav"><a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">🏡 Home</a><a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;">📜 Lyrics</a><a href="#" data-target="words-section" onclick="showSection('words-section');return false;">🔠 Vocabulary</a><a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;">📐 Grammar</a><a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;">💡 Rhetoric</a><a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;">🎯 Challenge</a></nav>
+<div id="layout">
+  <nav id="sidebar"><a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html"><span class="nav-icon">🏡</span>Home | 主頁</a><a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;"><span class="nav-icon">📜</span>Lyrics<br>雙語歌詞</a><a href="#" data-target="words-section" onclick="showSection('words-section');return false;"><span class="nav-icon">🔠</span>Vocabulary<br>重點單字</a><a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;"><span class="nav-icon">📐</span>Grammar<br>形容詞子句</a><a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;"><span class="nav-icon">💡</span>Rhetoric<br>修辭象徵</a><a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;"><span class="nav-icon">🎯</span>Challenge<br>練習挑戰</a></nav>
+  <main id="main">
+    <div id="content-container">
+      <div class="content-section" id="lyrics-section" style="display:block;">
+<h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
+<div class="lyric-section"><table class="lyrics-table"><colgroup><col/><col/></colgroup>
+<tbody>
+<tr class="section-row"><td class="marker" colspan="2">Intro / 前奏</td></tr>
+<tr><td>The stories (that) <span class="h-adj">we carry</span>…<br/>The people (whom) <span class="h-adj">we love</span>…<br/>And, The scars <span class="h-rel">that</span> <span class="h-adj">made us</span>…</td><td>如影的往事…<br/>深愛的人…<br/>以及，那些成就我們的傷痕…</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Verse 1 / 主歌 1</td></tr>
+<tr><td>I think about the hands <span class="h-rel">that</span> <span class="h-adj">held me when I fell</span>.</td><td>我想起那雙手，在我墜落時將我緊握。</td></tr>
+<tr><td>I think about the voice <span class="h-rel">that</span> <span class="h-adj">told me I was well</span>.</td><td>我想起那個聲音，告訴我一切都好過。</td></tr>
+<tr><td>I think about the place <span class="h-rel">where</span> <span class="h-adj">I learned how to heal</span>.</td><td>我想起那個地方，在那裡我學會癒合。</td></tr>
+<tr><td>I think about the moment <span class="h-rel">when</span> <span class="h-adj">I chose what’s real</span>.</td><td>我想起那個時刻，選擇真實的自我。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td>These are the pieces <span class="h-rel">that</span> <span class="h-adj">made me who I am now</span>.</td><td>正是那些片刻，造就了如今的我。</td></tr>
+<tr><td>These are the people <span class="h-rel">who</span> <span class="h-adj">held me when I ran about</span>.</td><td>正是這些人們，在我倉惶時將我緊握。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Chorus / 副歌</td></tr>
+<tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
+<tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
+<tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Verse 2 / 主歌 2</td></tr>
+<tr><td>I carry the silence <span class="h-rel">that</span> <span class="h-adj">taught me how to speak</span>.</td><td>我帶來的沈默，教會我如何發聲。</td></tr>
+<tr><td>I carry the failure <span class="h-rel">that</span> <span class="h-adj">made me strong and weak</span>.</td><td>我承受的失敗，讓我既脆弱又堅韌。</td></tr>
+<tr><td>I carry the moment <span class="h-rel">when</span> <span class="h-adj">I almost gave up</span>.</td><td>在幾近放棄時，我撐過了那陰霾。</td></tr>
+<tr><td>I carry the friend <span class="h-rel">whose</span> <span class="h-adj">love was like a cup</span>.</td><td>與我同行的摯友，給我滿溢的關愛。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td>These are the scars <span class="h-rel">that</span> <span class="h-adj">showed me I could heal</span>.</td><td>正是這些傷痕，讓我看見我能癒合。</td></tr>
+<tr><td>These are the ones <span class="h-rel">whose</span> <span class="h-adj">love I know is real</span>.</td><td>正是這些人們，真摯的愛如此深刻。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Chorus / 副歌 (重複)</td></tr>
+<tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
+<tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
+<tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Bridge / 橋段</td></tr>
+<tr><td>To the ones <span class="h-rel">who</span> <span class="h-adj">held me close</span>,</td><td>致那些緊握我雙手的人，</td></tr>
+<tr><td>To the ones <span class="h-rel">who</span> <span class="h-adj">let me go</span>,</td><td>致那些讓我自由飛翔的人，</td></tr>
+<tr><td>To the words <span class="h-rel">that</span> <span class="h-adj">broke me down</span>,</td><td>致那些曾經擊垮我的話語，</td></tr>
+<tr><td>To the words <span class="h-rel">that</span> <span class="h-adj">built me now</span>:</td><td>致那些如今成就我的話語：</td></tr>
+<tr><td>I am who I am because of the paths (that) <span class="h-adj">I chose</span>.</td><td>我之所以是我，因我選擇的路。</td></tr>
+<tr><td>I am who I am because of the love <span class="h-rel">that</span> <span class="h-adj">shows</span>.</td><td>我之所以是我，因那愛的炫目。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Final Chorus / 最終副歌</td></tr>
+<tr style="background:#f5f3ff"><td>This is the road (that) <span class="h-adj">I walked when I was scared</span>.</td><td>這是我滿心恐懼時的一路走來。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the love (that) <span class="h-adj">I thought I never deserved</span>.</td><td>這是我曾經以為不配擁有的愛。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the wound <span class="h-rel">that</span> <span class="h-adj">taught me how to grow</span>.</td><td>這是那道教會我成長的創傷。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the truth (that) <span class="h-adj">I finally came to know</span>.</td><td>這是那個我終於領悟的真相。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the dream <span class="h-rel">that</span> <span class="h-adj">kept me through the night</span>.</td><td>這是那個陪我長夜漫漫的夢想。</td></tr>
+<tr style="background:#f5f3ff"><td>This is the light <span class="h-rel">that</span> <span class="h-adj">showed me I’d be alright</span>.</td><td>這是那道讓我明瞭我將安然的光亮。</td></tr>
+<tr><td>These are the stories (that) <span class="h-adj">we carry in our hearts</span>.</td><td>這些故事，如影隨形，背負於心上。</td></tr>
+<tr><td>These are the reasons (why) <span class="h-adj">we are who we are</span>.</td><td>這些原因，讓我們，成為自己的模樣。</td></tr>
+<tr class="section-row"><td class="marker" colspan="2">Outro / 尾聲</td></tr>
+<tr><td>The stories (that) <span class="h-adj">we carry</span>…</td><td>如影的往事…</td></tr>
+<tr><td>The people (whom) <span class="h-adj">we love</span>…</td><td>深愛的人…</td></tr>
+<tr><td>And, The scars <span class="h-rel">that</span> <span class="h-adj">made us</span>…</td><td>以及，那些成就我們的傷痕…</td></tr>
+<tr><td>Made us who we are.</td><td>成就了，如今最好的我們。</td></tr>
+</tbody>
+</table></div>
+</div><div class="content-section" id="words-section">
+<h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡</h2>
+<div class="vocab-grid">
+<div class="study-box"><b>1. Pieces [ˈpiːsɪz] (n.)</b><br/>碎片、片斷。在此指組成生命的點滴往事。</div>
+<div class="study-box"><b>2. Deserved [dɪˈzɜːrvd] (v./adj.)</b><br/>應得的。常用於自認「不配擁有」(never deserved)。</div>
+<div class="study-box"><b>3. Wound [wuːnd] (n.)</b><br/>傷口、創傷。象徵生命中的痛。</div>
+<div class="study-box"><b>4. Failure [ˈfeɪljər] (n.)</b><br/>失敗。</div>
+<div class="study-box"><b>5. Path [pæθ] (n.)</b><br/>小徑、道路。象徵人生路徑。</div>
+<div class="study-box"><b>6. Ran about [phr.]</b><br/>奔波、倉惶而行。</div>
+<div class="study-box"><b>7. Built me [phr.]</b><br/>成就了我。指經歷讓一個人格更完整。</div>
+<div class="study-box"><b>8. Like a cup [metaphor]</b><br/>像杯子般（滿溢）。形容愛之深。</div>
 </div>
-
-<div id="vocab" class="content-section">
-    <div class="section-header">§ 📚 Vocabulary | 單字與片語</div>
-    <div class="vocab-grid">
-        <div class="study-box"><b>1. Pieces [ˈpiːsɪz] (n.)</b><br>碎片、片斷。在此指組成生命的點滴往事。</div>
-        <div class="study-box"><b>2. Deserved [dɪˈzɜːrvd] (v./adj.)</b><br>應得的。常用於自認「不配擁有」(never deserved)。</div>
-        <div class="study-box"><b>3. Wound [wuːnd] (n.)</b><br>傷口、創傷。象徵生命中的痛。</div>
-        <div class="study-box"><b>4. Failure [ˈfeɪljər] (n.)</b><br>失敗。</div>
-        <div class="study-box"><b>5. Path [pæθ] (n.)</b><br>小徑、道路。象徵人生路徑。</div>
-        <div class="study-box"><b>6. Ran about [phr.]</b><br>奔波、倉惶而行。</div>
-        <div class="study-box"><b>7. Built me [phr.]</b><br>成就了我。指經歷讓一個人格更完整。</div>
-        <div class="study-box"><b>8. Like a cup [metaphor]</b><br>像杯子般（滿溢）。形容愛之深。</div>
-    </div>
+</div><div class="content-section" id="grammar-section">
+<h2 class="section-header">📐 Grammar | 形容詞子句</h2>
+<div class="study-box">
+<h3>1. 關係代名詞 (Relative Pronouns)</h3>
+<p>當先行詞是「人」或「物」時使用，且關係代名詞在子句中充當主詞、受詞或所有格。</p>
+<ul>
+<li><b>That / Which (物):</b> <i>The scars <u>that</u> made us.</i> (that 為子句主詞)</li>
+<li><b>Who / Whom (人):</b> <i>The people <u>who</u> held me.</i></li>
+<li><b>Whose (所有格):</b> <i>The friend <u>whose</u> love was like a cup.</i> (朋友的愛)</li>
+<li><b>省略受詞:</b> <i>The road (that) I walked.</i> (當關係詞做受詞時可省略)</li>
+</ul>
 </div>
-
-<div id="grammar" class="content-section">
-    <div class="section-header">§ 📐 Grammar | 形容詞子句的各種構成</div>
-    
-    <div class="study-box">
-        <h3>1. 關係代名詞 (Relative Pronouns)</h3>
-        <p>當先行詞是「人」或「物」時使用，且關係代名詞在子句中充當主詞、受詞或所有格。</p>
-        <ul>
-            <li><b>That / Which (物):</b> <i>The scars <u>that</u> made us.</i> (that 為子句主詞)</li>
-            <li><b>Who / Whom (人):</b> <i>The people <u>who</u> held me.</i></li>
-            <li><b>Whose (所有格):</b> <i>The friend <u>whose</u> love was like a cup.</i> (朋友的愛)</li>
-            <li><b>省略受詞:</b> <i>The road (that) I walked.</i> (當關係詞做受詞時可省略)</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>2. 關係副詞 (Relative Adverbs)</h3>
-        <p>當先行詞是「時間、地點、原因」時，使用關係副詞引導完整子句。</p>
-        <ul>
-            <li><b>Where (地點):</b> <i>The place <u>where</u> I learned how to heal.</i></li>
-            <li><b>When (時間):</b> <i>The moment <u>when</u> I chose what’s real.</i></li>
-            <li><b>Why (原因):</b> <i>The reasons (<u>why</u>) we are who we are.</i></li>
-        </ul>
-    </div>
+<div class="study-box">
+<h3>2. 關係副詞 (Relative Adverbs)</h3>
+<p>當先行詞是「時間、地點、原因」時，使用關係副詞引導完整子句。</p>
+<ul>
+<li><b>Where (地點):</b> <i>The place <u>where</u> I learned how to heal.</i></li>
+<li><b>When (時間):</b> <i>The moment <u>when</u> I chose what’s real.</i></li>
+<li><b>Why (原因):</b> <i>The reasons (<u>why</u>) we are who we are.</i></li>
+</ul>
 </div>
-
-<div id="rhetoric" class="content-section">
-    <div class="section-header">§ 💡 Rhetoric | 修辭與象徵</div>
-    <div class="study-box">
-        <h3>1. Symbolism: The Stories We Carry (承載的故事)</h3>
-        <p>標題將無形的「回憶」比擬為有形的「重擔/行李 (Carry)」，表達了過去與現在自我之間不可分割的連結。</p>
-    </div>
-    <div class="study-box">
-        <h3>2. Antithesis (對照)</h3>
-        <p><b>"Made me strong and weak"</b>: 失敗讓人認識到脆弱，卻也從中鍛鍊出堅韌。這種對稱美學展現了生命的複雜性。</p>
-    </div>
-    <div class="study-box">
-        <h3>3. Anaphora (首句重複)</h3>
-        <p>Chorus 中不斷重複 <b>"This is the..."</b>，這是一種宣告，強烈肯認了過去每一步痛苦都有其意義。</p>
-    </div>
-    <div class="study-box">
-        <h3>4. Simile (明喻)</h3>
-        <p><b>"Love was like a cup"</b>: 將愛比喻為杯子（通常指裝滿、溢出的杯子），形容情義深重且令人滿足。</p>
-    </div>
+</div><div class="content-section" id="rhetoric-section">
+<h2 class="section-header">💡 Rhetorical Devices | 修辭與象徵</h2>
+<div class="study-box">
+<h3>1. Symbolism: The Stories We Carry (承載的故事)</h3>
+<p>標題將無形的「回憶」比擬為有形的「重擔/行李 (Carry)」，表達了過去與現在自我之間不可分割的連結。</p>
 </div>
-
-<div id="challenge" class="content-section">
-    <div class="section-header">§ 🎯 Challenge | 形容詞子句大挑戰</div>
-    <div class="quiz-container">
-        <p>請根據先行詞，選擇正確的關係詞 (who, that, where, when, whose)：</p>
-        <div style="margin-bottom: 15px;">1. This is the place ________ I found my courage.</div>
-        <div style="margin-bottom: 15px;">2. I remember the people ________ stayed by my side.</div>
-        <div style="margin-bottom: 15px;">3. The moment ________ I almost gave up was the hardest.</div>
-        <div style="margin-bottom: 15px;">4. He is the friend ________ kindness changed my life.</div>
-        <div style="margin-bottom: 15px;">5. These are the scars ________ taught me to grow.</div>
-    </div>
+<div class="study-box">
+<h3>2. Antithesis (對照)</h3>
+<p><b>"Made me strong and weak"</b>: 失敗讓人認識到脆弱，卻也從中鍛鍊出堅韌。這種對稱美學展現了生命的複雜性。</p>
 </div>
-
-<footer>&copy; 2026 Shirley AI Music Studio | 形容詞子句專題版</footer>
-
+<div class="study-box">
+<h3>3. Anaphora (首句重複)</h3>
+<p>Chorus 中不斷重複 <b>"This is the..."</b>，這是一種宣告，強烈肯認了過去每一步痛苦都有其意義。</p>
+</div>
+<div class="study-box">
+<h3>4. Simile (明喻)</h3>
+<p><b>"Love was like a cup"</b>: 將愛比喻為杯子（通常指裝滿、溢出的杯子），形容情義深重且令人滿足。</p>
+</div>
+</div><div class="content-section" id="challenge-section">
+<h2 class="section-header">🎯 Challenge | 形容詞子句大挑戰</h2>
+<div class="quiz-container">
+<p>請根據先行詞，選擇正確的關係詞 (who, that, where, when, whose)：</p>
+<div style="margin-bottom: 15px;">1. This is the place ________ I found my courage.</div>
+<div style="margin-bottom: 15px;">2. I remember the people ________ stayed by my side.</div>
+<div style="margin-bottom: 15px;">3. The moment ________ I almost gave up was the hardest.</div>
+<div style="margin-bottom: 15px;">4. He is the friend ________ kindness changed my life.</div>
+<div style="margin-bottom: 15px;">5. These are the scars ________ taught me to grow.</div>
+</div>
+</div>
+      <footer>&copy; 2026 Shirley AI Music Studio | 形容詞子句專題版</footer>
+    </div>
+  </main>
+</div>
 <script>
-    function showSection(sectionId, btn) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btn.classList.add('active');
-        window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
+function showSection(sectionId) {
+  document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+  const target = document.getElementById(sectionId);
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('#sidebar a, #mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll(`[data-target="${sectionId}"]`).forEach(a => a.classList.add('active'));
+  const main = document.getElementById('main');
+  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
