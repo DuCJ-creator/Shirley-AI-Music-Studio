@@ -1,255 +1,361 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track 9: When I Was Falling | 當我墜落時 - Learning Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --header-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            --accent-gold: #fbbf24;
-            --nav-bg: #1e293b;
-            --paper-bg: #fdfaf5;
-            --paper-grid: rgba(0, 0, 0, 0.05);
-            --text-main: #1e293b;
-            --highlight-adv: #e11d48; /* 副詞子句連接詞標註色 */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track 9: When I Was Falling | 當我墜落時 - Learning Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --parchment-dark: #0f172a;
+  --chapter-brown: #1e293b;
+  --ink-blue: #1e293b;
+  --page-gold: #b45309;
+  --gold-leaf: #fbbf24;
+  --rose-mark: #e11d48;
+  --paper-bg: #fdfaf5;
+  --text-main: #f8fafc;
+  --text-sub: #cbd5e1;
+  --text-dark: #1e293b;
+  --topbar-h: 84px;
+  --sidebar-w: 168px;
+}
 
-        body { margin: 0; font-family: 'Montserrat', 'Noto Serif TC', serif; background-color: var(--bg-dark); color: white; line-height: 1.6; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        header { background: var(--header-gradient); padding: 60px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); }
-        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: 2px; }
-        .author { color: #94a3b8; margin: 15px 0; font-size: 1rem; }
-        .track-img { width: 280px; height: 280px; border-radius: 20px; margin: 25px auto; display: block; box-shadow: 0 15px 40px rgba(0,0,0,0.6); object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
-        
-        .audio-player-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 30px;
-            margin: 25px 0;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        .audio-label { color: #1e293b; font-weight: 700; margin-right: 15px; font-size: 0.9rem; }
+@keyframes slow-drift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
 
-        nav { background-color: var(--nav-bg); padding: 15px; display: flex; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-item { background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 12px 22px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; text-decoration: none; }
-        .nav-item.active { background: var(--accent-gold); color: #1e293b; border-color: var(--accent-gold); }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Montserrat', 'Noto Serif TC', serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(900px circle at 8% -18%, rgba(251,191,36,.14) 0%, transparent 56%),
+    radial-gradient(720px circle at 88% 5%, rgba(225,29,72,.12) 0%, transparent 58%),
+    linear-gradient(160deg, #0f172a 0%, #1e293b 42%, #7f1d1d 78%, #0f172a 100%);
+  background-size: 200% 200%;
+  animation: slow-drift 180s linear infinite;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
 
-        .content-section {
-            display: none;
-            background-color: var(--paper-bg);
-            background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px);
-            background-size: 100% 1.8em;
-            color: var(--text-main);
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 60px;
-            border-radius: 6px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            animation: fadeIn 0.5s ease;
-        }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* TOP BAR */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 200;
+  display: flex; align-items: center; gap: 16px; padding: 0 20px;
+  background: linear-gradient(180deg, rgba(15,23,42,.97) 0%, rgba(30,41,59,.9) 100%);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(251,191,36,.42);
+  box-shadow: 0 4px 25px rgba(0,0,0,.5);
+}
+#topbar-title { flex: 0 0 auto; min-width: 250px; }
+.track-label {
+  color: var(--gold-leaf); font-weight: 800; letter-spacing: 4px; font-size: .72rem; margin-bottom: 2px;
+}
+#topbar-title h1 {
+  font-size: 1.03rem; font-weight: 900; color: #fff7ed; letter-spacing: .3px; line-height: 1.2;
+  text-shadow: 0 0 12px rgba(251,191,36,.25);
+}
+#topbar-title h2 { font-size: .72rem; font-weight: 500; color: var(--text-sub); margin-top: 2px; }
+#topbar-media { flex: 1 1 auto; display: flex; align-items: center; gap: 14px; min-width: 0; }
+.track-thumb {
+  width: 54px; height: 54px; object-fit: cover; border-radius: 12px;
+  border: 1px solid rgba(251,191,36,.35); box-shadow: 0 4px 16px rgba(0,0,0,.42);
+}
+#music-player {
+  flex: 1 1 auto; min-width: 140px; max-width: 500px; height: 36px; border-radius: 999px;
+  background: rgba(255,255,255,.95); box-shadow: 0 4px 14px rgba(0,0,0,.36), 0 0 14px rgba(251,191,36,.16);
+}
 
-        .section-header { font-size: 2.2rem; border-bottom: 4px solid var(--text-main); padding-bottom: 15px; margin-bottom: 40px; font-weight: 700; }
+/* BODY LAYOUT */
+#layout { position: fixed; top: var(--topbar-h); left: 0; right: 0; bottom: 0; display: flex; }
+#sidebar {
+  flex: 0 0 var(--sidebar-w); width: var(--sidebar-w); height: 100%; overflow-y: auto;
+  background: linear-gradient(180deg, rgba(15,23,42,.98) 0%, rgba(30,41,59,.94) 100%);
+  border-right: 1px solid rgba(251,191,36,.22); padding: 16px 8px; display: flex; flex-direction: column; gap: 5px;
+}
+#sidebar a {
+  display: block; text-decoration: none; color: var(--text-sub); font-size: .82rem; font-weight: 700;
+  padding: 9px 10px; border-radius: 8px; border: 1px solid transparent; transition: all .2s; line-height: 1.35; text-align: center;
+}
+#sidebar a:hover { background: rgba(251,191,36,.1); color: white; border-color: rgba(251,191,36,.26); }
+#sidebar a.active {
+  background: rgba(251,191,36,.16); color: var(--gold-leaf); border-color: rgba(251,191,36,.38); box-shadow: 0 0 14px rgba(251,191,36,.1);
+}
+#sidebar a .nav-icon { display: block; font-size: 1.35rem; margin-bottom: 2px; }
 
-        .lyrics-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .lyrics-table td { padding: 22px 20px; border: 1px solid #e2e8f0; vertical-align: top; line-height: 2; font-size: 1.1rem; }
-        .marker { background: #f1f5f9; font-weight: 800; text-align: center; color: #475569; letter-spacing: 3px; }
-        
-        .h-adv { color: var(--highlight-adv); font-weight: 800; text-decoration: underline; }
+#main { flex: 1 1 auto; height: 100%; overflow-y: auto; padding: 22px 24px 44px; -webkit-overflow-scrolling: touch; }
+#content-container {
+  max-width: 900px; margin: 0 auto; background: rgba(253,250,245,.98); color: var(--text-dark);
+  padding: 24px; border-radius: 14px; border: 1px solid rgba(251,191,36,.36);
+  box-shadow: 0 14px 44px rgba(0,0,0,.3), 0 0 0 1px rgba(127,29,29,.14);
+  background-image:
+    linear-gradient(rgba(180,83,9,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180,83,9,.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.content-section { display: none; }
+.content-section.active { display: block; animation: fadeIn .28s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .study-box { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .study-box h3 { color: #1e293b; border-left: 6px solid var(--highlight-adv); padding-left: 20px; margin-top: 0; }
-        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.section-header {
+  margin-top: 0; padding-bottom: 8px; border-bottom: 3px solid var(--ink-blue); color: #111827;
+  font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; position: relative; padding-left: 20px;
+}
+.section-header::before { content: "§"; position: absolute; left: 0; color: var(--gold-leaf); }
 
-        .quiz-container { background: #1e293b; color: white; padding: 45px; border-radius: 15px; }
-        footer { text-align: center; padding: 80px 20px; color: #94a3b8; font-size: 0.9rem; }
-    </style>
+/* LYRICS */
+.lyrics-table {
+  width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: .95rem; line-height: 1.65;
+  background: #fffdf9; border: 1.5px solid rgba(180,83,9,.22); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,.07);
+}
+.lyrics-table td {
+  vertical-align: top; padding: 9px 12px; border-bottom: 1px dashed rgba(180,83,9,.18); border-right: 1px solid rgba(180,83,9,.12);
+  word-wrap: break-word;
+}
+.lyrics-table td:last-child { border-right: none; }
+.lyrics-table tr:last-child td { border-bottom: none; }
+.marker {
+  background: linear-gradient(135deg,#f8fafc,#fef3c7); font-weight: 900; text-align: center; color: #475569;
+  letter-spacing: 2px; text-transform: uppercase; font-size: .78rem; border-bottom: 1px solid rgba(180,83,9,.24) !important;
+}
+.h-adv { color: var(--rose-mark); font-weight: 900; text-decoration: underline; text-underline-offset: 3px; }
+
+/* STUDY CONTENT */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.study-box {
+  background: #fffdf9; padding: 16px; border-radius: 10px; border: 1px solid rgba(180,83,9,.18); border-left: 5px solid var(--rose-mark);
+  margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+.study-box h3 {
+  color: #1e293b; border-left: none; padding-left: 0; margin-top: 0; margin-bottom: 10px; font-size: 1.14rem;
+  padding-bottom: 5px; border-bottom: 1px dashed rgba(180,83,9,.26);
+}
+.study-box ul { margin: 8px 0 0 20px; }
+.study-box li { margin: 5px 0; }
+.quiz-container { background: #1e293b; color: white; padding: 28px; border-radius: 14px; border: 1px solid rgba(251,191,36,.25); }
+.quiz-container p, .quiz-container div { line-height: 1.85; }
+
+footer { text-align: center; padding: 28px 20px 4px; color: #64748b; font-size: .82rem; }
+#mobile-nav { display: none; }
+
+@media (max-width: 700px) {
+  :root { --sidebar-w: 0px; --topbar-h: 112px; }
+  #topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  #topbar-title { min-width: 0; width: 100%; }
+  #topbar-title h1 { font-size: .93rem; }
+  #topbar-title h2 { display: none; }
+  #topbar-media { width: 100%; gap: 8px; }
+  .track-thumb { width: 40px; height: 40px; }
+  #music-player { max-width: 100%; }
+  #sidebar { display: none; }
+  #mobile-nav {
+    display: flex !important; position: fixed; top: var(--topbar-h); left: 0; right: 0; z-index: 190;
+    overflow-x: auto; white-space: nowrap; background: rgba(15,23,42,.98); border-bottom: 1px solid rgba(251,191,36,.22);
+    padding: 6px 8px; gap: 5px; -webkit-overflow-scrolling: touch;
+  }
+  #mobile-nav a {
+    display: inline-block; text-decoration: none; color: var(--text-sub); font-size: .78rem; font-weight: 800;
+    padding: 6px 10px; border-radius: 7px; border: 1px solid rgba(251,191,36,.22);
+  }
+  #mobile-nav a.active { background: rgba(251,191,36,.85); color: #0f172a; }
+  #layout { top: calc(var(--topbar-h) + 40px); }
+  #main { padding: 12px; }
+  #content-container { padding: 14px; }
+  .section-header { padding-left: 0; font-size: 1.25rem; }
+  .section-header::before { display: none; }
+  .lyrics-table { font-size: .86rem; min-width: 520px; }
+  #lyrics-section { overflow-x: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+  </style>
 </head>
 <body>
-
-<header>
-    <div style="color:var(--accent-gold); font-weight:600; letter-spacing:5px; margin-bottom:10px;">TRACK 9</div>
+<header id="topbar">
+  <div id="topbar-title">
+    <div class="track-label">TRACK 9</div>
     <h1>When I Was Falling | 當我墜落時</h1>
-    <div class="author">Author : Shirley & AI Shirley 老師&她的AI工具人</div>
-    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/when I was falling.png" class="track-img">
-    <div class="audio-player-box">
-        <span class="audio-label">🎵 Audio Player</span>
-        <audio controls><source src="https://ducj-creator.github.io/releases/when I was falling.mp3" type="audio/mpeg"></audio>
-    </div>
+    <h2>Author : Shirley &amp; AI Shirley 老師&amp;她的AI工具人</h2>
+  </div>
+  <div id="topbar-media">
+    <img src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/when I was falling.png" alt="Track 9 Cover Art" class="track-thumb">
+    <audio id="music-player" preload="metadata" controls=""><source src="https://ducj-creator.github.io/releases/when I was falling.mp3" type="audio/mpeg"/></audio>
+  </div>
 </header>
 
-<nav>
-    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="nav-item">🏠 Home</a>
-    <button class="nav-item active" onclick="showSection('lyrics', this)">📜 Lyrics | 歌詞</button>
-    <button class="nav-item" onclick="showSection('vocab', this)">📚 Vocab | 單字</button>
-    <button class="nav-item" onclick="showSection('grammar', this)">📐 Grammar | 文法</button>
-    <button class="nav-item" onclick="showSection('rhetoric', this)">💡 Rhetoric | 修辭</button>
-    <button class="nav-item" onclick="showSection('challenge', this)">🎯 Challenge | 挑戰</button>
+<nav id="mobile-nav">
+  <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">🏡 Home</a>
+  <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;">📜 Lyrics</a>
+  <a href="#" data-target="vocab-section" onclick="showSection('vocab-section');return false;">🔠 Vocab</a>
+  <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;">📐 Grammar</a>
+  <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;">💡 Rhetoric</a>
+  <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;">🎯 Challenge</a>
 </nav>
 
-<div id="lyrics" class="content-section active">
-    <div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
-    <table class="lyrics-table">
-        <tbody>
-            <tr><td colspan="2" class="marker">Intro / 前奏</td></tr>
-            <tr><td><span class="h-adv">When</span> I was falling…<br><span class="h-adv">Before</span> I knew…<br><span class="h-adv">Until</span> I found…</td><td>當我墜落之時…<br>在我明白之前…<br>直至我被尋見…</td></tr>
-            
-            <tr><td colspan="2" class="marker">Verse 1 / 主歌 1</td></tr>
-            <tr><td><span class="h-adv">When</span> I was young, I thought I knew it all.</td><td>年少輕狂時，以為一切了然。</td></tr>
-            <tr><td><span class="h-adv">Before</span> I learned, I built a wall so tall.</td><td>在我學會之前，築起高牆萬千。</td></tr>
-            <tr><td><span class="h-adv">After</span> I fell, I finally understood.</td><td>在我跌倒之後，終於慢慢看見。</td></tr>
-            <tr><td><span class="h-adv">As</span> I grew, I found what’s good.</td><td>隨著歲月流轉，找到心中所願。</td></tr>
+<div id="layout">
+  <nav id="sidebar">
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html"><span class="nav-icon">🏡</span>Home | 主頁</a>
+    <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;"><span class="nav-icon">📜</span>Lyrics<br>雙語歌詞</a>
+    <a href="#" data-target="vocab-section" onclick="showSection('vocab-section');return false;"><span class="nav-icon">🔠</span>Vocabulary<br>重點單字</a>
+    <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;"><span class="nav-icon">📐</span>Grammar<br>副詞子句</a>
+    <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;"><span class="nav-icon">💡</span>Rhetoric<br>修辭意象</a>
+    <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;"><span class="nav-icon">🎯</span>Challenge<br>練習挑戰</a>
+  </nav>
 
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td><span class="h-adv">Though</span> I was broken, I still held on.</td><td>雖然夢曾破碎，仍緊握手上。</td></tr>
-            <tr><td><span class="h-adv">If</span> I kept walking, I could see the dawn.</td><td>只要繼續前行，便能看見曙光。</td></tr>
-
-            <tr><td colspan="2" class="marker">Chorus / 副歌</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為滿滿愛意，我學會傲視此間。</td></tr>
-
-            <tr><td colspan="2" class="marker">Verse 2 / 主歌 2</td></tr>
-            <tr><td><span class="h-adv">While</span> I was hiding, you called my name.</td><td>當我躲藏之時，你呼喚我的名。</td></tr>
-            <tr><td><span class="h-adv">Until</span> you found me, I was lost in fame.</td><td>在你尋見之前，我迷失於虛名。</td></tr>
-            <tr><td><span class="h-adv">Since</span> I met you, I’ve learned to trust.</td><td>自從與你相遇，我學會了信任。</td></tr>
-            <tr><td><span class="h-adv">As long as</span> I’m breathing, I’ll never rust.</td><td>只要還呼吸著，我便絕不放任。</td></tr>
-
-            <tr><td colspan="2" class="marker">Pre-Chorus / 預副歌</td></tr>
-            <tr><td><span class="h-adv">Even when</span> I doubted, you stayed with me.</td><td>即使我曾懷疑，你仍不離不棄。</td></tr>
-            <tr><td><span class="h-adv">Wherever</span> I wandered, your love would be.</td><td>無論我流浪何地，你仍愛我如昔。</td></tr>
-
-            <tr><td colspan="2" class="marker">Chorus / 副歌 (重複)</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為滿滿愛意，我學會傲視此間。</td></tr>
-
-            <tr><td colspan="2" class="marker">Bridge / 橋段</td></tr>
-            <tr><td><span class="h-adv">Whenever</span> I stumble, I’ll get back up.</td><td>無論何時跌倒在地，我總會再次站起。</td></tr>
-            <tr><td><span class="h-adv">Wherever</span> life takes me, I’ll never give up.</td><td>無論命運帶我往何地，我將永不放棄。</td></tr>
-            <tr><td><span class="h-adv">Even if</span> I fall again, I know I’ll rise.</td><td>即使再次墜落，我知道終會熬過。</td></tr>
-            <tr><td><span class="h-adv">Now that</span> I’m stronger, I see through these eyes.</td><td>如今我已堅強，用雙眼繼續丈量。</td></tr>
-
-            <tr><td colspan="2" class="marker">Final Chorus / 最終副歌</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
-            <tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為你的愛意滿滿，我學會傲視此間。</td></tr>
-
-            <tr><td colspan="2" class="marker">Outro / 尾聲</td></tr>
-            <tr><td><span class="h-adv">When</span> I was falling…</td><td>當我墜落之時…</td></tr>
-            <tr><td><span class="h-adv">Before</span> I knew…</td><td>在我明白之前…</td></tr>
-            <tr><td><span class="h-adv">Now</span> I am standing…</td><td>如今我屹立於此…</td></tr>
-            <tr><td><span class="h-adv">Because of</span> you.</td><td>因為有你。</td></tr>
-        </tbody>
-    </table>
+  <main id="main">
+    <div id="content-container">
+      <div id="lyrics-section" class="content-section active">
+<div class="section-header">§ 📜 Dual Language Lyrics | 完整歌詞</div>
+<table class="lyrics-table">
+<tbody>
+<tr><td class="marker" colspan="2">Intro / 前奏</td></tr>
+<tr><td><span class="h-adv">When</span> I was falling…<br/><span class="h-adv">Before</span> I knew…<br/><span class="h-adv">Until</span> I found…</td><td>當我墜落之時…<br/>在我明白之前…<br/>直至我被尋見…</td></tr>
+<tr><td class="marker" colspan="2">Verse 1 / 主歌 1</td></tr>
+<tr><td><span class="h-adv">When</span> I was young, I thought I knew it all.</td><td>年少輕狂時，以為一切了然。</td></tr>
+<tr><td><span class="h-adv">Before</span> I learned, I built a wall so tall.</td><td>在我學會之前，築起高牆萬千。</td></tr>
+<tr><td><span class="h-adv">After</span> I fell, I finally understood.</td><td>在我跌倒之後，終於慢慢看見。</td></tr>
+<tr><td><span class="h-adv">As</span> I grew, I found what’s good.</td><td>隨著歲月流轉，找到心中所願。</td></tr>
+<tr><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td><span class="h-adv">Though</span> I was broken, I still held on.</td><td>雖然夢曾破碎，仍緊握手上。</td></tr>
+<tr><td><span class="h-adv">If</span> I kept walking, I could see the dawn.</td><td>只要繼續前行，便能看見曙光。</td></tr>
+<tr><td class="marker" colspan="2">Chorus / 副歌</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為滿滿愛意，我學會傲視此間。</td></tr>
+<tr><td class="marker" colspan="2">Verse 2 / 主歌 2</td></tr>
+<tr><td><span class="h-adv">While</span> I was hiding, you called my name.</td><td>當我躲藏之時，你呼喚我的名。</td></tr>
+<tr><td><span class="h-adv">Until</span> you found me, I was lost in fame.</td><td>在你尋見之前，我迷失於虛名。</td></tr>
+<tr><td><span class="h-adv">Since</span> I met you, I’ve learned to trust.</td><td>自從與你相遇，我學會了信任。</td></tr>
+<tr><td><span class="h-adv">As long as</span> I’m breathing, I’ll never rust.</td><td>只要還呼吸著，我便絕不放任。</td></tr>
+<tr><td class="marker" colspan="2">Pre-Chorus / 預副歌</td></tr>
+<tr><td><span class="h-adv">Even when</span> I doubted, you stayed with me.</td><td>即使我曾懷疑，你仍不離不棄。</td></tr>
+<tr><td><span class="h-adv">Wherever</span> I wandered, your love would be.</td><td>無論我流浪何地，你仍愛我如昔。</td></tr>
+<tr><td class="marker" colspan="2">Chorus / 副歌 (重複)</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為滿滿愛意，我學會傲視此間。</td></tr>
+<tr><td class="marker" colspan="2">Bridge / 橋段</td></tr>
+<tr><td><span class="h-adv">Whenever</span> I stumble, I’ll get back up.</td><td>無論何時跌倒在地，我總會再次站起。</td></tr>
+<tr><td><span class="h-adv">Wherever</span> life takes me, I’ll never give up.</td><td>無論命運帶我往何地，我將永不放棄。</td></tr>
+<tr><td><span class="h-adv">Even if</span> I fall again, I know I’ll rise.</td><td>即使再次墜落，我知道終會熬過。</td></tr>
+<tr><td><span class="h-adv">Now that</span> I’m stronger, I see through these eyes.</td><td>如今我已堅強，用雙眼繼續丈量。</td></tr>
+<tr><td class="marker" colspan="2">Final Chorus / 最終副歌</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">When</span> I was falling, someone caught my hand.</td><td>當我墜落之時，有雙手將我接住。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Before</span> I lost it, I found where I could stand.</td><td>在我失去之前，能尋得方寸立足。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">After</span> the darkness, the morning always came.</td><td>走過漫漫長夜，晨曦終會來臨。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Though</span> I was shaking, I whispered out your name.</td><td>儘管渾身顫抖，輕聲喚你的名。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">If</span> I keep moving, I’ll reach the other side.</td><td>只要步履不停，就能到達彼岸。</td></tr>
+<tr style="background:#fffcf2"><td><span class="h-adv">Because</span> you loved me, I learned to stand with pride.</td><td>因為你的愛意滿滿，我學會傲視此間。</td></tr>
+<tr><td class="marker" colspan="2">Outro / 尾聲</td></tr>
+<tr><td><span class="h-adv">When</span> I was falling…</td><td>當我墜落之時…</td></tr>
+<tr><td><span class="h-adv">Before</span> I knew…</td><td>在我明白之前…</td></tr>
+<tr><td><span class="h-adv">Now</span> I am standing…</td><td>如今我屹立於此…</td></tr>
+<tr><td><span class="h-adv">Because of</span> you.</td><td>因為有你。</td></tr>
+</tbody>
+</table>
 </div>
-
-<div id="vocab" class="content-section">
-    <div class="section-header">§ 📚 Vocabulary | 單字與重點</div>
-    <div class="vocab-grid">
-        <div class="study-box"><b>1. Shaking [ˈʃeɪkɪŋ] (adj./v-ing)</b><br>發抖的、顫抖的。形容極度恐懼或激動。</div>
-        <div class="study-box"><b>2. Whisper [ˈwɪspər] (v.)</b><br>低聲說、私語。</div>
-        <div class="study-box"><b>3. Stumble [ˈstʌmbəl] (v.)</b><br>跌倒、絆倒。象徵人生遭遇挫折。</div>
-        <div class="study-box"><b>4. Pride [praɪd] (n.)</b><br>自豪、驕傲。這裡指找回自尊。</div>
-        <div class="study-box"><b>5. Wander [ˈwɑːndər] (v.)</b><br>漫遊、流浪、迷失方向。</div>
-        <div class="study-box"><b>6. Rust [rʌst] (v.)</b><br>生鏽。在此指荒廢、停滯不前。</div>
-        <div class="study-box"><b>7. Dawn [dɔːn] (n.)</b><br>黎明、曙光。</div>
-        <div class="study-box"><b>8. Lost in fame [phr.]</b><br>迷失於名聲之中。</div>
-    </div>
+      <div id="vocab-section" class="content-section">
+<div class="section-header">§ 📚 Vocabulary | 單字與重點</div>
+<div class="vocab-grid">
+<div class="study-box"><b>1. Shaking [ˈʃeɪkɪŋ] (adj./v-ing)</b><br/>發抖的、顫抖的。形容極度恐懼或激動。</div>
+<div class="study-box"><b>2. Whisper [ˈwɪspər] (v.)</b><br/>低聲說、私語。</div>
+<div class="study-box"><b>3. Stumble [ˈstʌmbəl] (v.)</b><br/>跌倒、絆倒。象徵人生遭遇挫折。</div>
+<div class="study-box"><b>4. Pride [praɪd] (n.)</b><br/>自豪、驕傲。這裡指找回自尊。</div>
+<div class="study-box"><b>5. Wander [ˈwɑːndər] (v.)</b><br/>漫遊、流浪、迷失方向。</div>
+<div class="study-box"><b>6. Rust [rʌst] (v.)</b><br/>生鏽。在此指荒廢、停滯不前。</div>
+<div class="study-box"><b>7. Dawn [dɔːn] (n.)</b><br/>黎明、曙光。</div>
+<div class="study-box"><b>8. Lost in fame [phr.]</b><br/>迷失於名聲之中。</div>
 </div>
-
-<div id="grammar" class="content-section">
-    <div class="section-header">§ 📐 Grammar | 副詞子句全解析</div>
-    
-    <div class="study-box">
-        <h3>1. 時間副詞子句 (Time)</h3>
-        <p>表達動作發生的先後順序或同時性。</p>
-        <ul>
-            <li><b>When / While / As:</b> <i>When I was falling... / While I was hiding...</i> (當...之時)</li>
-            <li><b>Before / After:</b> <i>Before I knew... / After the darkness...</i> (在...之前/後)</li>
-            <li><b>Since / Until:</b> <i>Since I met you... / Until you found me...</i> (自從.../直到...)</li>
-            <li><b>Whenever:</b> <i>Whenever I stumble...</i> (每當...時)</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>2. 讓步副詞子句 (Concession)</h3>
-        <p>表達「雖然、儘管」，用於強調主句結果的出乎意料。</p>
-        <ul>
-            <li><b>Though / Even when:</b> <i>Though I was broken... / Even when I doubted...</i> (雖然/即使)</li>
-            <li><b>Even if:</b> <i>Even if I fall again...</i> (即便再次...)</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>3. 原因與條件 (Reason & Condition)</h3>
-        <ul>
-            <li><b>Because / Now that:</b> <i>Because you loved me... / Now that I'm stronger...</i> (因為/既然)</li>
-            <li><b>If / As long as:</b> <i>If I keep moving... / As long as I'm breathing...</i> (如果/只要)</li>
-        </ul>
-    </div>
-
-    <div class="study-box">
-        <h3>4. 地點副詞子句 (Place)</h3>
-        <ul>
-            <li><b>Wherever:</b> <i>Wherever I wandered... / Wherever life takes me...</i> (無論去哪裡)</li>
-        </ul>
-    </div>
 </div>
-
-<div id="rhetoric" class="content-section">
-    <div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
-    <div class="study-box">
-        <h3>1. Metaphor: The Wall (牆的隱喻)</h3>
-        <p><b>"I built a wall so tall"</b>: 牆象徵自我封閉、防禦心強，不想讓他人看見自己的脆弱。</p>
-    </div>
-    <div class="study-box">
-        <h3>2. Contrast: Darkness & Morning (明暗對比)</h3>
-        <p><b>"After the darkness, the morning always came"</b>: 用自然的日夜交替比喻人生的低谷與轉機，傳達希望感。</p>
-    </div>
-    <div class="study-box">
-        <h3>3. Personification: Life (擬人化)</h3>
-        <p><b>"Wherever life takes me"</b>: 將「命運/生活」賦予主動引領的能力，表達對未來的開放心態。</p>
-    </div>
+      <div id="grammar-section" class="content-section">
+<div class="section-header">§ 📐 Grammar | 副詞子句全解析</div>
+<div class="study-box">
+<h3>1. 時間副詞子句 (Time)</h3>
+<p>表達動作發生的先後順序或同時性。</p>
+<ul>
+<li><b>When / While / As:</b> <i>When I was falling... / While I was hiding...</i> (當...之時)</li>
+<li><b>Before / After:</b> <i>Before I knew... / After the darkness...</i> (在...之前/後)</li>
+<li><b>Since / Until:</b> <i>Since I met you... / Until you found me...</i> (自從.../直到...)</li>
+<li><b>Whenever:</b> <i>Whenever I stumble...</i> (每當...時)</li>
+</ul>
 </div>
-
-<div id="challenge" class="content-section">
-    <div class="section-header">§ 🎯 Challenge | 副詞子句填空</div>
-    <div class="quiz-container">
-        <p>請根據語意選擇最適合的連接詞 (When, Though, Because, If, Until)：</p>
-        <div style="margin-bottom: 15px;">1. ________ I was shaking, I whispered out your name. (雖然)</div>
-        <div style="margin-bottom: 15px;">2. ________ you loved me, I learned to stand with pride. (因為)</div>
-        <div style="margin-bottom: 15px;">3. I was lost ________ you found me. (直到)</div>
-        <div style="margin-bottom: 15px;">4. ________ I keep moving, I'll reach the other side. (只要/如果)</div>
-        <div style="margin-bottom: 15px;">5. ________ I was young, I thought I knew it all. (當...時)</div>
-    </div>
+<div class="study-box">
+<h3>2. 讓步副詞子句 (Concession)</h3>
+<p>表達「雖然、儘管」，用於強調主句結果的出乎意料。</p>
+<ul>
+<li><b>Though / Even when:</b> <i>Though I was broken... / Even when I doubted...</i> (雖然/即使)</li>
+<li><b>Even if:</b> <i>Even if I fall again...</i> (即便再次...)</li>
+</ul>
 </div>
-
-<footer>&copy; 2026 Shirley AI Music Studio | 副詞子句完整版</footer>
+<div class="study-box">
+<h3>3. 原因與條件 (Reason &amp; Condition)</h3>
+<ul>
+<li><b>Because / Now that:</b> <i>Because you loved me... / Now that I'm stronger...</i> (因為/既然)</li>
+<li><b>If / As long as:</b> <i>If I keep moving... / As long as I'm breathing...</i> (如果/只要)</li>
+</ul>
+</div>
+<div class="study-box">
+<h3>4. 地點副詞子句 (Place)</h3>
+<ul>
+<li><b>Wherever:</b> <i>Wherever I wandered... / Wherever life takes me...</i> (無論去哪裡)</li>
+</ul>
+</div>
+</div>
+      <div id="rhetoric-section" class="content-section">
+<div class="section-header">§ 💡 Rhetoric | 修辭意象</div>
+<div class="study-box">
+<h3>1. Metaphor: The Wall (牆的隱喻)</h3>
+<p><b>"I built a wall so tall"</b>: 牆象徵自我封閉、防禦心強，不想讓他人看見自己的脆弱。</p>
+</div>
+<div class="study-box">
+<h3>2. Contrast: Darkness &amp; Morning (明暗對比)</h3>
+<p><b>"After the darkness, the morning always came"</b>: 用自然的日夜交替比喻人生的低谷與轉機，傳達希望感。</p>
+</div>
+<div class="study-box">
+<h3>3. Personification: Life (擬人化)</h3>
+<p><b>"Wherever life takes me"</b>: 將「命運/生活」賦予主動引領的能力，表達對未來的開放心態。</p>
+</div>
+</div>
+      <div id="challenge-section" class="content-section">
+<div class="section-header">§ 🎯 Challenge | 副詞子句填空</div>
+<div class="quiz-container">
+<p>請根據語意選擇最適合的連接詞 (When, Though, Because, If, Until)：</p>
+<div style="margin-bottom: 15px;">1. ________ I was shaking, I whispered out your name. (雖然)</div>
+<div style="margin-bottom: 15px;">2. ________ you loved me, I learned to stand with pride. (因為)</div>
+<div style="margin-bottom: 15px;">3. I was lost ________ you found me. (直到)</div>
+<div style="margin-bottom: 15px;">4. ________ I keep moving, I'll reach the other side. (只要/如果)</div>
+<div style="margin-bottom: 15px;">5. ________ I was young, I thought I knew it all. (當...時)</div>
+</div>
+</div>
+      <footer>&copy; 2026 Shirley AI Music Studio | 副詞子句完整版</footer>
+    </div>
+  </main>
+</div>
 
 <script>
-    function showSection(sectionId, btn) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btn.classList.add('active');
-        window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
+function showSection(sectionId) {
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(sectionId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#sidebar a, #mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll(`[data-target="${sectionId}"]`).forEach(a => a.classList.add('active'));
+  const main = document.getElementById('main');
+  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
