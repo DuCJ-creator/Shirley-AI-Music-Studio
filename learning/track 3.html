@@ -4,1307 +4,605 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Learning: Right Now | 學習中：此刻即景</title>
-
   <style>
-:root{
-  /* 此刻即景主題色彩 - 雨夜城市 */
-  --midnight-city: #0d0b1a;          /* 午夜城市深紫 */
-  --urban-purple: #1a1730;           /* 都市紫 */
-  --neon-blue: #2a3b8f;              /* 霓虹藍 */
-  --rain-drop: #3a4aaf;              /* 雨滴藍 */
-  --streetlight-glow: #ffd166;       /* 街燈暖黃 */
-  --neon-pink: #ff5e9c;              /* 霓虹粉 */
-  --city-light: #8a9bff;             /* 城市燈光 */
-  --rainy-glass: #b8c5ff;            /* 雨後玻璃 */
-
-  --text-main:#f0f4ff;               /* 主文字偏淡紫白 */
-  --text-sub:#d8e1ff;                /* 次要文字帶一點藍紫 */
-  --text-dark:#0f0e1a;               /* 卡片內深色文字 */
-
-  --card-border: rgba(138, 155, 255, 0.7);
-  --card-shadow: 0 18px 55px rgba(0,0,0,0.65);
+:root {
+  --midnight-city: #0d0b1a;
+  --urban-purple: #1a1730;
+  --neon-blue: #2a3b8f;
+  --streetlight-glow: #ffd166;
+  --neon-pink: #ff5e9c;
+  --city-light: #8a9bff;
+  --text-main: #f0f4ff;
+  --text-sub: #d8e1ff;
+  --text-dark: #0f0e1a;
+  --topbar-h: 72px;
+  --sidebar-w: 160px;
 }
 
-    /* ---------------------------------- */
-    /* 2) 背景：雨夜城市＋霓虹律動 */
-    /* ---------------------------------- */
-    @keyframes city-pulse{
-      0%{background-position:0% 0%;}
-      100%{background-position:100% 100%;}
-    }
-body{
-  font-family: system-ui, -apple-system, "Arial", "Microsoft JhengHei", sans-serif;
-  margin:0;
-  min-height:100vh;
-  line-height:1.7;
-  color:var(--text-main);
-  padding-top: 0;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+@keyframes city-pulse {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: system-ui, -apple-system, "Microsoft JhengHei", sans-serif;
+  color: var(--text-main);
   background:
-    /* 城市燈光背景 */
-    radial-gradient(1200px circle at 10% -20%, rgba(138, 155, 255, 0.2) 0%, rgba(0,0,0,0) 55%),
-    radial-gradient(900px circle at 85% 0%, rgba(255, 94, 156, 0.15) 0%, rgba(0,0,0,0) 60%),
-    radial-gradient(800px circle at 50% 120%, rgba(255, 209, 102, 0.1) 0%, rgba(0,0,0,0) 65%),
-    linear-gradient(160deg, #0d0b1a 0%, #1a1730 35%, #2a3b8f 70%, #0d0b1a 100%);
+    radial-gradient(900px circle at 10% -20%, rgba(138,155,255,.18) 0%, transparent 55%),
+    radial-gradient(700px circle at 85% 0%,  rgba(255,94,156,.12) 0%, transparent 60%),
+    linear-gradient(160deg, #0d0b1a 0%, #1a1730 40%, #2a3b8f 75%, #0d0b1a 100%);
   background-size: 200% 200%;
   animation: city-pulse 60s linear infinite;
-  position:relative;
-  overflow-x:hidden;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  /* 減少GPU負載 */
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
-    /* ---------------------------------- */
-    /* ✅ 2.5) 此刻即景主題圖 (右下角浮動) - 效能優化 */
-    /* ---------------------------------- */
-    @keyframes city-image-float{
-      0%,100%{transform:translate(0,0) scale(1); opacity:.85;}
-      50%{transform:translate(3px,-5px) scale(1.01); opacity:.9;}
-    }
-    #city-image{
-      position:fixed;
-      bottom: -15px;
-      right: -15px;
-      width: clamp(280px, 28vw, 380px);
-      opacity: .85;
-      z-index: -1;
-      pointer-events: none;
-      filter: drop-shadow(0 0 25px rgba(138, 155, 255, 0.5)) brightness(1.1);
-      animation: city-image-float 25s ease-in-out infinite alternate;
-      transform-origin: 50% 100%;
-      /* 效能優化 - 減少動畫複雜度 */
-      will-change: transform;
-      image-rendering: -webkit-optimize-contrast;
-    }
+/* ─── TOP BAR ──────────────────────────────── */
+#topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  background: linear-gradient(180deg, rgba(26,23,48,.97) 0%, rgba(42,59,143,.88) 100%);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(138,155,255,.3);
+  box-shadow: 0 4px 25px rgba(42,59,143,.4);
+}
 
-    /* 只在非行動裝置顯示圖片 */
-    @media (max-width: 768px) {
-      #city-image {
-        display: none;
-      }
-    }
+#topbar-title { flex: 0 0 auto; white-space: nowrap; }
+#topbar-title h1 {
+  font-size: 1.05em; font-weight: 900; color: #fff;
+  letter-spacing: .3px;
+  text-shadow: 0 0 10px rgba(138,155,255,.5);
+  line-height: 1.2;
+}
+#topbar-title h2 {
+  font-size: 0.72em; font-weight: 500; color: var(--city-light); margin-top: 1px;
+}
 
-    /* ---------------------------------- */
-    /* 3) 雨滴點點背景（優化效能版本） */
-    /* ---------------------------------- */
-    @keyframes rain-drop-fall{
-      0%{transform:translateY(-20px) scale(0.8); opacity:0;}
-      10%{opacity:0.7;}
-      90%{opacity:0.5;}
-      100%{transform:translateY(100vh) scale(1); opacity:0;}
-    }
+#topbar-audio {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
 
-    .rain-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-      /* 減少雨滴數量以優化效能 */
-      overflow: hidden;
-    }
+#music-player {
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 460px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 4px 14px rgba(0,0,0,.4), 0 0 12px rgba(255,209,102,.2);
+}
 
-    .rain-drop {
-      position: absolute;
-      width: 2px;
-      height: 20px;
-      background: linear-gradient(to bottom, rgba(138, 155, 255, 0.8), rgba(58, 74, 175, 0.4));
-      border-radius: 0 0 2px 2px;
-      opacity: 0;
-      /* 使用硬體加速 */
-      transform: translateZ(0);
-      will-change: transform, opacity;
-    }
+/* ─── BODY LAYOUT ──────────────────────────── */
+#layout {
+  position: fixed;
+  top: var(--topbar-h);
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+}
 
-    /* 創建雨滴 - 使用JS動態生成以控制數量 */
+/* ─── SIDEBAR ──────────────────────────────── */
+#sidebar {
+  flex: 0 0 var(--sidebar-w);
+  width: var(--sidebar-w);
+  height: 100%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(13,11,26,.97) 0%, rgba(26,23,48,.93) 100%);
+  border-right: 1px solid rgba(138,155,255,.15);
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-    /* 額外的霓虹光暈層 */
-    body::after{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none;
-      background: 
-        radial-gradient(ellipse at 20% 20%, rgba(138, 155, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255, 94, 156, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(255, 209, 102, 0.03) 0%, transparent 50%);
-      z-index:-2;
-      /* 效能優化 */
-      transform: translateZ(0);
-    }
+#sidebar a {
+  display: block;
+  text-decoration: none;
+  color: var(--text-sub);
+  font-size: 0.82em;
+  font-weight: 600;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all .2s;
+  line-height: 1.3;
+  text-align: center;
+}
+#sidebar a:hover { background: rgba(138,155,255,.1); color: #fff; border-color: rgba(138,155,255,.2); }
+#sidebar a.active {
+  background: rgba(255,209,102,.15);
+  color: var(--streetlight-glow);
+  border-color: rgba(255,209,102,.3);
+  box-shadow: 0 0 12px rgba(255,209,102,.1);
+}
+#sidebar a .nav-icon { display: block; font-size: 1.3em; margin-bottom: 2px; }
 
-    /* ---------------------------------- */
-    /* 4) Header：霓虹城市風格 */
-    /* ---------------------------------- */
-    
-    #info-card-wrapper {
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
+/* ─── MAIN CONTENT ─────────────────────────── */
+#main {
+  flex: 1 1 auto;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 24px 40px 24px;
+  -webkit-overflow-scrolling: touch;
+}
 
-      /* 霓虹城市效果 */
-      background: linear-gradient(
-        180deg,
-        rgba(26, 23, 48, 0.95) 0%,
-        rgba(42, 59, 143, 0.85) 100%
-      );
+#content-container {
+  max-width: 820px;
+  margin: 0 auto;
+  background: rgba(255,255,255,.97);
+  color: var(--text-dark);
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  border: 1px solid rgba(138,155,255,.2);
+}
 
-      /* 減少模糊程度以提升效能 */
-      backdrop-filter: blur(8px) saturate(140%);
-      -webkit-backdrop-filter: blur(8px) saturate(140%);
+.content-section { display: none; }
 
-      /* 霓虹邊框效果 */
-      border-bottom: 1px solid rgba(138, 155, 255, 0.3);
-      box-shadow: 0 4px 25px rgba(42, 59, 143, 0.4);
-    }
+.section-header {
+  margin-top: 0;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--neon-blue);
+  color: #1a1730;
+  font-size: 1.5em;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
 
-    #info-card {
-      width: 92%;
-      max-width: 1040px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-      background: transparent; 
-      border: none;
-      padding: 12px 24px 8px 24px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-    }
+/* ─── LYRICS TABLE ─────────────────────────── */
+.lyric-section {
+  padding: 12px; margin-bottom: 20px;
+  border: 1.5px solid rgba(138,155,255,.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.07);
+  background: #fff; overflow-x: auto;
+}
+.lyrics-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  table-layout: fixed; font-size: .95em; line-height: 1.6; min-width: 480px;
+}
+.lyrics-table colgroup col { width: 50%; }
+.lyrics-table th {
+  text-align: left; padding: 9px 12px;
+  background: linear-gradient(135deg,#f0f4ff,#e6ebff);
+  color: #1a1730; border-bottom: 2px solid rgba(138,155,255,.2);
+  font-weight: 900; font-size: .95em;
+}
+.lyrics-table td {
+  vertical-align: top; padding: 7px 12px;
+  border-bottom: 1px dashed rgba(138,155,255,.15); word-wrap: break-word; font-size: .92em;
+}
+.lyrics-table tr.section-row td {
+  background: rgba(138,155,255,.08); font-weight: 900; color: #1a1730;
+  border-bottom: 1px solid rgba(138,155,255,.2); padding-top: 10px; padding-bottom: 5px;
+}
+.lyrics-table tr:last-child td { border-bottom: none; }
 
-    /* 霓虹流動效果 */
-    #info-card-wrapper::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(138, 155, 255, 0.1) 50%,
-        transparent 100%
-      );
-      transform: skewX(-25deg);
-      pointer-events: none;
-      animation: neon-shine 18s infinite;
-    }
-    
-    @keyframes neon-shine {
-      0% { left: -100%; opacity: 0; }
-      10% { opacity: 0.6; }
-      20% { left: 150%; opacity: 0; }
-      100% { left: 150%; opacity: 0; }
-    }
+/* ─── WORD GRID ────────────────────────────── */
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px,1fr));
+  gap: 14px; perspective: 800px;
+}
+.flip-card { height: 130px; position: relative; }
+.flip-card-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform .5s; transform-style: preserve-3d;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1); border-radius: 10px; will-change: transform;
+}
+.flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; border-radius: 10px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 10px; box-sizing: border-box; border: 1px solid rgba(0,0,0,.08);
+}
+.flip-card-front { background: #fff; }
+.flip-card-back {
+  background: linear-gradient(135deg, var(--neon-blue), var(--urban-purple));
+  color: white; transform: rotateY(180deg); font-size: .82em; text-align: center;
+}
+.eng-word-front { font-size: 1.7em; font-weight: 900; color: var(--neon-blue); margin-top: 2px; }
+.word-category { font-size: .72em; color: #888; font-weight: 600; }
+.chinese-word-front { font-size: .82em; color: #555; margin-top: 2px; }
+.pos-back { font-weight: 700; margin-bottom: 4px; }
+.chinese-word-back { font-size: .85em; line-height: 1.4; }
 
-    /* Header 內霓虹光點 - 減少數量 */
-    @keyframes neon-pulse{
-      0%,100%{transform:translate(0,0) scale(1); opacity:.4;}
-      50%{transform:translate(2px,-2px) scale(1.1); opacity:.8;}
-    }
-    .neon-lights{position:absolute; inset:0; pointer-events:none;}
-    .neon-lights span{
-      position:absolute; width:5px; height:5px; border-radius:50%;
-      background: radial-gradient(circle, #fff 0%, var(--neon-pink) 65%, transparent 72%);
-      box-shadow:0 0 10px 3px rgba(255, 94, 156, 0.7);
-      animation: neon-pulse 3s ease-in-out infinite;
-      will-change: transform, opacity;
-    }
-    .neon-lights span:nth-child(1){top:15%; left:8%; animation-delay:.1s;}
-    .neon-lights span:nth-child(2){top:40%; left:25%; animation-delay:.9s;}
-    .neon-lights span:nth-child(3){top:20%; left:45%; animation-delay:.5s;}
-    .neon-lights span:nth-child(4){top:35%; left:65%; animation-delay:1.3s;}
-    .neon-lights span:nth-child(5){top:25%; left:85%; animation-delay:.7s;}
+/* ─── GRAMMAR ──────────────────────────────── */
+.grammar-card {
+  background: #fff; padding: 14px; border-radius: 10px; margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.09); border: 1px solid rgba(0,0,0,.07); border-left: 5px solid;
+  transition: transform .25s; will-change: transform;
+}
+.grammar-card:hover { transform: translateY(-2px); }
+.grammar-card h3 { margin-top: 0; padding-bottom: 4px; border-bottom: 1px dashed rgba(0,0,0,.15); font-size: 1.2em; }
+.grammar-card.present-type    { border-left-color: #4d8fe6; }
+.grammar-card.past-type       { border-left-color: #56b87a; }
+.grammar-card.future-type     { border-left-color: #e3c25c; }
+.grammar-card.progressive-type{ border-left-color: #9a63d0; }
+.grammar-card.mixed-type      { border-left-color: #ff5e9c; }
 
-    /* Title / Author - 霓虹文字效果 */
-    #info-card h1{
-      text-align:center;
-      font-size:1.8em;
-      margin:0 0 4px 0;
-      color: #ffffff;
-      letter-spacing:.4px;
-      font-weight:900;
-      position:relative; z-index:2;
-      text-shadow: 0 3px 15px rgba(0,0,0,0.9), 0 0 10px rgba(138, 155, 255, 0.6);
-    }
-    #info-card h2{
-      text-align:center;
-      font-size:0.95em;
-      margin:0 0 6px 0;
-      color: var(--city-light);
-      font-weight:600;
-      position:relative; z-index:2;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 0 5px rgba(138, 155, 255, 0.5);
-    }
+/* ─── RHETORIC ─────────────────────────────── */
+.rhetoric-device {
+  background: #fff; padding: 14px; margin-bottom: 16px; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.07); border-left: 5px solid var(--streetlight-glow);
+  box-shadow: 0 4px 12px rgba(0,0,0,.09);
+  transition: box-shadow .3s, transform .3s; will-change: transform;
+}
+.rhetoric-device:hover { box-shadow: 0 6px 16px rgba(0,0,0,.13); transform: translateY(-2px); }
 
-    #music-box-container{
-      display:flex; flex-direction:column; align-items:center;
-      padding:4px 0 8px 0; /* 增加底部內距，讓播放器更突出 */
-      position:relative; z-index:2;
-    }
-    #music-box-container p{
-      margin:2px 0 8px 0; /* 增加間距 */
-      color:var(--streetlight-glow); /* 使用街燈金色更顯眼 */
-      font-weight:700;
-      letter-spacing:.2px;
-      font-size:0.95em;
-      text-shadow:0 1px 8px rgba(0,0,0,.85), 0 0 5px rgba(255, 209, 102, 0.4);
-    }
+/* ─── CHALLENGE ────────────────────────────── */
+#challenge-section-content textarea {
+  width: 98%; min-height: 44px; padding: 6px; margin-bottom: 10px; font-size: .93em;
+}
+.fill-in-the-blank { line-height: 2.4; }
+.fill-in-the-blank input[type="text"] {
+  width: 110px; border-bottom: 2px solid var(--neon-blue);
+  border-top: none; border-left: none; border-right: none; outline: none; font-size: .95em;
+}
 
-    #music-player{
-      width:min(480px,90%);
-      border-radius:999px;
-      box-shadow:0 8px 18px rgba(0,0,0,.40), 0 0 15px rgba(255, 209, 102, 0.4); /* 添加霓金光暈 */
-      background:rgba(255,255,255,.98); /* 稍微更白一點 */
-      margin-bottom: 4px;
-    }
+/* ─── MOBILE ───────────────────────────────── */
+#mobile-nav { display: none; }
 
-    #info-card ul{
-      list-style:none; padding-left:0; margin:8px 0 0;
-      position:relative; z-index:2;
-      font-size: 0.85em;
-    }
-    #info-card li{
-      font-size:0.85em;
-      margin:4px 0;
-      padding-left:18px;
-      position:relative;
-      color: #e0e6ff;
-      text-shadow:0 2px 6px rgba(0,0,0,.95);
-      font-weight:500;
-    }
-    #info-card li::before{
-      content:"💧";
-      position:absolute; left:0; top:-1px;
-      color:var(--city-light);
-      font-weight:900;
-      font-size: 0.9em;
-      text-shadow:0 0 8px rgba(138, 155, 255, 0.95);
-    }
+@media (max-width: 640px) {
+  :root { --sidebar-w: 0px; --topbar-h: 100px; }
+  #topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  #topbar-title h1 { font-size: .9em; }
+  #topbar-title h2 { display: none; }
+  #topbar-audio { flex-wrap: wrap; gap: 6px; }
+  #music-player { max-width: 100%; }
+  #sidebar { display: none; }
+  #mobile-nav {
+    display: flex !important;
+    position: fixed;
+    top: var(--topbar-h); left: 0; right: 0;
+    z-index: 190;
+    overflow-x: auto; white-space: nowrap;
+    background: rgba(13,11,26,.97);
+    border-bottom: 1px solid rgba(138,155,255,.15);
+    padding: 6px 8px; gap: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  #mobile-nav a {
+    display: inline-block; text-decoration: none;
+    color: var(--text-sub); font-size: .78em; font-weight: 700;
+    padding: 5px 10px; border-radius: 999px;
+    border: 1px solid rgba(138,155,255,.2); white-space: nowrap;
+  }
+  #mobile-nav a.active { background: var(--streetlight-glow); color: var(--midnight-city); border-color: var(--streetlight-glow); }
+  #layout { top: calc(var(--topbar-h) + 38px); }
+  #main { padding: 12px; }
+  #content-container { padding: 14px; }
+}
 
-    /* ---------------------------------- */
-    /* 5) 導航列 - 霓虹城市主題 */
-    /* ---------------------------------- */
-   #page-nav{
-      width:100%;
-      background: rgba(13, 11, 26, 0.4); 
-      padding:10px 0;
-      text-align:center;
-      border-top: 1px solid rgba(138, 155, 255, 0.2);
-    }
-
-    #page-nav a{
-      text-decoration:none;
-      color:#f7fbf9;
-      padding:6px 12px;
-      margin:0 3px;
-      border-radius:999px;
-      transition:all .25s ease;
-      font-weight:700;
-      font-size:0.9em;
-      display:inline-block;
-      border:1px solid rgba(138, 155, 255, 0.2);
-      text-shadow:0 1px 4px rgba(0,0,0,.7);
-      background: rgba(138, 155, 255, 0.1);
-      will-change: transform, background-color;
-    }
-    #page-nav a:hover,
-    #page-nav a.active{
-      background: rgba(255, 209, 102, 0.9);
-      color: var(--midnight-city);
-      box-shadow:0 0 12px rgba(255, 209, 102, 0.6);
-      border-color: rgba(255,255,255,.85);
-      transform:translateY(-1px);
-      text-shadow:none;
-    }
-
-    /* ---------------------------------- */
-    /* 6) 內容容器：白底好讀 */
-    /* ---------------------------------- */
-    #content-container{
-      width:90%;
-      max-width:1000px;
-      margin:12px auto 50px auto;
-      background: rgba(255,255,255,.97);
-      color: var(--text-dark);
-      padding:24px;
-      border-radius:16px;
-      box-shadow:0 15px 40px rgba(0,0,0,.22);
-      border:1px solid rgba(138, 155, 255, 0.3);
-      position: relative;
-      z-index: 1;
-    }
-    .content-section{display:none;}
-    .section-header{
-      margin-top:0;
-      padding-bottom:8px;
-      border-bottom:3px solid var(--neon-blue);
-      color: #1a1730;
-      font-size:1.7em;
-      font-weight:800;
-      margin-bottom:22px;
-      letter-spacing:.2px;
-    }
-
-    /* ---------------------------------- */
-    /* 7) 歌詞「對齊雙欄表格」 */
-    /* ---------------------------------- */
-    .lyric-section{
-      padding:14px;
-      margin-bottom:25px;
-      border:1.5px solid rgba(138, 155, 255, 0.2);
-      border-radius:12px;
-      box-shadow:0 6px 15px rgba(0,0,0,.08);
-      background:#ffffff;
-      overflow-x: auto;
-    }
-
-    .lyrics-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      table-layout:fixed;
-      font-size:1em;
-      line-height:1.6;
-      min-width: 500px;
-    }
-    .lyrics-table colgroup col:first-child{width:50%;}
-    .lyrics-table colgroup col:last-child{width:50%;}
-
-    .lyrics-table th{
-      text-align:left;
-      padding:10px 12px;
-      background: linear-gradient(135deg, #f0f4ff, #e6ebff);
-      color:#1a1730;
-      border-bottom:2px solid rgba(138, 155, 255, 0.2);
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size: 1em;
-    }
-    .lyrics-table td{
-      vertical-align:top;
-      padding:8px 12px;
-      border-bottom:1px dashed rgba(138, 155, 255, 0.15);
-      word-wrap:break-word;
-      font-size: 0.95em;
-    }
-
-    .lyrics-table tr.section-row td{
-      background: rgba(138, 155, 255, 0.08);
-      font-weight:900;
-      color:#1a1730;
-      border-bottom:1px solid rgba(138, 155, 255, 0.2);
-      padding-top:12px;
-      padding-bottom:6px;
-    }
-
-    /* 最後一行不畫虛線 */
-    .lyrics-table tr:last-child td{border-bottom:none;}
-
-    /* ---------------------------------- */
-    /* 8) 其他卡片保留霓虹城市主題 */
-    /* ---------------------------------- */
-    .word-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
-      gap:16px;
-      perspective:800px;
-    }
-    .flip-card{height:140px; position:relative;}
-    .flip-card-inner{
-      position:relative; width:100%; height:100%;
-      transition:transform .5s;
-      transform-style:preserve-3d;
-      box-shadow:0 5px 15px rgba(0,0,0,.12);
-      border-radius:10px;
-      will-change: transform;
-      transform: translateZ(0); /* 硬體加速 */
-    }
-    .flip-card:hover .flip-card-inner{transform:rotateY(180deg);}
-    .flip-card-front,.flip-card-back{
-      position:absolute; width:100%; height:100%;
-      backface-visibility:hidden;
-      border-radius:10px;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      padding:10px; box-sizing:border-box;
-      border:1px solid rgba(0,0,0,.08);
-      transform: translateZ(0); /* 硬體加速 */
-    }
-    .flip-card-front{background:#fff;}
-    .flip-card-back{
-      background: linear-gradient(135deg, var(--neon-blue), var(--urban-purple));
-      color:white;
-      transform:rotateY(180deg);
-      font-size:.85em;
-      text-align:center;
-    }
-    .eng-word-front{
-      font-size:1.8em; font-weight:900; color:var(--neon-blue); margin-top:3px;
-    }
-
-    .rhetoric-device{
-      background:#fff;
-      padding:16px;
-      margin-bottom:18px;
-      border-radius:10px;
-      border:1px solid rgba(0,0,0,.07);
-      border-left:6px solid var(--streetlight-glow);
-      box-shadow:0 4px 12px rgba(0,0,0,.10);
-      transition:box-shadow .3s, transform .3s;
-      will-change: transform, box-shadow;
-      transform: translateZ(0); /* 硬體加速 */
-    }
-    .rhetoric-device:hover{
-      box-shadow:0 6px 15px rgba(0,0,0,.14);
-      transform:translateY(-2px);
-    }
-
-    .grammar-card{
-      background:#fff;
-      padding:16px;
-      border-radius:10px;
-      margin-bottom:18px;
-      box-shadow:0 5px 15px rgba(0,0,0,.10);
-      border:1px solid rgba(0,0,0,.07);
-      border-left:6px solid;
-      transition:transform .25s;
-      will-change: transform;
-      transform: translateZ(0); /* 硬體加速 */
-    }
-    .grammar-card:hover{transform:translateY(-2px);}
-    .grammar-card h3{
-      margin-top:0; padding-bottom:4px;
-      border-bottom:1px dashed rgba(0,0,0,.18);
-      font-size:1.4em;
-    }
-    .grammar-card.present-type{border-left-color:#4d8fe6;}
-    .grammar-card.past-type{border-left-color:#56b87a;}
-    .grammar-card.future-type{border-left-color:#e3c25c;}
-    .grammar-card.progressive-type{border-left-color:#9a63d0;}
-    .grammar-card.mixed-type{border-left-color:#ff5e9c;}
-
-    #challenge-section-content textarea{
-      width:98%; min-height:48px; padding:6px; margin-bottom:12px;
-      font-size: 0.95em;
-    }
-
-    /* 小尺寸時表格改直排避免擠 */
-    @media (max-width: 720px){
-      .lyrics-table, .lyrics-table tbody, .lyrics-table tr, .lyrics-table td, .lyrics-table th{
-        display:block; width:100%;
-      }
-      .lyrics-table th{
-        border-radius:8px 8px 0 0;
-      }
-      .lyrics-table td{
-        border-bottom:1px dashed rgba(0,0,0,.08);
-      }
-      .lyrics-table tr.section-row td{
-        border-radius:0;
-      }
-      .lyrics-table td:first-child{
-        font-weight:800;
-        color:#1a1730;
-        padding-bottom:4px;
-      }
-      .lyrics-table td:last-child{
-        padding-top:0;
-      }
-      #city-image {
-          display: none;
-      }
-      
-      /* 手機版 header 進一步簡化 */
-      #info-card-wrapper {
-        position: relative;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        background: rgba(26, 23, 48, 0.95);
-      }
-      
-      #info-card {
-        padding: 10px 16px 6px 16px;
-      }
-      
-      #info-card h1{
-        font-size: 1.5em;
-      }
-      
-      #info-card h2{
-        font-size: 0.85em;
-      }
-      
-      #music-player {
-        width: 95%;
-      }
-      
-      .neon-lights{
-        display:none;
-      }
-      
-      #page-nav {
-        padding: 8px 0;
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-      
-      #page-nav a {
-        padding: 5px 10px;
-        font-size: 0.85em;
-        margin: 0 2px;
-      }
-      
-      /* 手機版減少雨滴動畫 */
-      .rain-drop {
-        animation-duration: 1.5s !important;
-      }
-    }
-
-    /* 效能控制：為低效能裝置減少動畫 */
-    @media (prefers-reduced-motion: reduce) {
-      *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      
-      .rain-drop {
-        animation: none !important;
-        opacity: 0 !important;
-      }
-      
-      .neon-lights span {
-        animation: none !important;
-      }
-      
-      #city-image {
-        animation: none !important;
-      }
-      
-      #info-card-wrapper::after {
-        animation: none !important;
-      }
-      
-      body {
-        animation: none !important;
-      }
-    }
-
-    /* 效能優化：啟用硬體加速的元素 */
-    .performance-optimized {
-      transform: translateZ(0);
-      backface-visibility: hidden;
-      perspective: 1000;
-    }
-
-    /* 添加效能控制開關的樣式 */
-    #performance-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(26, 23, 48, 0.8);
-      color: var(--streetlight-glow);
-      border: none;
-      cursor: pointer;
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      border: 1px solid rgba(138, 155, 255, 0.2);
-    }
-
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
   </style>
 </head>
-
 <body>
-  <img id="city-image" src="https://ducj-creator.github.io/Shirley-AI-Music-Studio/assets/images/right%20now.png" alt="此刻即景主題插畫" aria-hidden="true" loading="lazy">
-  
-  <!-- 雨滴容器 -->
-  <div class="rain-container" id="rain-container"></div>
 
-  <div id="info-card-wrapper">
-    <div id="info-card">
-      <div class="neon-lights" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-        <span></span>
+<!-- TOP BAR -->
+<header id="topbar">
+  <div id="topbar-title">
+    <h1>Right Now | 此刻即景</h1>
+    <h2>Shirley &amp; AI</h2>
+  </div>
+  <div id="topbar-audio">
+    <audio controls id="music-player" preload="metadata">
+      <source src="https://ducj-creator.github.io/releases/right%20now.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">🏡 Home</a>
+  <a href="#" data-target="lyrics-section"    class="active" onclick="showSection('lyrics-section');return false;">📜 Lyrics</a>
+  <a href="#" data-target="words-section"                    onclick="showSection('words-section');return false;">🔠 Vocab</a>
+  <a href="#" data-target="grammar-section"                  onclick="showSection('grammar-section');return false;">📐 Grammar</a>
+  <a href="#" data-target="rhetoric-section"                 onclick="showSection('rhetoric-section');return false;">💡 Rhetoric</a>
+  <a href="#" data-target="challenge-section"                onclick="showSection('challenge-section');return false;">🎯 Challenge</a>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div id="layout">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">
+      <span class="nav-icon">🏡</span>Home | 主頁
+    </a>
+    <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section');return false;">
+      <span class="nav-icon">📜</span>Lyrics<br>雙語歌詞
+    </a>
+    <a href="#" data-target="words-section" onclick="showSection('words-section');return false;">
+      <span class="nav-icon">🔠</span>Vocabulary<br>重點單字
+    </a>
+    <a href="#" data-target="grammar-section" onclick="showSection('grammar-section');return false;">
+      <span class="nav-icon">📐</span>Grammar<br>時態對比
+    </a>
+    <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section');return false;">
+      <span class="nav-icon">💡</span>Rhetoric<br>修辭手法
+    </a>
+    <a href="#" data-target="challenge-section" onclick="showSection('challenge-section');return false;">
+      <span class="nav-icon">🎯</span>Challenge<br>練習挑戰
+    </a>
+  </nav>
+
+  <!-- SCROLLABLE CONTENT -->
+  <main id="main">
+    <div id="content-container">
+
+      <!-- LYRICS -->
+      <div id="lyrics-section" class="content-section" style="display:block;">
+        <h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
+        <div class="lyric-section">
+          <table class="lyrics-table">
+            <colgroup><col><col></colgroup>
+            <thead><tr><th>English Version</th><th>中文版本</th></tr></thead>
+            <tbody>
+              <tr class="section-row"><td>Intro</td><td>前奏</td></tr>
+              <tr><td>Listen… to the moment… unfolding…</td><td>且聽…此刻…綻放…</td></tr>
+              <tr class="section-row"><td>Verse 1</td><td>主歌 1</td></tr>
+              <tr><td>The city lights are blinking, painting stories in the dark.</td><td>霓虹流轉 繪夜未央</td></tr>
+              <tr><td>I'm standing at the crossroads, feeling sparks inside my heart.</td><td>歧路佇立 心火躍芒</td></tr>
+              <tr><td>Raindrops are falling softly, tracing lines upon the glass.</td><td>簌簌雨落 畫影映窗</td></tr>
+              <tr><td>Time is whispering secrets, as the present moments pass.</td><td>時光低語 此刻流淌</td></tr>
+              <tr><td>I am becoming someone, in this breath, in this hour.</td><td>一息一瞬 蜕變生光</td></tr>
+              <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
+              <tr><td>Can you feel the world is turning, spinning 'round?</td><td>可感寰宇 旋轉不休</td></tr>
+              <tr><td>Every second, life is learning, new sights and new sounds.</td><td>每秒新生 萬象奔流</td></tr>
+              <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
+              <tr><td>I'M LIVING THIS STORY!</td><td>此刻正書寫！</td></tr>
+              <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
+              <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
+              <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻 即歸途！</td></tr>
+              <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
+              <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
+              <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
+              <tr><td>This change you're witnessing!</td><td>且見蛻變生！</td></tr>
+              <tr class="section-row"><td>Verse 2</td><td>主歌 2</td></tr>
+              <tr><td>The winds were howling loudly, when I stepped out in the night.</td><td>風嘯長夜 我曾獨行</td></tr>
+              <tr><td>I was searching for an answer, by the fading streetlight's glow.</td><td>街燈漸黯 尋光而往</td></tr>
+              <tr><td>You were waiting at the station, while the trains were coming, going.</td><td>月台靜佇 車影流長</td></tr>
+              <tr><td>We were holding onto moments, not yet knowing what we'd know.</td><td>捧住剎那 未解滄桑</td></tr>
+              <tr><td>Everything was changing, as we stood there in the rain.</td><td>雨中並立 萬物生響</td></tr>
+              <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
+              <tr><td>Can you feel the world was turning, spinning 'round?</td><td>可感寰宇 旋轉不休</td></tr>
+              <tr><td>Every second, life was learning, new sights and new sounds.</td><td>每秒新生 萬象奔流</td></tr>
+              <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
+              <tr><td>I'M LIVING THIS STORY!</td><td>此時正書寫！</td></tr>
+              <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
+              <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
+              <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻 即歸途！</td></tr>
+              <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
+              <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
+              <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
+              <tr><td>This change you're witnessing!</td><td>且見蛻變生！</td></tr>
+              <tr class="section-row"><td>Bridge</td><td>橋段</td></tr>
+              <tr><td>This time next year, I'll be walking different streets.</td><td>明年此際 行過異鄉</td></tr>
+              <tr><td>I'll be speaking a new language, with everyone I meet.</td><td>遇人皆語 心橋自暢</td></tr>
+              <tr><td>The sun will be rising on the chapters yet unwritten.</td><td>曉日初昇 照未竟章</td></tr>
+              <tr><td>I will be becoming more, with every step I'm taking.</td><td>步步生蓮 蜕變無疆</td></tr>
+              <tr><td>The world will be watching, as my story keeps unfolding.</td><td>天地為證 故事綿長</td></tr>
+              <tr class="section-row"><td>Final Chorus</td><td>終章副歌</td></tr>
+              <tr><td>I'M LIVING THIS STORY!</td><td>此時正書寫！</td></tr>
+              <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
+              <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
+              <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻即歸途！</td></tr>
+              <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
+              <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
+              <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
+              <tr><td>THIS CHANGE YOU'RE WITNESSING, RIGHT NOW!</td><td>且見蛻變生 此刻綻放！</td></tr>
+              <tr class="section-row"><td>Outro</td><td>尾聲</td></tr>
+              <tr><td>Right now…</td><td>此時…</td></tr>
+              <tr><td>The lights are blinking…</td><td>流光綻放…</td></tr>
+              <tr><td>I am becoming…</td><td>蜕變生光…</td></tr>
+              <tr><td>Right now…</td><td>此刻…</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <h1>Song: Right Now | 此刻即景</h1>
-      <h2>Author：Shirley & AI Shirley老師&她的AI工具人</h2>
-
-      <div id="music-box-container">
-        <p>🎵 Right Now - Audio Player | 此刻即景 - 音頻播放器</p>
-        
-        <audio controls id="music-player" preload="metadata">
-          <source src="https://ducj-creator.github.io/releases/right%20now.mp3" type="audio/mpeg" id="music-source">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <ul>
-        <li>Learning Foci：</li>
-        <li>1. Progressive Tenses (進行時態)</li>
-        <li>2. Scene Description (場景描繪)</li>
-        <li>3：Rhetorical Devices in Urban Context (都市情境修辭)</li>
-      </ul>
-    </div>
-
-    <nav id="page-nav">
-      <a href="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" class="back-link">🏡 Home | 主頁</a>
-      <a href="#" data-target="lyrics-section" class="active" onclick="showSection('lyrics-section'); return false;">📜 Lyrics | 雙語歌詞</a>
-      <a href="#" data-target="words-section" onclick="showSection('words-section'); return false;">🔠 Vocabulary | 重點單字</a>
-      <a href="#" data-target="grammar-section" onclick="showSection('grammar-section'); return false;">📐 Grammar | 時態對比</a>
-      <a href="#" data-target="rhetoric-section" onclick="showSection('rhetoric-section'); return false;">💡 Rhetoric | 修辭手法</a>
-      <a href="#" data-target="challenge-section" onclick="showSection('challenge-section'); return false;">🎯 Challenge | 練習挑戰</a>
-    </nav>
-  </div>
-
-  <div id="content-container">
-
-    <div id="lyrics-section" class="content-section" style="display:block;">
-      <h2 class="section-header">📜 Dual Language Lyrics | 雙語歌詞對照</h2>
-
-      <div class="lyric-section">
-        <table class="lyrics-table">
-          <colgroup><col><col></colgroup>
-          <thead>
-            <tr>
-              <th>English Version</th>
-              <th>中文版本</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <tr class="section-row"><td>Intro</td><td>前奏</td></tr>
-            <tr><td>Listen… to the moment… unfolding…</td><td>且聽…此刻…綻放…</td></tr>
-
-            <tr class="section-row"><td>Verse 1</td><td>主歌 1</td></tr>
-            <tr><td>The city lights are blinking, painting stories in the dark.</td><td>霓虹流轉 繪夜未央</td></tr>
-            <tr><td>I'm standing at the crossroads, feeling sparks inside my heart.</td><td>歧路佇立 心火躍芒</td></tr>
-            <tr><td>Raindrops are falling softly, tracing lines upon the glass.</td><td>簌簌雨落 畫影映窗</td></tr>
-            <tr><td>Time is whispering secrets, as the present moments pass.</td><td>時光低語 此刻流淌</td></tr>
-            <tr><td>I am becoming someone, in this breath, in this hour.</td><td>一息一瞬 蜕變生光</td></tr>
-
-            <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
-            <tr><td>Can you feel the world is turning, spinning 'round?</td><td>可感寰宇 旋轉不休</td></tr>
-            <tr><td>Every second, life is learning, new sights and new sounds.</td><td>每秒新生 萬象奔流</td></tr>
-
-            <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
-            <tr><td>I'M LIVING THIS STORY!</td><td>此刻正書寫！</td></tr>
-            <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
-            <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
-            <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻 即歸途！</td></tr>
-            <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
-            <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
-            <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
-            <tr><td>This change you're witnessing!</td><td>且見蛻變生！</td></tr>
-
-            <tr class="section-row"><td>Verse 2</td><td>主歌 2</td></tr>
-            <tr><td>The winds were howling loudly, when I stepped out in the night.</td><td>風嘯長夜 我曾獨行</td></tr>
-            <tr><td>I was searching for an answer, by the fading streetlight's glow.</td><td>街燈漸黯 尋光而往</td></tr>
-            <tr><td>You were waiting at the station, while the trains were coming, going.</td><td>月台靜佇 車影流長</td></tr>
-            <tr><td>We were holding onto moments, not yet knowing what we'd know.</td><td>捧住剎那 未解滄桑</td></tr>
-            <tr><td>Everything was changing, as we stood there in the rain.</td><td>雨中並立 萬物生響</td></tr>
-
-            <tr class="section-row"><td>Pre-Chorus</td><td>預副歌</td></tr>
-            <tr><td>Can you feel the world was turning, spinning 'round?</td><td>可感寰宇 旋轉不休</td></tr>
-            <tr><td>Every second, life was learning, new sights and new sounds.</td><td>每秒新生 萬象奔流</td></tr>
-
-            <tr class="section-row"><td>Chorus</td><td>副歌</td></tr>
-            <tr><td>I'M LIVING THIS STORY!</td><td>此時正書寫！</td></tr>
-            <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
-            <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
-            <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻 即歸途！</td></tr>
-            <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
-            <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
-            <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
-            <tr><td>This change you're witnessing!</td><td>且見蛻變生！</td></tr>
-
-            <tr class="section-row"><td>Bridge</td><td>橋段</td></tr>
-            <tr><td>This time next year, I'll be walking different streets.</td><td>明年此際 行過異鄉</td></tr>
-            <tr><td>I'll be speaking a new language, with everyone I meet.</td><td>遇人皆語 心橋自暢</td></tr>
-            <tr><td>The sun will be rising on the chapters yet unwritten.</td><td>曉日初昇 照未竟章</td></tr>
-            <tr><td>I will be becoming more, with every step I'm taking.</td><td>步步生蓮 蜕變無疆</td></tr>
-            <tr><td>The world will be watching, as my story keeps unfolding.</td><td>天地為證 故事綿長</td></tr>
-
-            <tr class="section-row"><td>Final Chorus</td><td>終章副歌</td></tr>
-            <tr><td>I'M LIVING THIS STORY!</td><td>此時正書寫！</td></tr>
-            <tr><td>I WAS DREAMING YESTERDAY!</td><td>昨日曾織夢！</td></tr>
-            <tr><td>I WILL BE SOARING TOMORROW!</td><td>明朝將振翼！</td></tr>
-            <tr><td>RIGHT NOW, I'M FINDING MY WAY!</td><td>此刻即歸途！</td></tr>
-            <tr><td>The past was shaping me!</td><td>往昔塑我形！</td></tr>
-            <tr><td>The present is making me!</td><td>當下鑄我魂！</td></tr>
-            <tr><td>The future will be calling me!</td><td>未來喚我名！</td></tr>
-            <tr><td>THIS CHANGE YOU'RE WITNESSING, RIGHT NOW!</td><td>且見蛻變生 此刻綻放！</td></tr>
-
-            <tr class="section-row"><td>Outro</td><td>尾聲</td></tr>
-            <tr><td>Right now…</td><td>此時…</td></tr>
-            <tr><td>The lights are blinking…</td><td>流光綻放…</td></tr>
-            <tr><td>I am becoming…</td><td>蜕變生光…</td></tr>
-            <tr><td>Right now…</td><td>此刻…</td></tr>
-
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  <div id="words-section" class="content-section">
-  <h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡 (Hover to Flip!)</h2>
-  <div class="word-grid">
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">城市意象 | City</div>
-          <div class="eng-word-front">blinking</div>
-          <div class="chinese-word-front">閃爍 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of blink</div>
-          <div class="chinese-word-back">The city lights are blinking. (霓虹流轉)</div>
-          <div class="example-back">Hover to flip back</div>
+      <!-- VOCABULARY -->
+      <div id="words-section" class="content-section">
+        <h2 class="section-header">🔠 Key Vocabulary | 重點單字記憶卡 (Hover to Flip!)</h2>
+        <div class="word-grid">
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">城市意象 | City</div><div class="eng-word-front">blinking</div><div class="chinese-word-front">閃爍 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">The city lights are blinking.</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">自然現象 | Nature</div><div class="eng-word-front">raindrops</div><div class="chinese-word-front">雨滴 (n.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">n. Drops of rain</div><div class="chinese-word-back">Raindrops are falling softly.</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">情緒動作 | Emotion</div><div class="eng-word-front">witness</div><div class="chinese-word-front">見證 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">You're witnessing this change!</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">抽象概念 | Abstract</div><div class="eng-word-front">unfold</div><div class="chinese-word-front">展開 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">Listen… to the moment… unfolding…</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">時間概念 | Time</div><div class="eng-word-front">soar</div><div class="chinese-word-front">翱翔 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Future continuous</div><div class="chinese-word-back">I will be soaring tomorrow!</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">狀態描述 | State</div><div class="eng-word-front">become</div><div class="chinese-word-front">成為 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">I am becoming someone.</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">動作描述 | Action</div><div class="eng-word-front">howl</div><div class="chinese-word-front">呼嘯 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Past continuous</div><div class="chinese-word-back">The winds were howling loudly.</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">抽象概念 | Abstract</div><div class="eng-word-front">shape</div><div class="chinese-word-front">塑造 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Past continuous</div><div class="chinese-word-back">The past was shaping me!</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">狀態描述 | State</div><div class="eng-word-front">fade</div><div class="chinese-word-front">漸暗 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">The streetlight's glow is fading.</div></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-card-inner">
+            <div class="flip-card-front"><div class="word-category">動作描述 | Action</div><div class="eng-word-front">trace</div><div class="chinese-word-front">描繪 (v.)</div></div>
+            <div class="flip-card-back"><div class="pos-back">v. Present participle</div><div class="chinese-word-back">Raindrops tracing lines upon the glass.</div></div>
+          </div></div>
         </div>
       </div>
-    </div>
 
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">自然現象 | Nature</div>
-          <div class="eng-word-front">raindrops</div>
-          <div class="chinese-word-front">雨滴 (n.)</div>
+      <!-- GRAMMAR -->
+      <div id="grammar-section" class="content-section">
+        <h2 class="section-header">📐 Tense Contrast | 時態對比：現在、過去、未來</h2>
+        <div class="grammar-card present-type">
+          <h3><span style="color:#4d8fe6;">🟦</span> 1. 現在進行式 (Present Progressive)</h3>
+          <p><strong>結構：</strong> S + am/is/are + V-ing + …</p>
+          <ul>
+            <li>The city lights <strong>are blinking</strong>.</li>
+            <li>Raindrops <strong>are falling</strong> softly.</li>
+            <li>I <strong>am becoming</strong> someone.</li>
+            <li>I <strong>am living</strong> this story!</li>
+          </ul>
         </div>
-        <div class="flip-card-back">
-          <div class="pos-back">n. Drops of rain</div>
-          <div class="chinese-word-back">Raindrops are falling softly. (簌簌雨落)</div>
-          <div class="example-back">Hover to flip back</div>
+        <div class="grammar-card past-type">
+          <h3><span style="color:#56b87a;">🟢</span> 2. 過去進行式 (Past Progressive)</h3>
+          <p><strong>結構：</strong> S + was/were + V-ing + …</p>
+          <ul>
+            <li>The winds <strong>were howling</strong> loudly.</li>
+            <li>I <strong>was searching</strong> for an answer.</li>
+            <li>You <strong>were waiting</strong> at the station.</li>
+            <li>Trains <strong>were coming</strong>, going.</li>
+          </ul>
         </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">情緒動作 | Emotion</div>
-          <div class="eng-word-front">witness</div>
-          <div class="chinese-word-front">見證 (v.)</div>
+        <div class="grammar-card future-type">
+          <h3><span style="color:#ffca28;">🟡</span> 3. 未來進行式 (Future Progressive)</h3>
+          <p><strong>結構：</strong> S + will be + V-ing + …</p>
+          <ul>
+            <li>I <strong>will be walking</strong> different streets.</li>
+            <li>I <strong>will be speaking</strong> a new language.</li>
+            <li>The sun <strong>will be rising</strong> on the chapters.</li>
+            <li>I <strong>will be becoming</strong> more.</li>
+          </ul>
         </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of witness</div>
-          <div class="chinese-word-back">You're witnessing this change! (且見蛻變生)</div>
-          <div class="example-back">Hover to flip back</div>
+        <div class="grammar-card progressive-type">
+          <h3><span style="color:#ab47bc;">🟣</span> 4. 混合時態對比</h3>
+          <p><strong>結構：</strong>歌詞中的時態對比</p>
+          <ul>
+            <li><strong>現在進行</strong>：I'm living / I'm finding / You're witnessing</li>
+            <li><strong>過去進行</strong>：I was dreaming / The past was shaping</li>
+            <li><strong>未來進行</strong>：I will be soaring / The future will be calling</li>
+            <li><strong>時間對比</strong>：yesterday / right now / tomorrow</li>
+          </ul>
         </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">抽象概念 | Abstract</div>
-          <div class="eng-word-front">unfold</div>
-          <div class="chinese-word-front">展開 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of unfold</div>
-          <div class="chinese-word-back">Listen… to the moment… unfolding… (此刻綻放)</div>
-          <div class="example-back">Hover to flip back</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">時間概念 | Time</div>
-          <div class="eng-word-front">soar</div>
-          <div class="chinese-word-front">翱翔 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Future continuous (will be soaring)</div>
-          <div class="chinese-word-back">I will be soaring tomorrow! (明朝將振翼)</div>
-          <div class="example-back">Hover to flip back</div>
+        <div class="grammar-card mixed-type">
+          <h3><span style="color:#ff5e9c;">🔴</span> 5. 歌曲核心時態結構</h3>
+          <p><strong>概念：</strong>透過歌詞理解時態轉換</p>
+          <ul>
+            <li><strong>過去</strong>：I was dreaming yesterday / The past was shaping me</li>
+            <li><strong>現在</strong>：I'm living this story / The present is making me</li>
+            <li><strong>未來</strong>：I will be soaring tomorrow / The future will be calling me</li>
+            <li><strong>核心句</strong>：Right now, I'm finding my way!</li>
+          </ul>
         </div>
       </div>
-    </div>
 
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">狀態描述 | State</div>
-          <div class="eng-word-front">become</div>
-          <div class="chinese-word-front">成為 (v.)</div>
+      <!-- RHETORIC -->
+      <div id="rhetoric-section" class="content-section">
+        <h2 class="section-header">💡 Rhetorical Devices | 修辭手法分析</h2>
+        <div class="rhetoric-device">
+          <h3>1. Personification | 擬人化</h3>
+          <p>賦予非人事物以人類的動作、情感或特質。</p>
+          <ul>
+            <li>Time <strong>is whispering</strong> secrets.</li>
+            <li>The future <strong>will be calling</strong> me.</li>
+            <li>The winds <strong>were howling</strong> loudly.</li>
+            <li>The world <strong>will be watching</strong>.</li>
+          </ul>
         </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of become</div>
-          <div class="chinese-word-back">I am becoming someone. (蜕變生光)</div>
-          <div class="example-back">Hover to flip back</div>
+        <div class="rhetoric-device">
+          <h3>2. Metaphor | 隱喻</h3>
+          <p>隱含地將一事物比作另一事物，不使用 like 或 as。</p>
+          <ul>
+            <li>The past <strong>was shaping me</strong>. (往昔塑我形)</li>
+            <li>The present <strong>is making me</strong>. (當下鑄我魂)</li>
+            <li>My dreams <strong>will light the way</strong>.</li>
+            <li>Raindrops <strong>tracing lines</strong> upon the glass.</li>
+          </ul>
         </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">動作描述 | Action</div>
-          <div class="eng-word-front">howl</div>
-          <div class="chinese-word-front">呼嘯 (v.)</div>
+        <div class="rhetoric-device">
+          <h3>3. Repetition | 重複</h3>
+          <p>重複關鍵詞或句子，以加強語氣與節奏感。</p>
+          <ul>
+            <li><strong>Right now…</strong> — 重複出現的主題</li>
+            <li><strong>I'm living</strong> this story! — 副歌開頭重複</li>
+            <li><strong>Can you feel</strong> the world… — 預副歌重複結構</li>
+            <li><strong>Every second, life is learning</strong> — 節奏性重複</li>
+          </ul>
         </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Past continuous (were howling)</div>
-          <div class="chinese-word-back">The winds were howling loudly. (風嘯長夜)</div>
-          <div class="example-back">Hover to flip back</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">抽象概念 | Abstract</div>
-          <div class="eng-word-front">shape</div>
-          <div class="chinese-word-front">塑造 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Past continuous (was shaping)</div>
-          <div class="chinese-word-back">The past was shaping me! (往昔塑我形)</div>
-          <div class="example-back">Hover to flip back</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">狀態描述 | State</div>
-          <div class="eng-word-front">fade</div>
-          <div class="chinese-word-front">漸暗 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of fade</div>
-          <div class="chinese-word-back"> The streetlight's glow is fading. (街燈漸黯)</div>
-          <div class="example-back">Hover to flip back</div>
+        <div class="rhetoric-device">
+          <h3>4. Parallelism | 平行結構</h3>
+          <p>使用相同或相似的語法結構，增強節奏與對比。</p>
+          <ul>
+            <li>I was dreaming <strong>yesterday</strong>! I'm living <strong>right now</strong>! I will be soaring <strong>tomorrow</strong>!</li>
+            <li>The past <strong>was shaping me</strong>! The present <strong>is making me</strong>! The future <strong>will be calling me</strong>!</li>
+            <li>In this <strong>breath</strong>, in this <strong>hour</strong>.</li>
+            <li>New <strong>sights</strong> and new <strong>sounds</strong>.</li>
+          </ul>
         </div>
       </div>
-    </div>
 
-    <div class="word-card flip-card">
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="word-category">動作描述 | Action</div>
-          <div class="eng-word-front">trace</div>
-          <div class="chinese-word-front">描繪 (v.)</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="pos-back">v. Present participle of trace</div>
-          <div class="chinese-word-back"> The light is tracing lines upon the glass. (畫影映窗)</div>
-          <div class="example-back">Hover to flip back</div>
+      <!-- CHALLENGE -->
+      <div id="challenge-section" class="content-section">
+        <h2 class="section-header">🎯 Writing Challenge | 練習挑戰</h2>
+        <div class="grammar-card" id="challenge-section-content">
+          <h3>✍️ Tense Practice | 時態練習：用不同時態描寫城市生活</h3>
+          <p>現在進行式 (描述正在發生的事)：</p><textarea placeholder="Example: The city lights are glowing in the night."></textarea>
+          <p>過去進行式 (描述昨天此時發生的事)：</p><textarea placeholder="Example: I was walking in the rain yesterday evening."></textarea>
+          <p>未來進行式 (描述明年此時的計劃)：</p><textarea placeholder="Example: This time next year, I will be studying abroad."></textarea>
+          <p>使用擬人修辭 (賦予城市或自然現象人性)：</p><textarea placeholder="Example: The city streets are whispering old stories."></textarea>
+          <p>使用隱喻修辭 (將城市生活比喻為其他事物)：</p><textarea placeholder="Example: The city is a living, breathing organism."></textarea>
+          <h3 style="margin-top:16px;">🎵 Lyric Gap Fill | 歌詞填空</h3>
+          <div class="fill-in-the-blank">
+            "The city lights <input type="text" placeholder="are blinking">, painting stories in the dark.<br>
+            I'm <input type="text" placeholder="standing"> at the crossroads, feeling sparks inside my heart.<br>
+            Raindrops <input type="text" placeholder="are falling"> softly, tracing lines upon the glass.<br>
+            Time <input type="text" placeholder="is whispering"> secrets, as the present moments pass.<br>
+            I <input type="text" placeholder="am becoming"> someone, in this breath, in this hour."
+          </div>
         </div>
       </div>
-    </div>
 
-  </div>
-</div>
-
-  <div id="grammar-section" class="content-section">
-  <h2 class="section-header">📐 Tense Contrast | 時態對比：現在、過去、未來</h2>
-
-  <div class="grammar-card present-type">
-    <h3><span style="color:#4d8fe6;">🟦</span> 1. 現在進行式 (Present Progressive)</h3>
-    <p><strong>結構：</strong> S + am/is/are + V-ing + …</p>
-    <ul>
-      <li>The city lights <strong>are blinking</strong>. (霓虹流轉)</li>
-      <li>Raindrops <strong>are falling</strong> softly. (簌簌雨落)</li>
-      <li>I <strong>am becoming</strong> someone. (蜕變生光)</li>
-      <li>I <strong>am living</strong> this story! (此刻正書寫)</li>
-    </ul>
-  </div>
-
-  <div class="grammar-card past-type">
-    <h3><span style="color:#56b87a;">🟢</span> 2. 過去進行式 (Past Progressive)</h3>
-    <p><strong>結構：</strong> S + was/were + V-ing + …</p>
-    <ul>
-      <li>The winds <strong>were howling</strong> loudly. (風嘯長夜)</li>
-      <li>I <strong>was searching</strong> for an answer. (尋光而往)</li>
-      <li>You <strong>were waiting</strong> at the station. (月台靜佇)</li>
-      <li>Trains <strong>were coming</strong>, <strong>going</strong>. (車影流長)</li>
-    </ul>
-  </div>
-
-  <div class="grammar-card future-type">
-    <h3><span style="color:#ffca28;">🟡</span> 3. 未來進行式 (Future Progressive)</h3>
-    <p><strong>結構：</strong> S + will be + V-ing + …</p>
-    <ul>
-      <li>I <strong>will be walking</strong> different streets. (行過異鄉)</li>
-      <li>I <strong>will be speaking</strong> a new language. (遇人皆語)</li>
-      <li>The sun <strong>will be rising</strong> on the chapters. (曉日初昇)</li>
-      <li>I <strong>will be becoming</strong> more. (蜕變無疆)</li>
-    </ul>
-  </div>
-
-  <div class="grammar-card progressive-type">
-    <h3><span style="color:#ab47bc;">🟣</span> 4. 混合時態對比</h3>
-    <p><strong>結構：</strong> 歌詞中的時態對比</p>
-    <ul>
-      <li><strong>現在進行</strong>：I'm living / I'm finding / You're witnessing</li>
-      <li><strong>過去進行</strong>：I was dreaming / The past was shaping</li>
-      <li><strong>未來進行</strong>：I will be soaring / The future will be calling</li>
-      <li><strong>時間對比</strong>：yesterday / right now / tomorrow</li>
-    </ul>
-  </div>
-
-  <div class="grammar-card mixed-type">
-    <h3><span style="color:#ff5e9c;">🔴</span> 5. 歌曲核心時態結構</h3>
-    <p><strong>概念：</strong> 透過歌詞理解時態轉換</p>
-    <ul>
-      <li><strong>過去</strong>：I was dreaming yesterday / The past was shaping me</li>
-      <li><strong>現在</strong>：I'm living this story / The present is making me</li>
-      <li><strong>未來</strong>：I will be soaring tomorrow / The future will be calling me</li>
-      <li><strong>核心句</strong>：Right now, I'm finding my way! (此刻即歸途)</li>
-    </ul>
-  </div>
-</div>
-
-<div id="rhetoric-section" class="content-section">
-  <h2 class="section-header">💡 Rhetorical Devices | 修辭手法分析</h2>
-
-  <div class="rhetoric-device">
-    <h3>1. Personification | 擬人化</h3>
-    <p>定義：賦予非人事物以人類的動作、情感或特質。</p>
-    <ul>
-      <li><div class="rhetoric-example">Time <strong>is whispering</strong> secrets. (時光低語)</div></li>
-      <li><div class="rhetoric-example">The future <strong>will be calling</strong> me. (未來喚我名)</div></li>
-      <li><div class="rhetoric-example">The winds <strong>were howling</strong> loudly. (風嘯長夜)</div></li>
-      <li><div class="rhetoric-example">The world <strong>will be watching</strong>. (天地為證)</div></li>
-    </ul>
-  </div>
-
-  <div class="rhetoric-device">
-    <h3>2. Metaphor | 隱喻</h3>
-    <p>定義：隱含地將一事物比作另一事物，不使用 like 或 as。</p>
-    <ul>
-      <li><div class="rhetoric-example">The past <strong>was shaping me</strong>. (往昔塑我形)</div></li>
-      <li><div class="rhetoric-example">The present <strong>is making me</strong>. (當下鑄我魂)</div></li>
-      <li><div class="rhetoric-example">My dreams <strong>will light the way</strong>. (夢為燈塔)</div></li>
-      <li><div class="rhetoric-example">Raindrops <strong>tracing lines</strong> upon the glass. (畫影映窗)</div></li>
-    </ul>
-  </div>
-
-  <div class="rhetoric-device">
-    <h3>3. Repetition | 重複</h3>
-    <p>定義：重複關鍵詞或句子，以加強語氣與節奏感。</p>
-    <ul>
-      <li><div class="rhetoric-example"><strong>Right now…</strong> (此刻…) — 重複出現的主題</div></li>
-      <li><div class="rhetoric-example"><strong>I'm living</strong> this story! — 副歌開頭重複</div></li>
-      <li><div class="rhetoric-example"><strong>Can you feel</strong> the world… — 預副歌重複結構</div></li>
-      <li><div class="rhetoric-example"><strong>Every second, life is learning</strong> — 節奏性重複</div></li>
-    </ul>
-  </div>
-
-  <div class="rhetoric-device">
-    <h3>4. Parallelism | 平行結構</h3>
-    <p>定義：使用相同或相似的語法結構，增強節奏與對比。</p>
-    <ul>
-      <li><div class="rhetoric-example">I was dreaming <strong>yesterday</strong>! I'm living <strong>right now</strong>! I will be soaring <strong>tomorrow</strong>!</div></li>
-      <li><div class="rhetoric-example">The past <strong>was shaping me</strong>! The present <strong>is making me</strong>! The future <strong>will be calling me</strong>!</div></li>
-      <li><div class="rhetoric-example">In this <strong>breath</strong>, in this <strong>hour</strong>. (一息一瞬)</div></li>
-      <li><div class="rhetoric-example">New <strong>sights</strong> and new <strong>sounds</strong>. (萬象奔流)</div></li>
-    </ul>
-  </div>
-</div>
-<div id="challenge-section" class="content-section">
-  <h2 class="section-header">🎯 Writing Challenge | 練習挑戰</h2>
-
-  <div class="grammar-card" id="challenge-section-content">
-
-    <h3>✍️ Tense Practice | 時態練習：用不同時態描寫城市生活</h3>
-    <p>現在進行式 (描述正在發生的事)：</p><textarea placeholder="Example: The city lights are glowing in the night."></textarea>
-    <p>過去進行式 (描述昨天此時發生的事)：</p><textarea placeholder="Example: I was walking in the rain yesterday evening."></textarea>
-    <p>未來進行式 (描述明年此時的計劃)：</p><textarea placeholder="Example: This time next year, I will be studying abroad."></textarea>
-    <p>使用擬人修辭 (賦予城市或自然現象人性)：</p><textarea placeholder="Example: The city streets are whispering old stories."></textarea>
-    <p>使用隱喻修辭 (將城市生活比喻為其他事物)：</p><textarea placeholder="Example: The city is a living, breathing organism."></textarea>
-
-    <h3>🎵 Lyric Gap Fill | 歌詞填空：聽歌或默寫填空</h3>
-    <div class="fill-in-the-blank">
-      "The city lights <input type="text" placeholder="are blinking">, painting stories in the dark.<br>
-      I'm <input type="text" placeholder="standing"> at the crossroads, feeling sparks inside my heart.<br>
-      Raindrops <input type="text" placeholder="are falling"> softly, tracing lines upon the glass.<br>
-      Time <input type="text" placeholder="is whispering"> secrets, as the present moments pass.<br>
-      I <input type="text" placeholder="am becoming"> someone, in this breath, in this hour."
-    </div>
-
-  </div>
-</div>
-    
-  </div>
-
-<button id="performance-toggle" title="Toggle Performance Mode" aria-label="Toggle Performance Mode">⚡</button>
+    </div><!-- /content-container -->
+  </main>
+</div><!-- /layout -->
 
 <script>
-// 效能控制變數
-let performanceMode = false;
-let originalAnimations = [];
-let rainInterval;
-
-// 雨滴生成函數 - 控制數量以優化效能
-function createRainDrops() {
-  const rainContainer = document.getElementById('rain-container');
-  if (!rainContainer) return;
-  
-  // 根據效能模式調整雨滴數量
-  const dropCount = performanceMode ? 15 : 30;
-  
-  // 清空現有雨滴
-  rainContainer.innerHTML = '';
-  
-  for (let i = 0; i < dropCount; i++) {
-    const drop = document.createElement('div');
-    drop.className = 'rain-drop';
-    
-    // 隨機位置
-    const left = Math.random() * 100;
-    const delay = Math.random() * 5;
-    const duration = 1.5 + Math.random() * 1.5;
-    
-    drop.style.left = `${left}%`;
-    drop.style.animationDelay = `${delay}s`;
-    drop.style.animationDuration = `${duration}s`;
-    drop.style.animationName = 'rain-drop-fall';
-    drop.style.animationIterationCount = 'infinite';
-    drop.style.animationTimingFunction = 'linear';
-    
-    // 隨機長度
-    const height = 15 + Math.random() * 20;
-    drop.style.height = `${height}px`;
-    
-    // 隨機透明度
-    const opacity = 0.3 + Math.random() * 0.5;
-    drop.style.opacity = opacity.toString();
-    
-    rainContainer.appendChild(drop);
-  }
-}
-
 function showSection(sectionId) {
-  // 1. 隱藏所有內容區塊
-  document.querySelectorAll('.content-section').forEach(section => {
-    section.style.display = 'none';
-  });
-
-  // 2. 顯示目標區塊
+  document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
   const target = document.getElementById(sectionId);
-  if (!target) return;
-  target.style.display = 'block';
-
-  // 3. 更新導航欄 active 狀態
-  document.querySelectorAll('#page-nav a').forEach(link => {
-    link.classList.remove('active');
-  });
-  const activeLink = document.querySelector(`#page-nav a[data-target='${sectionId}']`);
-  if (activeLink) activeLink.classList.add('active');
-
-  // 4. 平滑捲動到內容頂部
-  const container = document.getElementById('content-container');
-  if (container) {
-    const headerWrapper = document.getElementById('info-card-wrapper');
-    const headerHeight = headerWrapper ? headerWrapper.offsetHeight : 0;
-    
-    // 計算捲動位置
-    let top = container.offsetTop - headerHeight - 12;
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('#sidebar a, #mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll(`[data-target="${sectionId}"]`).forEach(a => a.classList.add('active'));
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 預設顯示歌詞區塊
-    showSection('lyrics-section');
-    
-    // 創建初始雨滴
-    createRainDrops();
-    
-    // 定期更新雨滴（減少頻率以優化效能）
-    rainInterval = setInterval(() => {
-      if (!performanceMode) {
-        createRainDrops();
-      }
-    }, 8000);
-
-    // 效能控制功能
-    const performanceToggle = document.getElementById('performance-toggle');
-    
-    // 儲存原始動畫狀態
-    function saveOriginalAnimations() {
-        originalAnimations = [];
-        
-        // 儲存霓虹光點動畫
-        const neonLights = document.querySelectorAll('.neon-lights span');
-        neonLights.forEach(light => {
-            originalAnimations.push({
-                element: light,
-                animation: light.style.animation
-            });
-        });
-        
-        // 儲存背景動畫
-        originalAnimations.push({
-            element: document.body,
-            animation: document.body.style.animation
-        });
-        
-        // 儲存圖片動畫
-        const cityImage = document.getElementById('city-image');
-        if (cityImage) {
-            originalAnimations.push({
-                element: cityImage,
-                animation: cityImage.style.animation
-            });
-        }
-    }
-    
-    // 切換效能模式
-    function togglePerformanceMode() {
-        performanceMode = !performanceMode;
-        
-        if (performanceMode) {
-            // 啟高效能模式：停用動畫
-            console.log('Performance mode enabled');
-            performanceToggle.textContent = '🐢';
-            performanceToggle.title = 'Performance Mode: On (Click to disable)';
-            
-            // 停用所有動畫
-            document.querySelectorAll('*').forEach(element => {
-                element.style.animationPlayState = 'paused';
-            });
-            
-            // 停用雨滴動畫
-            const rainDrops = document.querySelectorAll('.rain-drop');
-            rainDrops.forEach(drop => {
-                drop.style.animation = 'none';
-                drop.style.opacity = '0';
-            });
-            
-            // 停用霓虹光點
-            const neonLights = document.querySelectorAll('.neon-lights span');
-            neonLights.forEach(light => {
-                light.style.animation = 'none';
-            });
-            
-            // 停用背景動畫
-            document.body.style.animation = 'none';
-            
-            // 停用圖片動畫
-            const cityImage = document.getElementById('city-image');
-            if (cityImage) {
-                cityImage.style.animation = 'none';
-            }
-            
-            // 停用翻轉卡片效果
-            document.querySelectorAll('.flip-card').forEach(card => {
-                card.style.pointerEvents = 'none';
-            });
-            
-            // 減少背景模糊
-            document.getElementById('info-card-wrapper').style.backdropFilter = 'none';
-            document.getElementById('info-card-wrapper').style.webkitBackdropFilter = 'none';
-            
-        } else {
-            // 關閉效能模式：恢復動畫
-            console.log('Performance mode disabled');
-            performanceToggle.textContent = '⚡';
-            performanceToggle.title = 'Performance Mode: Off (Click to enable)';
-            
-            // 恢復所有動畫
-            document.querySelectorAll('*').forEach(element => {
-                element.style.animationPlayState = 'running';
-            });
-            
-            // 恢復特定動畫
-            originalAnimations.forEach(item => {
-                if (item.element && item.animation !== undefined) {
-                    item.element.style.animation = item.animation;
-                }
-            });
-            
-            // 恢復雨滴
-            createRainDrops();
-            
-            // 恢復背景模糊
-            document.getElementById('info-card-wrapper').style.backdropFilter = 'blur(8px) saturate(140%)';
-            document.getElementById('info-card-wrapper').style.webkitBackdropFilter = 'blur(8px) saturate(140%)';
-            
-            // 恢復翻轉卡片效果
-            document.querySelectorAll('.flip-card').forEach(card => {
-                card.style.pointerEvents = 'auto';
-            });
-        }
-    }
-    
-    // 初始化效能控制
-    saveOriginalAnimations();
-    performanceToggle.addEventListener('click', togglePerformanceMode);
-    
-    // 自動偵測低效能裝置
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const isLowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-    
-    if (isMobile || isLowPower) {
-        // 自動啟用效能模式
-        setTimeout(() => {
-            if (!performanceMode) {
-                togglePerformanceMode();
-            }
-        }, 2000);
-    }
-    
-    // 監聽滾動事件，優化效能
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
-        }
-        
-        scrollTimeout = setTimeout(() => {
-            // 滾動停止時執行輕量級操作
-        }, 100);
-    }, { passive: true });
-    
-    // 預先載入圖片
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.loading = 'lazy';
-    });
-    
-    // 監聽頁面可見性變化以優化效能
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            // 頁面隱藏時減少動畫
-            if (rainInterval) clearInterval(rainInterval);
-        } else {
-            // 頁面可見時恢復
-            if (!performanceMode) {
-                rainInterval = setInterval(() => {
-                    createRainDrops();
-                }, 8000);
-            }
-        }
-    });
-});
-
-// 清理函數
-window.addEventListener('beforeunload', () => {
-    if (rainInterval) clearInterval(rainInterval);
-});
 </script>
 </body>
 </html>
